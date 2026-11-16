@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/card">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Report a Loophole"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:gravity="center"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Found a way around the filter? Tell us so we can close it."
+        android:textColor="@color/muted"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:layout_marginBottom="14dp"/>
+
+    <EditText
+        android:id="@+id/loopDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Describe the loophole..."
+        android:textColorHint="@color/muted"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_search"
+        android:padding="11dp"
+        android:minLines="3"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:importantForAutofill="no"/>
+</LinearLayout>

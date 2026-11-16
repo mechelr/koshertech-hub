@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/card">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Request an App"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:gravity="center"
+        android:layout_marginBottom="14dp"/>
+
+    <EditText
+        android:id="@+id/reqAppName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="App name"
+        android:textColorHint="@color/muted"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_search"
+        android:padding="11dp"
+        android:layout_marginBottom="10dp"
+        android:inputType="text"
+        android:importantForAutofill="no"/>
+
+    <EditText
+        android:id="@+id/reqReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Reason"
+        android:textColorHint="@color/muted"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_search"
+        android:padding="11dp"
+        android:minLines="2"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:importantForAutofill="no"/>
+</LinearLayout>
