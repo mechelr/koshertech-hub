@@ -24,10 +24,10 @@ import java.net.URL
 class MainActivity : AppCompatActivity() {
 
     // ===== EMAIL DELIVERY =====
-    // When this is filled in, every App Request / Loophole / Rating is emailed to you.
-    // Leave it "" and the app just says "saved" without sending.
-    // (We set this to a free FormSubmit address once you OK using your email.)
-    private val FEEDBACK_ENDPOINT = ""
+    // The build machine swaps this placeholder for your hidden FORMSUBMIT_URL secret.
+    // Your real email never lives in the project files — only in the locked secret.
+    // If no secret is set, it stays a placeholder and the app just says "saved".
+    private val FEEDBACK_ENDPOINT = "FEEDBACK_ENDPOINT_PLACEHOLDER"
 
     // ===== YOUR APPS =====
     // To add an app: copy a line, change the name/category/package/color.
@@ -57,12 +57,8 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.requestButton).setOnClickListener { showRequestDialog() }
         findViewById<TextView>(R.id.loopholeButton).setOnClickListener { showLoopholeDialog() }
         findViewById<TextView>(R.id.rateButton).setOnClickListener { showRateDialog() }
-        findViewById<TextView>(R.id.buyPlanButton).setOnClickListener {
-            comingSoon("Buy Plan", "Here you'll be able to choose and pay for your KosherTech plan.")
-        }
-        findViewById<TextView>(R.id.updatePaymentButton).setOnClickListener {
-            comingSoon("Update Payment", "Here you'll be able to update your card or payment method.")
-        }
+        findViewById<TextView>(R.id.buyPlanButton).setOnClickListener { showBuyPlanDialog() }
+        findViewById<TextView>(R.id.updatePaymentButton).setOnClickListener { showPaymentDialog(null) }
 
         startGlow()
     }
@@ -102,11 +98,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun comingSoon(title: String, msg: String) {
+    // ===== PLANS (demo only — made-up pricing you can edit anytime) =====
+    private val plans = arrayOf(
+        "Basic — $14.99/mo   ·   1 device, approved apps, email support",
+        "Family — $24.99/mo   ·   up to 4 devices, remote management",
+        "Premium — $34.99/mo   ·   unlimited devices, priority 24/7 support",
+        "Yearly — $299/yr   ·   Premium features, 2 months free"
+    )
+
+    private fun showBuyPlanDialog() {
         AlertDialog.Builder(this)
-            .setTitle(title)
-            .setMessage(msg + "\n\n(Coming soon.)")
-            .setPositiveButton("OK", null)
+            .setTitle("Choose your plan")
+            .setItems(plans) { _, which -> showPaymentDialog(plans[which]) }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    // Demo card entry. Submit just shows a confirmation — no real payment happens.
+    private fun showPaymentDialog(plan: String?) {
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_payment, null)
+        val title = view.findViewById<TextView>(R.id.payTitle)
+        if (plan != null) title.text = "Plan: " + plan
+        AlertDialog.Builder(this)
+            .setView(view)
+            .setPositiveButton("Submit") { _, _ ->
+                Toast.makeText(this, "Payment submitted ✓  Thank you!", Toast.LENGTH_LONG).show()
+            }
+            .setNegativeButton("Cancel", null)
             .show()
     }
 
@@ -151,7 +169,7 @@ class MainActivity : AppCompatActivity() {
     // Emails the request/loophole/rating to you when FEEDBACK_ENDPOINT is set.
     private fun sendToInbox(kind: String, body: String) {
         val endpoint = FEEDBACK_ENDPOINT
-        if (endpoint.isBlank()) {
+        if (endpoint.isBlank() || endpoint.contains("PLACEHOLDER")) {
             Toast.makeText(this, "Saved. (Email delivery isn't switched on yet.)", Toast.LENGTH_LONG).show()
             return
         }

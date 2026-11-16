@@ -20,6 +20,16 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.7'
+      - name: Inject feedback email endpoint (from repo secret)
+        env:
+          FORMSUBMIT_URL: ${{ secrets.FORMSUBMIT_URL }}
+        run: |
+          if [ -n "$FORMSUBMIT_URL" ]; then
+            sed -i "s|FEEDBACK_ENDPOINT_PLACEHOLDER|$FORMSUBMIT_URL|" app/src/main/java/com/koshertech/hub/MainActivity.kt
+            echo "Feedback endpoint injected from secret."
+          else
+            echo "No FORMSUBMIT_URL secret set; email delivery stays off."
+          fi
       - name: Build debug APK
         run: gradle assembleDebug --no-daemon --stacktrace
       - name: Rename APK
