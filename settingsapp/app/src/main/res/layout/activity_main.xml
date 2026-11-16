@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:background="@drawable/bg_status"
+                android:background="@drawable/bg_card"
                 android:padding="15dp"
                 android:layout_marginTop="18dp">
                 <TextView
@@ -272,14 +272,5 @@
                 android:layout_marginBottom="8dp"/>
         </LinearLayout>
     </ScrollView>
-
-    <View
-        android:id="@+id/glowBorder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/glow_border"
-        android:clickable="false"
-        android:focusable="false"
-        android:importantForAccessibility="no"/>
 
 </FrameLayout>

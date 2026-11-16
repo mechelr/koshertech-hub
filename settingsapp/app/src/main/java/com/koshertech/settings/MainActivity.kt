@@ -1,7 +1,5 @@
 package com.koshertech.settings
 
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
@@ -31,17 +29,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileSecurity).setOnClickListener { openScreenLock() }
 
         findViewById<TextView>(R.id.deviceModel).text = Build.MANUFACTURER + " " + Build.MODEL
-
-        startGlow()
-    }
-
-    private fun startGlow() {
-        val glow = findViewById<View>(R.id.glowBorder)
-        val anim = ObjectAnimator.ofFloat(glow, "alpha", 0.35f, 1f)
-        anim.duration = 1700
-        anim.repeatMode = ValueAnimator.REVERSE
-        anim.repeatCount = ValueAnimator.INFINITE
-        anim.start()
     }
 
     private fun open(action: String) {
