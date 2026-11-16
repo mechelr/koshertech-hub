@@ -1,23 +1,44 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="40dp"
-    android:height="40dp"
-    android:viewportWidth="100"
-    android:viewportHeight="100">
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Filled background hexagon with navy -> blue gradient -->
+    <path android:pathData="M54,10 L92,32 L92,76 L54,98 L16,76 L16,32 Z">
+        <aapt:attr xmlns:aapt="http://schemas.android.com/aapt"
+            name="android:fillColor">
+            <gradient
+                android:startX="54" android:startY="10"
+                android:endX="54" android:endY="98"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FF1E3A8A"/>
+                <item android:offset="0.55" android:color="#FF2563EB"/>
+                <item android:offset="1.0" android:color="#FF0EA5E9"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Glowing cyan outer border -->
     <path
-        android:strokeColor="#22D3EE"
+        android:strokeColor="#FF22D3EE"
         android:strokeWidth="4"
         android:fillColor="#00000000"
-        android:pathData="M50,6 L88,28 L88,72 L50,94 L12,72 L12,28 Z"/>
+        android:pathData="M54,10 L92,32 L92,76 L54,98 L16,76 L16,32 Z"/>
+
+    <!-- Inner accent ring -->
     <path
-        android:strokeColor="#6F5BD0"
-        android:strokeWidth="3"
+        android:strokeColor="#9967E8F5"
+        android:strokeWidth="2"
         android:fillColor="#00000000"
-        android:pathData="M50,15 L80,32 L80,68 L50,85 L20,68 L20,32 Z"/>
+        android:pathData="M54,20 L84,37 L84,71 L54,88 L24,71 L24,37 Z"/>
+
+    <!-- Bright white checkmark -->
     <path
-        android:strokeColor="#22D3EE"
-        android:strokeWidth="8"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="9"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"
         android:fillColor="#00000000"
-        android:pathData="M35,52 L46,63 L68,36"/>
+        android:pathData="M38,55 L49,66 L72,39"/>
 </vector>
