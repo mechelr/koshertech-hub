@@ -23,26 +23,26 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="14dp">
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
                     android:src="@drawable/ic_logo"
-                    android:contentDescription="KosherTech"/>
+                    android:contentDescription="Settings"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginStart="10dp">
+                    android:layout_marginStart="11dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="KosherTech"
+                        android:text="Settings"
                         android:textColor="@color/white"
                         android:textStyle="bold"
-                        android:textSize="18sp"/>
+                        android:textSize="22sp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="SETTINGS"
+                        android:text="KOSHERTECH"
                         android:textColor="@color/muted"
                         android:textSize="9sp"
                         android:letterSpacing="0.22"/>
@@ -56,13 +56,13 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:background="@drawable/bg_status"
-                android:padding="16dp"
+                android:padding="15dp"
                 android:layout_marginTop="18dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="🛡️"
-                    android:textSize="26sp"/>
+                    android:textSize="24sp"/>
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                         android:text="Protected Device"
                         android:textColor="@color/white"
                         android:textStyle="bold"
-                        android:textSize="15sp"/>
+                        android:textSize="14sp"/>
                     <TextView
                         android:id="@+id/deviceModel"
                         android:layout_width="wrap_content"
@@ -84,228 +84,181 @@
                         android:textColor="@color/cyan"
                         android:textSize="11sp"
                         android:layout_marginTop="1dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Managed &amp; filtered by KosherTech"
-                        android:textColor="@color/muted"
-                        android:textSize="11sp"
-                        android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Section: Connectivity -->
+            <!-- CONNECTIVITY -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="CONNECTIVITY"
                 android:textColor="@color/muted"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:textStyle="bold"
-                android:letterSpacing="0.1"
+                android:letterSpacing="0.12"
                 android:layout_marginTop="22dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="9dp"
+                android:paddingStart="4dp"/>
 
             <LinearLayout
-                android:id="@+id/tileWifi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_card"
-                android:padding="14dp"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:focusable="true">
-                <FrameLayout
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="@drawable/bg_chip"
-                    android:backgroundTint="#1E88E5">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="📶"
-                        android:textSize="20sp"/>
-                </FrameLayout>
+                android:orientation="vertical"
+                android:background="@drawable/bg_card">
+
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:id="@+id/tileWifi"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="13dp">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="13dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <FrameLayout android:layout_width="38dp" android:layout_height="38dp"
+                        android:background="@drawable/bg_chip" android:backgroundTint="#1E88E5">
+                        <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                            android:gravity="center" android:text="📶" android:textSize="18sp"/>
+                    </FrameLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="13dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Wi-Fi" android:textColor="@color/white" android:textStyle="bold" android:textSize="15sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Connect to a network" android:textColor="@color/muted" android:textSize="11sp" android:layout_marginTop="1dp"/>
+                    </LinearLayout>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Wi-Fi" android:textColor="@color/white" android:textStyle="bold" android:textSize="15sp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Connect to a network" android:textColor="@color/muted" android:textSize="11sp" android:layout_marginTop="2dp"/>
+                        android:text="›" android:textColor="@color/muted" android:textSize="22sp"/>
                 </LinearLayout>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="›" android:textColor="@color/muted" android:textSize="24sp"/>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="@color/line" android:layout_marginStart="64dp"/>
+
+                <LinearLayout
+                    android:id="@+id/tileBluetooth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="13dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <FrameLayout android:layout_width="38dp" android:layout_height="38dp"
+                        android:background="@drawable/bg_chip" android:backgroundTint="#22D3EE">
+                        <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                            android:gravity="center" android:text="🔷" android:textSize="18sp"/>
+                    </FrameLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="13dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Bluetooth" android:textColor="@color/white" android:textStyle="bold" android:textSize="15sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Pair headphones &amp; devices" android:textColor="@color/muted" android:textSize="11sp" android:layout_marginTop="1dp"/>
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="›" android:textColor="@color/muted" android:textSize="22sp"/>
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/tileBluetooth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_card"
-                android:padding="14dp"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:focusable="true">
-                <FrameLayout
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="@drawable/bg_chip"
-                    android:backgroundTint="#22D3EE">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="🔷"
-                        android:textSize="20sp"/>
-                </FrameLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="13dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Bluetooth" android:textColor="@color/white" android:textStyle="bold" android:textSize="15sp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Pair headphones &amp; devices" android:textColor="@color/muted" android:textSize="11sp" android:layout_marginTop="2dp"/>
-                </LinearLayout>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="›" android:textColor="@color/muted" android:textSize="24sp"/>
-            </LinearLayout>
-
-            <!-- Section: Device -->
+            <!-- DEVICE -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="DEVICE"
                 android:textColor="@color/muted"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:textStyle="bold"
-                android:letterSpacing="0.1"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="10dp"/>
+                android:letterSpacing="0.12"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="9dp"
+                android:paddingStart="4dp"/>
 
             <LinearLayout
-                android:id="@+id/tileDisplay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_card"
-                android:padding="14dp"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:focusable="true">
-                <FrameLayout
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="@drawable/bg_chip"
-                    android:backgroundTint="#9333EA">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="🖥️"
-                        android:textSize="20sp"/>
-                </FrameLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="13dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Display" android:textColor="@color/white" android:textStyle="bold" android:textSize="15sp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Brightness &amp; screen timeout" android:textColor="@color/muted" android:textSize="11sp" android:layout_marginTop="2dp"/>
-                </LinearLayout>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="›" android:textColor="@color/muted" android:textSize="24sp"/>
-            </LinearLayout>
+                android:orientation="vertical"
+                android:background="@drawable/bg_card">
 
-            <LinearLayout
-                android:id="@+id/tileSound"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_card"
-                android:padding="14dp"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:focusable="true">
-                <FrameLayout
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="@drawable/bg_chip"
-                    android:backgroundTint="#E0A52B">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="🔊"
-                        android:textSize="20sp"/>
-                </FrameLayout>
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:id="@+id/tileDisplay"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="13dp">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="13dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <FrameLayout android:layout_width="38dp" android:layout_height="38dp"
+                        android:background="@drawable/bg_chip" android:backgroundTint="#9333EA">
+                        <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                            android:gravity="center" android:text="🖥️" android:textSize="18sp"/>
+                    </FrameLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="13dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Display" android:textColor="@color/white" android:textStyle="bold" android:textSize="15sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Brightness &amp; screen timeout" android:textColor="@color/muted" android:textSize="11sp" android:layout_marginTop="1dp"/>
+                    </LinearLayout>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Sound &amp; Volume" android:textColor="@color/white" android:textStyle="bold" android:textSize="15sp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Ringer, media &amp; alarms" android:textColor="@color/muted" android:textSize="11sp" android:layout_marginTop="2dp"/>
+                        android:text="›" android:textColor="@color/muted" android:textSize="22sp"/>
                 </LinearLayout>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="›" android:textColor="@color/muted" android:textSize="24sp"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/tileSecurity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_card"
-                android:padding="14dp"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:focusable="true">
-                <FrameLayout
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="@drawable/bg_chip"
-                    android:backgroundTint="#34D399">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="🔒"
-                        android:textSize="20sp"/>
-                </FrameLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="@color/line" android:layout_marginStart="64dp"/>
+
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:id="@+id/tileSound"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="13dp">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="13dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <FrameLayout android:layout_width="38dp" android:layout_height="38dp"
+                        android:background="@drawable/bg_chip" android:backgroundTint="#E0A52B">
+                        <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                            android:gravity="center" android:text="🔊" android:textSize="18sp"/>
+                    </FrameLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="13dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Sound &amp; Volume" android:textColor="@color/white" android:textStyle="bold" android:textSize="15sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Ringer, media &amp; alarms" android:textColor="@color/muted" android:textSize="11sp" android:layout_marginTop="1dp"/>
+                    </LinearLayout>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Security" android:textColor="@color/white" android:textStyle="bold" android:textSize="15sp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Set a screen lock / PIN" android:textColor="@color/muted" android:textSize="11sp" android:layout_marginTop="2dp"/>
+                        android:text="›" android:textColor="@color/muted" android:textSize="22sp"/>
                 </LinearLayout>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="›" android:textColor="@color/muted" android:textSize="24sp"/>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="@color/line" android:layout_marginStart="64dp"/>
+
+                <LinearLayout
+                    android:id="@+id/tileSecurity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="13dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <FrameLayout android:layout_width="38dp" android:layout_height="38dp"
+                        android:background="@drawable/bg_chip" android:backgroundTint="#34D399">
+                        <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                            android:gravity="center" android:text="🔒" android:textSize="18sp"/>
+                    </FrameLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="13dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Security" android:textColor="@color/white" android:textStyle="bold" android:textSize="15sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Set a screen lock / PIN" android:textColor="@color/muted" android:textSize="11sp" android:layout_marginTop="1dp"/>
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="›" android:textColor="@color/muted" android:textSize="22sp"/>
+                </LinearLayout>
             </LinearLayout>
 
             <TextView
@@ -315,7 +268,7 @@
                 android:textColor="@color/muted"
                 android:textSize="10sp"
                 android:gravity="center"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"/>
         </LinearLayout>
     </ScrollView>
