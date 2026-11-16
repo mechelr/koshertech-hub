@@ -3,9 +3,7 @@ package com.koshertech.hub
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.drawable.GradientDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -99,23 +97,30 @@ class MainActivity : AppCompatActivity() {
         anim.start()
     }
 
-    // Installed -> open it. Not installed -> send them to install it.
+    // Installed -> open it. NOT installed -> ask KosherTech to add it.
+    // IMPORTANT: this never opens the Play Store or any app store. Approved apps
+    // are installed by KosherTech (via MDM), so the customer can never browse a store.
     private fun openOrInstall(app: AppItem) {
         val launch = packageManager.getLaunchIntentForPackage(app.packageName)
         if (launch != null) {
-            startActivity(launch)
+            startActivity(launch)   // already installed -> just open it
             return
         }
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + app.packageName)))
-        } catch (e: Exception) {
-            try {
-                startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=" + app.packageName)))
-            } catch (e2: Exception) {
-                Toast.makeText(this, "Can't open the store for " + app.name + " yet.", Toast.LENGTH_SHORT).show()
-            }
+        showInstallRequestDialog(app)   // not installed -> safe request, no store
+    }
+
+    private fun showInstallRequestDialog(app: AppItem) {
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_install, null)
+        val dialog = customDialog(view)
+        view.findViewById<TextView>(R.id.installTitle).text = "Add " + app.name
+        view.findViewById<View>(R.id.closeX).setOnClickListener { dialog.dismiss() }
+        view.findViewById<TextView>(R.id.primaryBtn).setOnClickListener {
+            sendToInbox("Install request", app.name + " — customer asked to install it")
+            Toast.makeText(this, app.name + " requested — KosherTech will add it to your device.",
+                Toast.LENGTH_LONG).show()
+            dialog.dismiss()
         }
+        dialog.show()
     }
 
     // ---- Custom popup: rounded card, its own X and buttons (no default Submit/Cancel) ----

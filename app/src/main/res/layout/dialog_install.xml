@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/bg_dialog">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/installTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add app"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:paddingHorizontal="24dp"/>
+        <TextView
+            android:id="@+id/closeX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:text="✕"
+            android:textColor="@color/muted"
+            android:textSize="18sp"
+            android:padding="4dp"
+            android:clickable="true"
+            android:focusable="true"/>
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Approved apps are installed by KosherTech — no app store, no browsing. Tap below and we'll add it to your device."
+        android:textColor="@color/muted"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/primaryBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Request install"
+        android:gravity="center"
+        android:textColor="#04121C"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:paddingVertical="14dp"
+        android:background="@drawable/bg_request"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:focusable="true"/>
+</LinearLayout>
