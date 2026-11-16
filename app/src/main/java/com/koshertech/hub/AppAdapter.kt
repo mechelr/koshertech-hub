@@ -43,6 +43,12 @@ class AppAdapter(
         holder.iconLetter.text = app.name.take(1)
         val d = holder.icon.background.mutate() as GradientDrawable
         d.setColor(app.color)
+
+        // "Open" if the app is already on the phone, otherwise "Install".
+        val pm = holder.itemView.context.packageManager
+        val installed = pm.getLaunchIntentForPackage(app.packageName) != null
+        holder.open.text = if (installed) "Open" else "Install"
+
         holder.open.setOnClickListener { onOpen(app) }
     }
 

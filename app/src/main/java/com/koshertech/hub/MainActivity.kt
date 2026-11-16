@@ -1,9 +1,14 @@
 package com.koshertech.hub
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
@@ -12,13 +17,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MainActivity : AppCompatActivity() {
 
+    // ===== EMAIL DELIVERY =====
+    // When this is filled in, every App Request / Loophole / Rating is emailed to you.
+    // Leave it "" and the app just says "saved" without sending.
+    // (We set this to a free FormSubmit address once you OK using your email.)
+    private val FEEDBACK_ENDPOINT = ""
+
     // ===== YOUR APPS =====
     // To add an app: copy a line, change the name/category/package/color.
-    // The "package" is the app's exact ID on the phone. We read the real ones off
-    // the Jelly Star together (Zemer's is a placeholder until then).
     private val allApps = listOf(
         AppItem("Zemer", "Music · Jewish songs", "PACKAGE_FOR_ZEMER", 0xFFE0A52B.toInt()),
         AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFE04F5F.toInt()),
@@ -33,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         val recycler = findViewById<RecyclerView>(R.id.appList)
         recycler.layoutManager = LinearLayoutManager(this)
-        adapter = AppAdapter(allApps) { app -> openApp(app) }
+        adapter = AppAdapter(allApps) { app -> openOrInstall(app) }
         recycler.adapter = adapter
 
         findViewById<EditText>(R.id.searchBox).addTextChangedListener(object : TextWatcher {
@@ -45,16 +57,57 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.requestButton).setOnClickListener { showRequestDialog() }
         findViewById<TextView>(R.id.loopholeButton).setOnClickListener { showLoopholeDialog() }
         findViewById<TextView>(R.id.rateButton).setOnClickListener { showRateDialog() }
+        findViewById<TextView>(R.id.buyPlanButton).setOnClickListener {
+            comingSoon("Buy Plan", "Here you'll be able to choose and pay for your KosherTech plan.")
+        }
+        findViewById<TextView>(R.id.updatePaymentButton).setOnClickListener {
+            comingSoon("Update Payment", "Here you'll be able to update your card or payment method.")
+        }
+
+        startGlow()
     }
 
-    // Opens the real installed app. If it isn't on the phone yet, it says so.
-    private fun openApp(app: AppItem) {
-        val intent = packageManager.getLaunchIntentForPackage(app.packageName)
-        if (intent != null) {
-            startActivity(intent)
-        } else {
-            Toast.makeText(this, app.name + " isn't installed yet.", Toast.LENGTH_SHORT).show()
+    override fun onResume() {
+        super.onResume()
+        // Re-check which apps are installed each time the screen comes back.
+        adapter.notifyDataSetChanged()
+    }
+
+    // Gemini-style breathing glow around the whole screen.
+    private fun startGlow() {
+        val glow = findViewById<View>(R.id.glowBorder)
+        val anim = ObjectAnimator.ofFloat(glow, "alpha", 0.35f, 1f)
+        anim.duration = 1700
+        anim.repeatMode = ValueAnimator.REVERSE
+        anim.repeatCount = ValueAnimator.INFINITE
+        anim.start()
+    }
+
+    // Installed -> open it. Not installed -> send them to install it.
+    private fun openOrInstall(app: AppItem) {
+        val launch = packageManager.getLaunchIntentForPackage(app.packageName)
+        if (launch != null) {
+            startActivity(launch)
+            return
         }
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + app.packageName)))
+        } catch (e: Exception) {
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=" + app.packageName)))
+            } catch (e2: Exception) {
+                Toast.makeText(this, "Can't open the store for " + app.name + " yet.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun comingSoon(title: String, msg: String) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(msg + "\n\n(Coming soon.)")
+            .setPositiveButton("OK", null)
+            .show()
     }
 
     private fun showRequestDialog() {
@@ -77,7 +130,6 @@ class MainActivity : AppCompatActivity() {
             .setView(view)
             .setPositiveButton("Send report") { _, _ ->
                 sendToInbox("Loophole report", desc.text.toString())
-                Toast.makeText(this, "Loophole reported — thank you!", Toast.LENGTH_LONG).show()
             }
             .setNegativeButton("Cancel", null)
             .show()
@@ -91,16 +143,46 @@ class MainActivity : AppCompatActivity() {
             .setView(view)
             .setPositiveButton("Send rating") { _, _ ->
                 sendToInbox("Rating", bar.rating.toInt().toString() + " stars — " + comment.text.toString())
-                Toast.makeText(this, "Thanks for rating us!", Toast.LENGTH_LONG).show()
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    // All three (request / loophole / rating) go here.
-    // Next, we set up a tiny free backend (Google Apps Script or Formspree) that
-    // emails these to you, and paste its web address in here.
+    // Emails the request/loophole/rating to you when FEEDBACK_ENDPOINT is set.
     private fun sendToInbox(kind: String, body: String) {
-        Toast.makeText(this, kind + " sent", Toast.LENGTH_SHORT).show()
+        val endpoint = FEEDBACK_ENDPOINT
+        if (endpoint.isBlank()) {
+            Toast.makeText(this, "Saved. (Email delivery isn't switched on yet.)", Toast.LENGTH_LONG).show()
+            return
+        }
+        Toast.makeText(this, "Sending…", Toast.LENGTH_SHORT).show()
+        Thread {
+            try {
+                val conn = URL(endpoint).openConnection() as HttpURLConnection
+                conn.requestMethod = "POST"
+                conn.setRequestProperty("Content-Type", "application/json")
+                conn.setRequestProperty("Accept", "application/json")
+                conn.connectTimeout = 15000
+                conn.readTimeout = 15000
+                conn.doOutput = true
+                val payload = JSONObject()
+                payload.put("_subject", "KosherTech Hub: " + kind)
+                payload.put("type", kind)
+                payload.put("message", body)
+                conn.outputStream.use { it.write(payload.toString().toByteArray(Charsets.UTF_8)) }
+                val ok = conn.responseCode in 200..299
+                val code = conn.responseCode
+                conn.disconnect()
+                runOnUiThread {
+                    Toast.makeText(this,
+                        if (ok) "Sent — thank you!" else "Couldn't send (error " + code + ")",
+                        Toast.LENGTH_LONG).show()
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this, "Couldn't send: " + e.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }.start()
     }
 }

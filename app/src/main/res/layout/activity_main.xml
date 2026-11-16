@@ -1,162 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_root"
-    android:fillViewport="true">
+    android:background="@drawable/bg_root">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="18dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="14dp">
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_logo"
-                android:contentDescription="KosherTech logo"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginStart="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/brand"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tagline"
-                    android:textColor="@color/muted"
-                    android:textSize="9sp"
-                    android:letterSpacing="0.14"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/searchBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/bg_search"
-            android:hint="Search apps"
-            android:textColorHint="@color/muted"
-            android:textColor="@color/white"
-            android:padding="12dp"
-            android:inputType="text"
-            android:maxLines="1"
-            android:importantForAutofill="no"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Your Apps"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="10dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/appList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"/>
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_card"
-            android:padding="16dp"
-            android:layout_marginTop="14dp">
-            <TextView
+            android:padding="18dp">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Need another app?"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="14dp">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_logo"
+                    android:contentDescription="KosherTech logo"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/brand"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tagline"
+                        android:textColor="@color/muted"
+                        android:textSize="9sp"
+                        android:letterSpacing="0.14"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/searchBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_search"
+                android:hint="Search apps"
+                android:textColorHint="@color/muted"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="14sp"/>
+                android:padding="12dp"
+                android:inputType="text"
+                android:maxLines="1"
+                android:importantForAutofill="no"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tell us which app and why. We will review it."
+                android:text="Your Apps"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="10dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/appList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card"
+                android:padding="16dp"
+                android:layout_marginTop="14dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Need another app?"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tell us which app and why. We will review it."
+                    android:textColor="@color/muted"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="12dp"/>
+                <TextView
+                    android:id="@+id/requestButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="+  Request an App"
+                    android:gravity="center"
+                    android:textColor="#04121C"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:paddingVertical="12dp"
+                    android:background="@drawable/bg_request"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:id="@+id/loopholeButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="🛡  Report a Loophole"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:paddingVertical="11dp"
+                    android:background="@drawable/bg_secondary"
+                    android:clickable="true"
+                    android:focusable="true"/>
+                <View
+                    android:layout_width="9dp"
+                    android:layout_height="1dp"/>
+                <TextView
+                    android:id="@+id/rateButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="⭐  Rate Us"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:paddingVertical="11dp"
+                    android:background="@drawable/bg_secondary"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:id="@+id/buyPlanButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="🛒  Buy Plan"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:paddingVertical="11dp"
+                    android:background="@drawable/bg_secondary"
+                    android:clickable="true"
+                    android:focusable="true"/>
+                <View
+                    android:layout_width="9dp"
+                    android:layout_height="1dp"/>
+                <TextView
+                    android:id="@+id/updatePaymentButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="💳  Update Payment"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:paddingVertical="11dp"
+                    android:background="@drawable/bg_secondary"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="KosherTech · Approved apps only"
                 android:textColor="@color/muted"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="12dp"/>
-            <TextView
-                android:id="@+id/requestButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="+  Request an App"
+                android:textSize="10sp"
                 android:gravity="center"
-                android:textColor="#04121C"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:paddingVertical="12dp"
-                android:background="@drawable/bg_request"
-                android:clickable="true"
-                android:focusable="true"/>
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="8dp"/>
         </LinearLayout>
+    </ScrollView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-            <TextView
-                android:id="@+id/loopholeButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Report a Loophole"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:paddingVertical="11dp"
-                android:background="@drawable/bg_secondary"
-                android:clickable="true"
-                android:focusable="true"/>
-            <View
-                android:layout_width="9dp"
-                android:layout_height="1dp"/>
-            <TextView
-                android:id="@+id/rateButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Rate Us"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:paddingVertical="11dp"
-                android:background="@drawable/bg_secondary"
-                android:clickable="true"
-                android:focusable="true"/>
-        </LinearLayout>
+    <!-- Gemini-style glowing frame around the whole screen (pulses in MainActivity) -->
+    <View
+        android:id="@+id/glowBorder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/glow_border"
+        android:clickable="false"
+        android:focusable="false"
+        android:importantForAccessibility="no"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="KosherTech · Approved apps only"
-            android:textColor="@color/muted"
-            android:textSize="10sp"
-            android:gravity="center"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="8dp"/>
-    </LinearLayout>
-</ScrollView>
+</FrameLayout>
