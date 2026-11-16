@@ -2,18 +2,21 @@ package com.koshertech.hub
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,18 +26,36 @@ import java.net.URL
 
 class MainActivity : AppCompatActivity() {
 
-    // ===== EMAIL DELIVERY =====
-    // The build machine swaps this placeholder for your hidden FORMSUBMIT_URL secret.
-    // Your real email never lives in the project files — only in the locked secret.
-    // If no secret is set, it stays a placeholder and the app just says "saved".
-    private val FEEDBACK_ENDPOINT = "FEEDBACK_ENDPOINT_PLACEHOLDER"
+    // Feedback (requests / loopholes / ratings) is emailed here via FormSubmit.
+    // The address is never shown anywhere in the app.
+    private val FEEDBACK_ENDPOINT = "https://formsubmit.co/ajax/mechelr362@gmail.com"
 
     // ===== YOUR APPS =====
-    // To add an app: copy a line, change the name/category/package/color.
     private val allApps = listOf(
         AppItem("Zemer", "Music · Jewish songs", "PACKAGE_FOR_ZEMER", 0xFFE0A52B.toInt()),
         AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFE04F5F.toInt()),
         AppItem("Zing", "Music · Streaming", "fm.jewishmusic.application", 0xFF9333EA.toInt())
+    )
+
+    // ===== PLANS (demo pricing — edit freely) =====
+    data class Plan(
+        val name: String,
+        val price: String,
+        val period: String,
+        val features: String,
+        val popular: Boolean,
+        val accent: Int
+    )
+
+    private val plans = listOf(
+        Plan("Basic", "$14.99", "/mo",
+            "1 device  ·  approved apps  ·  email support", false, 0xFF22D3EE.toInt()),
+        Plan("Family", "$24.99", "/mo",
+            "Up to 4 devices  ·  remote management  ·  priority support", true, 0xFF9333EA.toInt()),
+        Plan("Premium", "$34.99", "/mo",
+            "Unlimited devices  ·  custom app approvals  ·  24/7 support", false, 0xFFE0A52B.toInt()),
+        Plan("Yearly", "$299", "/yr",
+            "All Premium features  ·  2 months free", false, 0xFF34D399.toInt())
     )
 
     private lateinit var adapter: AppAdapter
@@ -65,7 +86,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Re-check which apps are installed each time the screen comes back.
         adapter.notifyDataSetChanged()
     }
 
@@ -98,75 +118,100 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // ===== PLANS (demo only — made-up pricing you can edit anytime) =====
-    private val plans = arrayOf(
-        "Basic — $14.99/mo   ·   1 device, approved apps, email support",
-        "Family — $24.99/mo   ·   up to 4 devices, remote management",
-        "Premium — $34.99/mo   ·   unlimited devices, priority 24/7 support",
-        "Yearly — $299/yr   ·   Premium features, 2 months free"
-    )
+    // ---- Custom popup: rounded card, its own X and buttons (no default Submit/Cancel) ----
+    private fun customDialog(view: View): Dialog {
+        val d = Dialog(this)
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        d.setContentView(view)
+        d.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        val w = (resources.displayMetrics.widthPixels * 0.90).toInt()
+        d.window?.setLayout(w, ViewGroup.LayoutParams.WRAP_CONTENT)
+        return d
+    }
+
+    private fun showRequestDialog() {
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_request, null)
+        val dialog = customDialog(view)
+        view.findViewById<View>(R.id.closeX).setOnClickListener { dialog.dismiss() }
+        view.findViewById<TextView>(R.id.primaryBtn).setOnClickListener {
+            val appName = view.findViewById<EditText>(R.id.reqAppName).text.toString()
+            val reason = view.findViewById<EditText>(R.id.reqReason).text.toString()
+            sendToInbox("App request", appName + " — " + reason)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun showLoopholeDialog() {
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_loophole, null)
+        val dialog = customDialog(view)
+        view.findViewById<View>(R.id.closeX).setOnClickListener { dialog.dismiss() }
+        view.findViewById<TextView>(R.id.primaryBtn).setOnClickListener {
+            val desc = view.findViewById<EditText>(R.id.loopDesc).text.toString()
+            sendToInbox("Loophole report", desc)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun showRateDialog() {
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_rate, null)
+        val dialog = customDialog(view)
+        view.findViewById<View>(R.id.closeX).setOnClickListener { dialog.dismiss() }
+        view.findViewById<TextView>(R.id.primaryBtn).setOnClickListener {
+            val bar = view.findViewById<RatingBar>(R.id.ratingBar)
+            val comment = view.findViewById<EditText>(R.id.rateComment).text.toString()
+            sendToInbox("Rating", bar.rating.toInt().toString() + " stars — " + comment)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
 
     private fun showBuyPlanDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Choose your plan")
-            .setItems(plans) { _, which -> showPaymentDialog(plans[which]) }
-            .setNegativeButton("Cancel", null)
-            .show()
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_buyplan, null)
+        val dialog = customDialog(view)
+        view.findViewById<View>(R.id.closeX).setOnClickListener { dialog.dismiss() }
+
+        val container = view.findViewById<ViewGroup>(R.id.planContainer)
+        val inflater = LayoutInflater.from(this)
+        for (plan in plans) {
+            val card = inflater.inflate(R.layout.item_plan, container, false)
+            card.findViewById<TextView>(R.id.planName).text = plan.name
+            card.findViewById<TextView>(R.id.planName).setTextColor(plan.accent)
+            card.findViewById<TextView>(R.id.planPrice).text = plan.price
+            card.findViewById<TextView>(R.id.planPeriod).text = plan.period
+            card.findViewById<TextView>(R.id.planFeatures).text = plan.features
+            card.findViewById<TextView>(R.id.planCta).setTextColor(plan.accent)
+            if (plan.popular) {
+                card.findViewById<TextView>(R.id.planBadge).visibility = View.VISIBLE
+            }
+            // colored border to match the plan's accent
+            val bg = card.findViewById<View>(R.id.planCard).background.mutate() as GradientDrawable
+            bg.setStroke(if (plan.popular) 3 else 2, plan.accent)
+
+            card.setOnClickListener {
+                dialog.dismiss()
+                showPaymentDialog(plan.name + " — " + plan.price + plan.period)
+            }
+            container.addView(card)
+        }
+        dialog.show()
     }
 
     // Demo card entry. Submit just shows a confirmation — no real payment happens.
     private fun showPaymentDialog(plan: String?) {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_payment, null)
-        val title = view.findViewById<TextView>(R.id.payTitle)
-        if (plan != null) title.text = "Plan: " + plan
-        AlertDialog.Builder(this)
-            .setView(view)
-            .setPositiveButton("Submit") { _, _ ->
-                Toast.makeText(this, "Payment submitted ✓  Thank you!", Toast.LENGTH_LONG).show()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
+        val dialog = customDialog(view)
+        if (plan != null) view.findViewById<TextView>(R.id.payTitle).text = plan
+        view.findViewById<View>(R.id.closeX).setOnClickListener { dialog.dismiss() }
+        view.findViewById<TextView>(R.id.primaryBtn).setOnClickListener {
+            Toast.makeText(this, "Payment submitted ✓  Thank you!", Toast.LENGTH_LONG).show()
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
-    private fun showRequestDialog() {
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_request, null)
-        val appName = view.findViewById<EditText>(R.id.reqAppName)
-        val reason = view.findViewById<EditText>(R.id.reqReason)
-        AlertDialog.Builder(this)
-            .setView(view)
-            .setPositiveButton("Send request") { _, _ ->
-                sendToInbox("App request", appName.text.toString() + " — " + reason.text.toString())
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun showLoopholeDialog() {
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_loophole, null)
-        val desc = view.findViewById<EditText>(R.id.loopDesc)
-        AlertDialog.Builder(this)
-            .setView(view)
-            .setPositiveButton("Send report") { _, _ ->
-                sendToInbox("Loophole report", desc.text.toString())
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun showRateDialog() {
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_rate, null)
-        val bar = view.findViewById<RatingBar>(R.id.ratingBar)
-        val comment = view.findViewById<EditText>(R.id.rateComment)
-        AlertDialog.Builder(this)
-            .setView(view)
-            .setPositiveButton("Send rating") { _, _ ->
-                sendToInbox("Rating", bar.rating.toInt().toString() + " stars — " + comment.text.toString())
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    // Emails the request/loophole/rating to you when FEEDBACK_ENDPOINT is set.
+    // Emails the request/loophole/rating to you.
     private fun sendToInbox(kind: String, body: String) {
         val endpoint = FEEDBACK_ENDPOINT
         if (endpoint.isBlank() || endpoint.contains("PLACEHOLDER")) {

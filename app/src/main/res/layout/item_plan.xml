@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/planCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_plan"
+    android:padding="16dp"
+    android:layout_marginBottom="11dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/planBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="★ MOST POPULAR"
+        android:textColor="@color/cyan"
+        android:textStyle="bold"
+        android:textSize="10sp"
+        android:letterSpacing="0.08"
+        android:background="@drawable/bg_badge"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="4dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/planName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="bottom"
+        android:layout_marginTop="2dp">
+        <TextView
+            android:id="@+id/planPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="24sp"/>
+        <TextView
+            android:id="@+id/planPeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/muted"
+            android:textSize="13sp"
+            android:layout_marginStart="3dp"
+            android:layout_marginBottom="3dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/planFeatures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/muted"
+        android:textSize="11sp"
+        android:layout_marginTop="7dp"
+        android:lineSpacingExtra="3dp"/>
+
+    <TextView
+        android:id="@+id/planCta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose this plan  →"
+        android:textColor="@color/cyan"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:layout_marginTop="10dp"/>
+</LinearLayout>

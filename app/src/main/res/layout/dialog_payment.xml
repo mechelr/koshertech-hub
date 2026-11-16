@@ -4,27 +4,43 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="@color/card">
+    android:background="@drawable/bg_dialog">
 
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Payment"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="17sp"
-        android:gravity="center"
-        android:layout_marginBottom="4dp"/>
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="💳  Payment"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:paddingHorizontal="24dp"/>
+        <TextView
+            android:id="@+id/closeX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:text="✕"
+            android:textColor="@color/muted"
+            android:textSize="18sp"
+            android:padding="4dp"
+            android:clickable="true"
+            android:focusable="true"/>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/payTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Enter your card details"
-        android:textColor="@color/muted"
+        android:textColor="@color/cyan"
         android:textSize="12sp"
         android:gravity="center"
-        android:layout_marginBottom="14dp"/>
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/cardName"
@@ -34,7 +50,7 @@
         android:textColorHint="@color/muted"
         android:textColor="@color/white"
         android:background="@drawable/bg_search"
-        android:padding="11dp"
+        android:padding="12dp"
         android:layout_marginBottom="10dp"
         android:inputType="textPersonName"
         android:importantForAutofill="no"/>
@@ -47,7 +63,7 @@
         android:textColorHint="@color/muted"
         android:textColor="@color/white"
         android:background="@drawable/bg_search"
-        android:padding="11dp"
+        android:padding="12dp"
         android:layout_marginBottom="10dp"
         android:inputType="number"
         android:maxLength="19"
@@ -66,7 +82,7 @@
             android:textColorHint="@color/muted"
             android:textColor="@color/white"
             android:background="@drawable/bg_search"
-            android:padding="11dp"
+            android:padding="12dp"
             android:inputType="text"
             android:importantForAutofill="no"/>
         <View
@@ -81,10 +97,24 @@
             android:textColorHint="@color/muted"
             android:textColor="@color/white"
             android:background="@drawable/bg_search"
-            android:padding="11dp"
+            android:padding="12dp"
             android:inputType="number"
             android:maxLength="4"
             android:importantForAutofill="no"/>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/primaryBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit payment"
+        android:gravity="center"
+        android:textColor="#04121C"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:paddingVertical="14dp"
+        android:background="@drawable/bg_request"
+        android:layout_marginTop="18dp"
+        android:clickable="true"
+        android:focusable="true"/>
 </LinearLayout>
