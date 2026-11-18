@@ -6,11 +6,15 @@ import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.text.InputType
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 
@@ -53,7 +57,33 @@ class AutomationsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_automations)
         prefs = getSharedPreferences("ktautomations", Context.MODE_PRIVATE)
         findViewById<View>(R.id.backBtn).setOnClickListener { finish() }
-        rebuild()
+        gate()
+    }
+
+    // Locked behind the same parent PIN so a kid can't change automations or the report email.
+    private fun gate() {
+        val pin = getSharedPreferences("ktparental", Context.MODE_PRIVATE).getString("pin", null)
+        if (pin == null) { rebuild(); return }
+        val et = EditText(this)
+        et.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+        et.hint = "••••"; val pad = dp(16); et.setPadding(pad, pad, pad, pad)
+        AlertDialog.Builder(this).setTitle("Enter parent PIN").setView(et).setCancelable(false)
+            .setPositiveButton("Unlock") { _, _ ->
+                if (et.text.toString() == pin) rebuild()
+                else { Toast.makeText(this, "Wrong PIN", Toast.LENGTH_SHORT).show(); finish() }
+            }
+            .setNegativeButton("Cancel") { _, _ -> finish() }.show()
+    }
+
+    private fun editEmail() {
+        val et = EditText(this)
+        et.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        et.hint = "parent@example.com"
+        et.setText(prefs.getString("reportEmail", ""))
+        val pad = dp(16); et.setPadding(pad, pad, pad, pad)
+        AlertDialog.Builder(this).setTitle("Email weekly reports to").setView(et)
+            .setPositiveButton("Save") { _, _ -> prefs.edit().putString("reportEmail", et.text.toString().trim()).apply(); rebuild() }
+            .setNegativeButton("Cancel", null).show()
     }
 
     private fun dp(v: Int): Int = (v * resources.displayMetrics.density).toInt()
@@ -114,6 +144,16 @@ class AutomationsActivity : AppCompatActivity() {
             val wlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); wlp.topMargin = dp(5); w.layoutParams = wlp
             if (a.editTime) w.setOnClickListener { pickTimes(a) }
             col.addView(w)
+        }
+
+        if (a.key == "report") {
+            val email = prefs.getString("reportEmail", "") ?: ""
+            val emTv = TextView(this)
+            emTv.text = if (email.isBlank()) "📧 Send to: tap to set an email" else "📧 Send to: " + email + "   ✎"
+            emTv.setTextColor(0xFF34D399.toInt()); emTv.textSize = 11f; emTv.setTypeface(emTv.typeface, Typeface.BOLD)
+            val elp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); elp.topMargin = dp(6); emTv.layoutParams = elp
+            emTv.setOnClickListener { editEmail() }
+            col.addView(emTv)
         }
 
         card.addView(ic); card.addView(col)
