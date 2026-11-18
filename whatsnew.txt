@@ -1,1 +1,1 @@
-💬 Live chat: the auto-reply now comes only once — on your first message when you open a chat — and each new chat gets its own fresh ticket number.
+💬 Support replies in live chat now show a KosherTech profile picture and a "KosherTech Employee" label, so it's clear who's answering.

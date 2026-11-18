@@ -2,6 +2,7 @@ package com.koshertech.hub
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,6 +10,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
@@ -129,13 +131,38 @@ class ChatActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun removeBubble(bubble: TextView?) {
-        if (bubble == null) return
-        (bubble.parent as? LinearLayout)?.removeView(bubble)
+    private fun removeBubble(v: View?) {
+        if (v == null) return
+        (v.parent as? ViewGroup)?.removeView(v)
     }
 
-    private fun addBubble(text: String, outgoing: Boolean): TextView {
+    private fun addBubble(text: String, outgoing: Boolean): View {
         val container = findViewById<LinearLayout>(R.id.chatMessages)
+
+        // Wrapper so an incoming (support) message can carry a profile header above it.
+        val wrap = LinearLayout(this)
+        wrap.orientation = LinearLayout.VERTICAL
+        wrap.gravity = if (outgoing) Gravity.END else Gravity.START
+        val wlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        wlp.topMargin = dp(8)
+        wlp.leftMargin = if (outgoing) dp(50) else 0
+        wlp.rightMargin = if (outgoing) 0 else dp(50)
+        wrap.layoutParams = wlp
+
+        if (!outgoing) {
+            val header = LinearLayout(this); header.orientation = LinearLayout.HORIZONTAL; header.gravity = Gravity.CENTER_VERTICAL
+            val avatar = ImageView(this)
+            avatar.setImageResource(R.drawable.ic_logo)
+            val alp = LinearLayout.LayoutParams(dp(22), dp(22)); alp.rightMargin = dp(6); avatar.layoutParams = alp
+            val nm = TextView(this)
+            nm.text = "KosherTech Employee"
+            nm.setTextColor(0xFF22D3EE.toInt()); nm.textSize = 11f; nm.setTypeface(nm.typeface, Typeface.BOLD)
+            header.addView(avatar); header.addView(nm)
+            val hlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); hlp.bottomMargin = dp(3)
+            header.layoutParams = hlp
+            wrap.addView(header)
+        }
+
         val bubble = TextView(this)
         bubble.text = text
         bubble.textSize = 14f
@@ -147,16 +174,12 @@ class ChatActivity : AppCompatActivity() {
             bubble.setBackgroundResource(R.drawable.bg_bubble_in)
             bubble.setTextColor(0xFFF3F7FF.toInt())
         }
-        val lp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        lp.gravity = if (outgoing) Gravity.END else Gravity.START
-        lp.topMargin = dp(6)
-        lp.leftMargin = if (outgoing) dp(50) else 0
-        lp.rightMargin = if (outgoing) 0 else dp(50)
-        bubble.layoutParams = lp
-        container.addView(bubble)
+        bubble.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        wrap.addView(bubble)
 
+        container.addView(wrap)
         val scroll = findViewById<ScrollView>(R.id.chatScroll)
         scroll.post { scroll.fullScroll(View.FOCUS_DOWN) }
-        return bubble
+        return wrap
     }
 }
