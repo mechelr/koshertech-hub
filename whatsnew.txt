@@ -1,4 +1,3 @@
-🌤️ New: live weather on the home screen — current temperature plus the next 3 days.
-🔔 New: after every update you'll see a short note like this explaining what improved.
-💬 Live chat now auto-replies with a ticket number until a rep answers.
-🔒 Parental Controls: apps can be set to Anytime (no time limit), with a clear way to remove a limit.
+📍 New: set your own location! Tap the location on the Zmanim card and search by city or 5-digit ZIP — both the Zmanim and the Weather update to that place.
+🌤️ Weather and Zmanim now follow whatever location you choose, with the correct local times.
+🔔 You're seeing this because the "What's new after every update" feature is working.

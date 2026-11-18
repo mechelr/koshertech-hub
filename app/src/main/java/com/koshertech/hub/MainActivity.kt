@@ -34,6 +34,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URLEncoder
 
 class MainActivity : AppCompatActivity() {
 
@@ -80,6 +81,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        ZmanimInfo.load(this)
+
         val recycler = findViewById<RecyclerView>(R.id.appList)
         recycler.layoutManager = LinearLayoutManager(this)
         adapter = AppAdapter(allApps) { app -> openOrInstall(app) }
@@ -107,6 +110,78 @@ class MainActivity : AppCompatActivity() {
         fetchWeather()
         initUpdateBar()
         startGlow()
+
+        // Tap the location label (on the zmanim card) to change city for BOTH zmanim and weather.
+        findViewById<TextView>(R.id.zmanimLoc).setOnClickListener { showLocationDialog() }
+    }
+
+    // ===== LOCATION PICKER (shared by zmanim + weather) =====
+    private fun showLocationDialog() {
+        val input = EditText(this)
+        input.hint = "City or 5-digit ZIP (e.g. Lakewood or 08701)"
+        input.setPadding(dpx(16), dpx(16), dpx(16), dpx(16))
+        AlertDialog.Builder(this)
+            .setTitle("Set location")
+            .setMessage("Used for both the Zmanim and the Weather.\nCurrently: " + ZmanimInfo.locationName())
+            .setView(input)
+            .setPositiveButton("Search") { _, _ ->
+                val q = input.text.toString().trim()
+                if (q.isNotEmpty()) resolveAndSaveLocation(q)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun httpGet(urlStr: String): String {
+        val conn = URL(urlStr).openConnection() as HttpURLConnection
+        conn.connectTimeout = 10000; conn.readTimeout = 10000; conn.instanceFollowRedirects = true
+        val t = conn.inputStream.bufferedReader().readText(); conn.disconnect(); return t
+    }
+
+    private fun resolveTz(lat: Double, lng: Double): String {
+        return try {
+            val o = JSONObject(httpGet("https://api.open-meteo.com/v1/forecast?latitude=$lat&longitude=$lng&timezone=auto&forecast_days=1"))
+            o.optString("timezone", "")
+        } catch (e: Exception) { "" }
+    }
+
+    private fun resolveAndSaveLocation(query: String) {
+        Toast.makeText(this, "Looking up \"$query\"…", Toast.LENGTH_SHORT).show()
+        Thread {
+            try {
+                var name = ""; var lat = 0.0; var lng = 0.0; var tz = ""
+                val q = query.trim()
+                // 1) Open-Meteo geocoding (cities, towns worldwide; returns timezone)
+                val gurl = "https://geocoding-api.open-meteo.com/v1/search?name=" +
+                    URLEncoder.encode(q, "UTF-8") + "&count=1&language=en&format=json"
+                val arr = JSONObject(httpGet(gurl)).optJSONArray("results")
+                if (arr != null && arr.length() > 0) {
+                    val r = arr.getJSONObject(0)
+                    lat = r.getDouble("latitude"); lng = r.getDouble("longitude")
+                    tz = r.optString("timezone", "")
+                    val base = r.optString("name", ""); val admin1 = r.optString("admin1", "")
+                    name = if (admin1.isNotBlank()) "$base, $admin1" else base
+                } else if (q.matches(Regex("\\d{5}"))) {
+                    // 2) US ZIP fallback via Zippopotam
+                    val places = JSONObject(httpGet("https://api.zippopotam.us/us/$q")).getJSONArray("places").getJSONObject(0)
+                    lat = places.getString("latitude").toDouble()
+                    lng = places.getString("longitude").toDouble()
+                    name = places.getString("place name") + ", " + places.getString("state abbreviation")
+                } else throw Exception("not found")
+
+                if (tz.isBlank()) tz = resolveTz(lat, lng)
+                if (tz.isBlank()) tz = "America/New_York"
+
+                ZmanimInfo.setLocation(this, name, lat, lng, tz)
+                runOnUiThread {
+                    Toast.makeText(this, "Location set to " + name, Toast.LENGTH_LONG).show()
+                    populateZmanim()
+                    fetchWeather()
+                }
+            } catch (e: Exception) {
+                runOnUiThread { Toast.makeText(this, "Couldn't find that. Try a city name or a 5-digit ZIP.", Toast.LENGTH_LONG).show() }
+            }
+        }.start()
     }
 
     // ===== WEATHER (display only — no taps, goes nowhere) =====
@@ -114,10 +189,11 @@ class MainActivity : AppCompatActivity() {
     private fun fetchWeather() {
         Thread {
             try {
-                val url = "https://api.open-meteo.com/v1/forecast?latitude=40.6782&longitude=-73.9442" +
+                val url = "https://api.open-meteo.com/v1/forecast?latitude=" + ZmanimInfo.lat() +
+                    "&longitude=" + ZmanimInfo.lng() +
                     "&current=temperature_2m,weather_code" +
                     "&daily=weather_code,temperature_2m_max,temperature_2m_min" +
-                    "&temperature_unit=fahrenheit&timezone=America%2FNew_York&forecast_days=4"
+                    "&temperature_unit=fahrenheit&timezone=auto&forecast_days=4"
                 val conn = URL(url).openConnection() as HttpURLConnection
                 conn.connectTimeout = 10000; conn.readTimeout = 10000; conn.instanceFollowRedirects = true
                 val text = conn.inputStream.bufferedReader().readText()
@@ -148,7 +224,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showWeather(nowTemp: Int, nowCode: Int, labels: List<String>, emos: List<String>, his: List<Int>, los: List<Int>) {
         findViewById<TextView>(R.id.weatherNow).text = "$nowTemp°"
-        findViewById<TextView>(R.id.weatherDesc).text = descFor(nowCode) + "  ·  Brooklyn, NY"
+        findViewById<TextView>(R.id.weatherDesc).text = descFor(nowCode) + "  ·  " + ZmanimInfo.locationName()
         findViewById<TextView>(R.id.weatherIcon).text = emojiFor(nowCode)
         val row = findViewById<LinearLayout>(R.id.weatherDays)
         row.removeAllViews()
@@ -327,7 +403,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.greetingText).text = ZmanimInfo.greeting()
         findViewById<TextView>(R.id.hebrewDate).text = ZmanimInfo.hebrewDate()
         findViewById<TextView>(R.id.englishDate).text = ZmanimInfo.englishDate()
-        findViewById<TextView>(R.id.zmanimLoc).text = "🕯️ " + ZmanimInfo.locationName()
+        findViewById<TextView>(R.id.zmanimLoc).text = "📍 " + ZmanimInfo.locationName() + "  ✎"
         findViewById<TextView>(R.id.candleVal).text = ZmanimInfo.candleLighting()
 
         val grid = findViewById<LinearLayout>(R.id.zmanimGrid)

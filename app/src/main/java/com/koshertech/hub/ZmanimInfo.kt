@@ -1,5 +1,6 @@
 package com.koshertech.hub
 
+import android.content.Context
 import com.kosherjava.zmanim.ComplexZmanimCalendar
 import com.kosherjava.zmanim.hebrewcalendar.HebrewDateFormatter
 import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar
@@ -14,14 +15,34 @@ data class Zman(val label: String, val time: String)
 
 object ZmanimInfo {
 
-    // Default location (Brooklyn). Later this comes from the device / a picked city.
-    private const val CITY = "Brooklyn, NY"
-    private const val LAT = 40.6782
-    private const val LNG = -73.9442
+    // Location — defaults to Brooklyn, overridden by whatever the user sets.
+    private var CITY = "Brooklyn, NY"
+    private var LAT = 40.6782
+    private var LNG = -73.9442
     private const val ELEV = 10.0
-    private const val TZID = "America/New_York"
+    private var TZID = "America/New_York"
+
+    // Load the saved location (call once on startup).
+    fun load(ctx: Context) {
+        val p = ctx.getSharedPreferences("ktloc", Context.MODE_PRIVATE)
+        CITY = p.getString("city", CITY) ?: CITY
+        LAT = p.getFloat("lat", LAT.toFloat()).toDouble()
+        LNG = p.getFloat("lng", LNG.toFloat()).toDouble()
+        TZID = p.getString("tz", TZID) ?: TZID
+    }
+
+    // Save a new location (used by the Set Location picker).
+    fun setLocation(ctx: Context, city: String, lat: Double, lng: Double, tz: String) {
+        CITY = city; LAT = lat; LNG = lng; TZID = tz
+        ctx.getSharedPreferences("ktloc", Context.MODE_PRIVATE).edit()
+            .putString("city", city).putFloat("lat", lat.toFloat())
+            .putFloat("lng", lng.toFloat()).putString("tz", tz).apply()
+    }
 
     fun locationName(): String = CITY
+    fun lat(): Double = LAT
+    fun lng(): Double = LNG
+    fun tzId(): String = TZID
 
     private fun fmt(d: Date?): String {
         if (d == null) return "--"
