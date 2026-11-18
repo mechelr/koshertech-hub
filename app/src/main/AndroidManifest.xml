@@ -29,6 +29,7 @@
         <activity android:name=".CalendarActivity" android:exported="false"/>
         <activity android:name=".ParentalActivity" android:exported="false"/>
         <activity android:name=".AutomationsActivity" android:exported="false"/>
+        <activity android:name=".ChatActivity" android:exported="false"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

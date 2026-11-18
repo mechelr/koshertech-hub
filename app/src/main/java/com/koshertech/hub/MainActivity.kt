@@ -87,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileParental).setOnClickListener { startActivity(Intent(this, ParentalActivity::class.java)) }
         findViewById<View>(R.id.tileAutomations).setOnClickListener { startActivity(Intent(this, AutomationsActivity::class.java)) }
         findViewById<View>(R.id.tileHelp).setOnClickListener { showHelp() }
+        findViewById<View>(R.id.chatFab).setOnClickListener { startActivity(Intent(this, ChatActivity::class.java)) }
 
         populateZmanim()
         checkForUpdate()
@@ -226,6 +227,10 @@ class MainActivity : AppCompatActivity() {
         val dialog = customDialog(view)
         view.findViewById<View>(R.id.closeX).setOnClickListener { dialog.dismiss() }
         view.findViewById<TextView>(R.id.primaryBtn).setOnClickListener { dialog.dismiss() }
+        view.findViewById<TextView>(R.id.helpChat).setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, ChatActivity::class.java))
+        }
         dialog.show()
     }
 
