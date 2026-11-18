@@ -20,7 +20,7 @@ import java.util.UUID
 
 class ChatActivity : AppCompatActivity() {
 
-    private val ENDPOINT = "https://script.google.com/macros/s/AKfycbyItxTmCLC4oLj1Xv2xaoOwNmhl_r2XEln6BqFyoKStbyV5Q-ve-40wXByWJqkC9hDv/exec"
+    private val ENDPOINT = "https://script.google.com/macros/s/AKfycbzeh0yW4sqHXuJZXsg31xZFDXm4q7crX-MIWBCE4bEDyLg7l-yY4askgSfZd9II7_wG/exec"
 
     private lateinit var chatId: String
     private lateinit var prefsChat: SharedPreferences

@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     // Feedback (requests / loopholes / ratings) is emailed here via FormSubmit.
     // The address is never shown anywhere in the app.
-    private val FEEDBACK_ENDPOINT = "https://script.google.com/macros/s/AKfycbyItxTmCLC4oLj1Xv2xaoOwNmhl_r2XEln6BqFyoKStbyV5Q-ve-40wXByWJqkC9hDv/exec"
+    private val FEEDBACK_ENDPOINT = "https://script.google.com/macros/s/AKfycbzeh0yW4sqHXuJZXsg31xZFDXm4q7crX-MIWBCE4bEDyLg7l-yY4askgSfZd9II7_wG/exec"
 
     // ===== YOUR APPS =====
     // apkUrl: a KosherTech-hosted link to the approved APK. When set, Install downloads

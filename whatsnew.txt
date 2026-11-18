@@ -1,3 +1,2 @@
-📋 App requests now show a live status — Pending, Approved, or Declined — right under the Request button.
-🛠️ KosherTech can now add approved apps to your device remotely, so new apps can appear without reinstalling.
-📢 Announcements from KosherTech can now show at the top of your home screen.
+🔗 Connected the app to your live KosherTech backend — requests, live chat, email alerts, remote apps and announcements all run through it now.
+📋 Request status, remote app push, and announcements are active.
