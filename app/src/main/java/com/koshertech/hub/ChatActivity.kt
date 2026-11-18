@@ -130,7 +130,7 @@ class ChatActivity : AppCompatActivity() {
     private fun pollReplies() {
         Thread {
             try {
-                val conn = URL(ENDPOINT + "?chatId=" + chatId).openConnection() as HttpURLConnection
+                val conn = URL(ENDPOINT + "?action=chat&chatId=" + chatId).openConnection() as HttpURLConnection
                 conn.connectTimeout = 10000; conn.readTimeout = 10000
                 conn.instanceFollowRedirects = true
                 val text = conn.inputStream.bufferedReader().readText()

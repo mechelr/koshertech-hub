@@ -1,2 +1,2 @@
-🔗 Connected the app to your live KosherTech backend — requests, live chat, email alerts, remote apps and announcements all run through it now.
-📋 Request status, remote app push, and announcements are active.
+💬 Live chat now receives replies from the support team (fixed).
+🔄 The app now refreshes every time you open it, so approved requests, pushed apps, and announcements from KosherTech show up right away.
