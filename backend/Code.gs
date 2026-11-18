@@ -1,11 +1,11 @@
 // ===================== KosherTech Control Backend =====================
 // ONE script = data store (Google Sheet) + device sync API + admin dashboard.
-// 1) Put your email on the next line (for request/loophole/rating alerts).
-// 2) Deploy as a NEW VERSION of your existing deployment (keeps the same URL).
-// 3) Open the URL in a browser to use the admin dashboard; the first password
+// Your email is already filled in below (mechelr362@gmail.com).
+// 1) Deploy as a NEW VERSION of your existing deployment (keeps the same URL).
+// 2) Open the URL in a browser to use the admin dashboard; the first password
 //    you type there becomes your admin password.
 
-var TO = "PUT_YOUR_EMAIL_HERE@gmail.com";
+var TO = "mechelr362@gmail.com";
 
 // ---------- storage ----------
 function ss_() {
