@@ -157,6 +157,18 @@ class ParentalActivity : AppCompatActivity() {
         status.textSize = 12f; status.setTypeface(status.typeface, Typeface.BOLD)
         val slp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); slp.topMargin = dp(10); status.layoutParams = slp
         card.addView(status)
+
+        if (limited) {
+            val remove = TextView(this)
+            remove.text = "✕  Remove time limit  (make available anytime)"
+            remove.setTextColor(0xFFE07A86.toInt())
+            remove.textSize = 12f; remove.setTypeface(remove.typeface, Typeface.BOLD)
+            val rlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); rlp.topMargin = dp(8); remove.layoutParams = rlp
+            remove.setOnClickListener {
+                prefs.edit().putBoolean("limited_" + r.name, false).apply(); buildCards()
+            }
+            card.addView(remove)
+        }
         return card
     }
 
