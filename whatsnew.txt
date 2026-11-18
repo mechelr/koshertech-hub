@@ -1,0 +1,4 @@
+🌤️ New: live weather on the home screen — current temperature plus the next 3 days.
+🔔 New: after every update you'll see a short note like this explaining what improved.
+💬 Live chat now auto-replies with a ticket number until a rep answers.
+🔒 Parental Controls: apps can be set to Anytime (no time limit), with a clear way to remove a limit.

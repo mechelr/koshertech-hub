@@ -3,9 +3,16 @@ package com.koshertech.hub
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.view.Gravity
+import androidx.appcompat.app.AlertDialog
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -97,8 +104,79 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.chatFab).setOnClickListener { startActivity(Intent(this, ChatActivity::class.java)) }
 
         populateZmanim()
+        fetchWeather()
         initUpdateBar()
         startGlow()
+    }
+
+    // ===== WEATHER (display only — no taps, goes nowhere) =====
+    // Uses the free Open-Meteo API (no key). Same location as the zmanim card.
+    private fun fetchWeather() {
+        Thread {
+            try {
+                val url = "https://api.open-meteo.com/v1/forecast?latitude=40.6782&longitude=-73.9442" +
+                    "&current=temperature_2m,weather_code" +
+                    "&daily=weather_code,temperature_2m_max,temperature_2m_min" +
+                    "&temperature_unit=fahrenheit&timezone=America%2FNew_York&forecast_days=4"
+                val conn = URL(url).openConnection() as HttpURLConnection
+                conn.connectTimeout = 10000; conn.readTimeout = 10000; conn.instanceFollowRedirects = true
+                val text = conn.inputStream.bufferedReader().readText()
+                conn.disconnect()
+                val o = JSONObject(text)
+                val cur = o.getJSONObject("current")
+                val nowTemp = Math.round(cur.getDouble("temperature_2m")).toInt()
+                val nowCode = cur.optInt("weather_code", 0)
+                val daily = o.getJSONObject("daily")
+                val times = daily.getJSONArray("time")
+                val codes = daily.getJSONArray("weather_code")
+                val maxs = daily.getJSONArray("temperature_2m_max")
+                val mins = daily.getJSONArray("temperature_2m_min")
+                val labels = ArrayList<String>(); val emos = ArrayList<String>()
+                val his = ArrayList<Int>(); val los = ArrayList<Int>()
+                var i = 1
+                while (i < times.length() && labels.size < 3) {
+                    val d = LocalDate.parse(times.getString(i))
+                    labels.add(d.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
+                    emos.add(emojiFor(codes.getInt(i)))
+                    his.add(Math.round(maxs.getDouble(i)).toInt()); los.add(Math.round(mins.getDouble(i)).toInt())
+                    i++
+                }
+                runOnUiThread { showWeather(nowTemp, nowCode, labels, emos, his, los) }
+            } catch (e: Exception) { /* no network / blocked by filter — card just stays hidden */ }
+        }.start()
+    }
+
+    private fun showWeather(nowTemp: Int, nowCode: Int, labels: List<String>, emos: List<String>, his: List<Int>, los: List<Int>) {
+        findViewById<TextView>(R.id.weatherNow).text = "$nowTemp°"
+        findViewById<TextView>(R.id.weatherDesc).text = descFor(nowCode) + "  ·  Brooklyn, NY"
+        findViewById<TextView>(R.id.weatherIcon).text = emojiFor(nowCode)
+        val row = findViewById<LinearLayout>(R.id.weatherDays)
+        row.removeAllViews()
+        for (k in labels.indices) {
+            val cell = LinearLayout(this); cell.orientation = LinearLayout.VERTICAL; cell.gravity = Gravity.CENTER
+            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f); cell.layoutParams = lp
+            val lbl = TextView(this); lbl.text = labels[k]; lbl.setTextColor(0xFFBFC9E6.toInt()); lbl.textSize = 12f; lbl.gravity = Gravity.CENTER
+            val em = TextView(this); em.text = emos[k]; em.textSize = 20f; em.gravity = Gravity.CENTER
+            val tmp = TextView(this); tmp.text = "${his[k]}° / ${los[k]}°"; tmp.setTextColor(0xFFF3F7FF.toInt()); tmp.textSize = 12f; tmp.gravity = Gravity.CENTER; tmp.setTypeface(tmp.typeface, Typeface.BOLD)
+            val emlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); emlp.topMargin = dpx(3); emlp.bottomMargin = dpx(3); em.layoutParams = emlp
+            cell.addView(lbl); cell.addView(em); cell.addView(tmp)
+            row.addView(cell)
+        }
+        findViewById<View>(R.id.weatherCard).visibility = View.VISIBLE
+    }
+
+    private fun dpx(v: Int): Int = (v * resources.displayMetrics.density).toInt()
+
+    private fun emojiFor(code: Int): String = when (code) {
+        0 -> "☀️"; 1, 2 -> "🌤️"; 3 -> "☁️"; 45, 48 -> "🌫️"
+        in 51..57 -> "🌦️"; in 61..67 -> "🌧️"; in 71..77 -> "🌨️"
+        in 80..82 -> "🌧️"; in 85..86 -> "🌨️"; in 95..99 -> "⛈️"; else -> "🌡️"
+    }
+
+    private fun descFor(code: Int): String = when (code) {
+        0 -> "Clear"; 1, 2 -> "Partly cloudy"; 3 -> "Cloudy"; 45, 48 -> "Foggy"
+        in 51..57 -> "Drizzle"; in 61..67 -> "Rain"; in 71..77 -> "Snow"
+        in 80..82 -> "Showers"; in 85..86 -> "Snow showers"; in 95..99 -> "Thunderstorm"; else -> "—"
     }
 
     // Soft breathing ambient glow behind the top of the app.
@@ -157,9 +235,10 @@ class MainActivity : AppCompatActivity() {
                 val remoteCode = obj.optInt("versionCode", 0)
                 val remoteName = obj.optString("versionName", "")
                 val apkUrl = obj.optString("url", "")
+                val notes = obj.optString("notes", "")
                 runOnUiThread {
-                    if (remoteCode > installedVersionCode() && apkUrl.isNotBlank()) setUpdateAvailable(remoteName, apkUrl)
-                    else setUpToDate()
+                    if (remoteCode > installedVersionCode() && apkUrl.isNotBlank()) setUpdateAvailable(remoteName, apkUrl, notes)
+                    else { setUpToDate(); maybeShowWhatsNew(remoteCode, notes) }
                 }
             } catch (e: Exception) {
                 runOnUiThread { setCheckError() }
@@ -167,13 +246,30 @@ class MainActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun setUpdateAvailable(versionName: String, apkUrl: String) {
+    private fun setUpdateAvailable(versionName: String, apkUrl: String, notes: String) {
         pendingApkUrl = apkUrl
         findViewById<TextView>(R.id.updateIcon).text = "⬆️"
-        findViewById<TextView>(R.id.updateTitle).text = "Update available"
-        findViewById<TextView>(R.id.updateSub).text =
-            if (versionName.isBlank()) "Tap to update now" else "Version " + versionName + " — tap to update"
+        findViewById<TextView>(R.id.updateTitle).text = "Update available — tap to install"
+        findViewById<TextView>(R.id.updateSub).text = when {
+            notes.isNotBlank() -> notes
+            versionName.isBlank() -> "Tap to update now"
+            else -> "Version " + versionName + " — tap to update"
+        }
         findViewById<View>(R.id.updateAction).visibility = View.VISIBLE
+    }
+
+    // After the user updates and opens the app, show once what the new version improved.
+    private fun maybeShowWhatsNew(remoteCode: Int, notes: String) {
+        if (notes.isBlank() || remoteCode != installedVersionCode()) return
+        val p = getSharedPreferences("ktmain", Context.MODE_PRIVATE)
+        if (installedVersionCode() > p.getInt("whatsnewShown", 0)) {
+            p.edit().putInt("whatsnewShown", installedVersionCode()).apply()
+            AlertDialog.Builder(this)
+                .setTitle("What's new in v" + installedVersionName())
+                .setMessage(notes)
+                .setPositiveButton("Got it", null)
+                .show()
+        }
     }
 
     private fun setUpToDate() {
