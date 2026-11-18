@@ -1,8 +1,7 @@
 package com.koshertech.hub
 
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
@@ -12,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
@@ -79,7 +79,12 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.buyPlanButton).setOnClickListener { showBuyPlanDialog() }
         findViewById<TextView>(R.id.updatePaymentButton).setOnClickListener { showPaymentDialog(null) }
 
-        startGlow()
+        findViewById<View>(R.id.tileCalendar).setOnClickListener { startActivity(Intent(this, CalendarActivity::class.java)) }
+        findViewById<View>(R.id.tileParental).setOnClickListener { startActivity(Intent(this, ParentalActivity::class.java)) }
+        findViewById<View>(R.id.tileAutomations).setOnClickListener { startActivity(Intent(this, AutomationsActivity::class.java)) }
+        findViewById<View>(R.id.tileHelp).setOnClickListener { showHelp() }
+
+        populateZmanim()
     }
 
     override fun onResume() {
@@ -87,14 +92,66 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    // Gemini-style breathing glow around the whole screen.
-    private fun startGlow() {
-        val glow = findViewById<View>(R.id.glowBorder)
-        val anim = ObjectAnimator.ofFloat(glow, "alpha", 0.35f, 1f)
-        anim.duration = 1700
-        anim.repeatMode = ValueAnimator.REVERSE
-        anim.repeatCount = ValueAnimator.INFINITE
-        anim.start()
+    private fun populateZmanim() {
+        findViewById<TextView>(R.id.greetingText).text = ZmanimInfo.greeting()
+        findViewById<TextView>(R.id.hebrewDate).text = ZmanimInfo.hebrewDate()
+        findViewById<TextView>(R.id.englishDate).text = ZmanimInfo.englishDate()
+        findViewById<TextView>(R.id.zmanimLoc).text = "🕯️ " + ZmanimInfo.locationName()
+        findViewById<TextView>(R.id.candleVal).text = ZmanimInfo.candleLighting()
+
+        val grid = findViewById<LinearLayout>(R.id.zmanimGrid)
+        grid.removeAllViews()
+        val list = ZmanimInfo.zmanim()
+        var i = 0
+        while (i < list.size) {
+            val row = LinearLayout(this)
+            row.orientation = LinearLayout.HORIZONTAL
+            val lp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            lp.bottomMargin = dp(8)
+            row.layoutParams = lp
+            row.addView(zmanCell(list[i]))
+            val sp = View(this)
+            sp.layoutParams = LinearLayout.LayoutParams(dp(14), 1)
+            row.addView(sp)
+            if (i + 1 < list.size) {
+                row.addView(zmanCell(list[i + 1]))
+            } else {
+                val filler = View(this)
+                filler.layoutParams = LinearLayout.LayoutParams(0, 1, 1f)
+                row.addView(filler)
+            }
+            grid.addView(row)
+            i += 2
+        }
+    }
+
+    private fun zmanCell(z: Zman): View {
+        val cell = LinearLayout(this)
+        cell.orientation = LinearLayout.HORIZONTAL
+        cell.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+        val label = TextView(this)
+        label.text = z.label
+        label.textSize = 11f
+        label.setTextColor(0xFF8599C0.toInt())
+        label.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+        val value = TextView(this)
+        value.text = z.time
+        value.textSize = 12f
+        value.setTypeface(value.typeface, android.graphics.Typeface.BOLD)
+        value.setTextColor(0xFFF3F7FF.toInt())
+        cell.addView(label)
+        cell.addView(value)
+        return cell
+    }
+
+    private fun dp(v: Int): Int = (v * resources.displayMetrics.density).toInt()
+
+    private fun showHelp() {
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_help, null)
+        val dialog = customDialog(view)
+        view.findViewById<View>(R.id.closeX).setOnClickListener { dialog.dismiss() }
+        view.findViewById<TextView>(R.id.primaryBtn).setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 
     // Installed -> open it. NOT installed -> ask KosherTech to add it.
