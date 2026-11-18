@@ -1,1 +1,1 @@
-✕ You can now dismiss announcements and clear old app-request entries right from the home screen — tap the ✕ next to any of them. They only disappear on your device.
+💬 Live chat: the auto-reply now comes only once — on your first message when you open a chat — and each new chat gets its own fresh ticket number.

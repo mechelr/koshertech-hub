@@ -25,8 +25,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatId: String
     private lateinit var prefsChat: SharedPreferences
     private var adminShown = 0
-    private var answered = false       // true once a real rep (admin) has replied to this ticket
-    private var firstAutoSent = false  // whether the full greeting has gone out this ticket
+    private var autoReplied = false    // one auto-reply per time the chat screen is opened
     private var ticketNo = ""
     private val handler = Handler(Looper.getMainLooper())
     private val poller = object : Runnable {
@@ -47,27 +46,13 @@ class ChatActivity : AppCompatActivity() {
         chatId = devId ?: prefsChat.getString("chatId", null) ?: UUID.randomUUID().toString().substring(0, 8).also {
             prefsChat.edit().putString("chatId", it).apply()
         }
-        loadTicketState()
 
         addBubble("Hi! 👋  How can KosherTech help you today?", false)
         findViewById<TextView>(R.id.chatSend).setOnClickListener { send() }
     }
 
-    private fun loadTicketState() {
-        answered = prefsChat.getBoolean("answered_" + chatId, false)
-        firstAutoSent = prefsChat.getBoolean("firstauto_" + chatId, false)
-        ticketNo = "KT-" + chatId.uppercase().take(6)
-    }
-
-    // When a human rep has already answered and the customer starts a fresh question,
-    // open a brand-new ticket so the auto-responder runs again until the rep replies.
-    private fun startNewTicket() {
-        // Keep the same chatId (= deviceId) so the dashboard groups all chat under this device;
-        // just reset so the auto-responder runs again until the rep replies.
-        answered = false
-        firstAutoSent = false
-        prefsChat.edit().putBoolean("answered_" + chatId, false).putBoolean("firstauto_" + chatId, false).apply()
-    }
+    // A fresh (fake) ticket number every time a conversation starts.
+    private fun newTicketNo(): String = "KT-" + (10000 + java.util.Random().nextInt(89999))
 
     override fun onResume() { super.onResume(); handler.post(poller) }
     override fun onPause() { super.onPause(); handler.removeCallbacks(poller) }
@@ -79,30 +64,22 @@ class ChatActivity : AppCompatActivity() {
         val msg = input.text.toString().trim()
         if (msg.isEmpty()) return
 
-        // Already answered by a rep? A new message opens a fresh ticket + restarts auto-replies.
-        if (answered) startNewTicket()
-
         addBubble(msg, true)
         input.setText("")
 
-        // Auto-responder: reply automatically until a real rep writes back.
-        // A short pause + a "typing…" indicator makes it feel like a real person.
-        if (!answered) {
-            val first = !firstAutoSent
-            firstAutoSent = true
-            prefsChat.edit().putBoolean("firstauto_" + chatId, true).apply()
+        // Auto-reply fires only ONCE — on the first message after opening the chat.
+        // After that, no more auto-replies this session (even once the rep replies).
+        if (!autoReplied) {
+            autoReplied = true
+            ticketNo = newTicketNo()
             handler.postDelayed({
-                if (answered) return@postDelayed
                 val typing = addBubble("✍️  typing…", false)
                 handler.postDelayed({
                     removeBubble(typing)
-                    if (!answered) {
-                        val reply = if (first)
-                            "Hi 👋 Thanks for reaching out to KosherTech support. A ticket (#$ticketNo) has been created and we're on it. A member of our team will reply right here as fast as we possibly can."
-                        else
-                            "Got it 👍 Your message was added to ticket #$ticketNo. We'll reply as soon as a rep is available — thanks for your patience."
-                        addBubble(reply, false)
-                    }
+                    addBubble(
+                        "Hi 👋 Thanks for reaching out to KosherTech support. A ticket (#$ticketNo) has been created and we're on it. A member of our team will reply right here as fast as we possibly can.",
+                        false
+                    )
                 }, 2800)
             }, 1200)
         }
@@ -146,11 +123,6 @@ class ChatActivity : AppCompatActivity() {
                 if (admin.size > adminShown) {
                     val newOnes = admin.subList(adminShown, admin.size).toList()
                     adminShown = admin.size
-                    // A real rep replied → stop the auto-responder for this ticket.
-                    if (!answered) {
-                        answered = true
-                        prefsChat.edit().putBoolean("answered_" + chatId, true).apply()
-                    }
                     runOnUiThread { for (t in newOnes) addBubble(t, false) }
                 }
             } catch (e: Exception) { /* backend not set up yet or offline — ignore */ }
