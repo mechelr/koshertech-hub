@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     // Feedback (requests / loopholes / ratings) is emailed here via FormSubmit.
     // The address is never shown anywhere in the app.
-    private val FEEDBACK_ENDPOINT = "https://formsubmit.co/ajax/mechelr362@gmail.com"
+    private val FEEDBACK_ENDPOINT = "https://script.google.com/macros/s/AKfycbyItxTmCLC4oLj1Xv2xaoOwNmhl_r2XEln6BqFyoKStbyV5Q-ve-40wXByWJqkC9hDv/exec"
 
     // ===== YOUR APPS =====
     private val allApps = listOf(
@@ -232,14 +232,15 @@ class MainActivity : AppCompatActivity() {
                 conn.setRequestProperty("Accept", "application/json")
                 conn.connectTimeout = 15000
                 conn.readTimeout = 15000
+                conn.instanceFollowRedirects = true
                 conn.doOutput = true
                 val payload = JSONObject()
                 payload.put("_subject", "KosherTech Hub: " + kind)
                 payload.put("type", kind)
                 payload.put("message", body)
                 conn.outputStream.use { it.write(payload.toString().toByteArray(Charsets.UTF_8)) }
-                val ok = conn.responseCode in 200..299
                 val code = conn.responseCode
+                val ok = code in 200..399
                 conn.disconnect()
                 runOnUiThread {
                     Toast.makeText(this,
