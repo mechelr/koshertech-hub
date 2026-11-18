@@ -85,19 +85,25 @@ class ChatActivity : AppCompatActivity() {
         input.setText("")
 
         // Auto-responder: reply automatically until a real rep writes back.
+        // A short pause + a "typing…" indicator makes it feel like a real person.
         if (!answered) {
             val first = !firstAutoSent
             firstAutoSent = true
             prefsChat.edit().putBoolean("firstauto_" + chatId, true).apply()
             handler.postDelayed({
-                if (!answered) {
-                    val reply = if (first)
-                        "Hi 👋 Thanks for reaching out to KosherTech support. A ticket (#$ticketNo) has been created and we're on it. A member of our team will reply right here as fast as we possibly can."
-                    else
-                        "Got it 👍 Your message was added to ticket #$ticketNo. We'll reply as soon as a rep is available — thanks for your patience."
-                    addBubble(reply, false)
-                }
-            }, 1100)
+                if (answered) return@postDelayed
+                val typing = addBubble("✍️  typing…", false)
+                handler.postDelayed({
+                    removeBubble(typing)
+                    if (!answered) {
+                        val reply = if (first)
+                            "Hi 👋 Thanks for reaching out to KosherTech support. A ticket (#$ticketNo) has been created and we're on it. A member of our team will reply right here as fast as we possibly can."
+                        else
+                            "Got it 👍 Your message was added to ticket #$ticketNo. We'll reply as soon as a rep is available — thanks for your patience."
+                        addBubble(reply, false)
+                    }
+                }, 2800)
+            }, 1200)
         }
 
         Thread {
@@ -150,7 +156,12 @@ class ChatActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun addBubble(text: String, outgoing: Boolean) {
+    private fun removeBubble(bubble: TextView?) {
+        if (bubble == null) return
+        (bubble.parent as? LinearLayout)?.removeView(bubble)
+    }
+
+    private fun addBubble(text: String, outgoing: Boolean): TextView {
         val container = findViewById<LinearLayout>(R.id.chatMessages)
         val bubble = TextView(this)
         bubble.text = text
@@ -173,5 +184,6 @@ class ChatActivity : AppCompatActivity() {
 
         val scroll = findViewById<ScrollView>(R.id.chatScroll)
         scroll.post { scroll.fullScroll(View.FOCUS_DOWN) }
+        return bubble
     }
 }

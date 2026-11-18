@@ -1,3 +1,2 @@
-📍 New: set your own location — tap the location on the Zmanim card and search by city or 5-digit ZIP. Both the Zmanim and the Weather follow it.
-🌤️ Weather is now more reliable: it shows Loading, retries automatically, and clearly says if there's no connection instead of just disappearing.
-🔔 You're reading this in the "What's new" popup — proof that the after-every-update message is working.
+💬 Live chat feels more real: when you message support, you now see a "typing…" indicator and the reply arrives after a few seconds instead of instantly.
+📍 Reminder: tap the location on the Zmanim card to set your city or ZIP — Zmanim and Weather both follow it.
