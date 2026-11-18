@@ -122,13 +122,6 @@ class MainActivity : AppCompatActivity() {
     // ===== BACKEND SYNC (device identity, remote app push, request status, announcements) =====
     private lateinit var deviceId: String
 
-    // Re-sync every time the app comes to the foreground, so dashboard changes
-    // (approved requests, pushed apps, announcements) show up without a full restart.
-    override fun onResume() {
-        super.onResume()
-        if (::deviceId.isInitialized) syncBackend()
-    }
-
     private fun ensureDeviceId(): String {
         val p = getSharedPreferences("ktdevice", Context.MODE_PRIVATE)
         var id = p.getString("deviceId", null)
@@ -495,6 +488,9 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         adapter.notifyDataSetChanged()
+        // Re-sync on every foreground so dashboard changes (approved requests,
+        // pushed apps, announcements) show up without a full restart.
+        if (::deviceId.isInitialized) syncBackend()
     }
 
     private fun populateZmanim() {
