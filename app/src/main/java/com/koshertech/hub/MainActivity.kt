@@ -38,7 +38,8 @@ class MainActivity : AppCompatActivity() {
     // apkUrl: a KosherTech-hosted link to the approved APK. When set, Install downloads
     // and installs it directly (no Play Store). Add the real Zemer/24Six/Zing links here.
     private val allApps = listOf(
-        AppItem("Zemer", "Music · Jewish songs", "PACKAGE_FOR_ZEMER", 0xFFE0A52B.toInt(), ""),
+        AppItem("Zemer", "Music · Jewish songs", "com.jtech.zemer", 0xFFE0A52B.toInt(),
+            "https://github.com/mechelr/koshertech-hub/releases/download/latest/zemer.apk"),
         AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFE04F5F.toInt(), ""),
         AppItem("Zing", "Music · Streaming", "fm.jewishmusic.application", 0xFF9333EA.toInt(), ""),
         AppItem("KosherTech Settings", "Controlled settings app", "com.koshertech.settings", 0xFF22D3EE.toInt(),

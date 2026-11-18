@@ -425,4 +425,12 @@
         android:clickable="true"
         android:focusable="true"/>
 
+    <!-- Gemini-style multi-color glow framing the whole screen (never eats touches) -->
+    <com.koshertech.hub.GlowBorderView
+        android:id="@+id/glowBorder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="12dp"
+        android:importantForAccessibility="no"/>
+
 </FrameLayout>
