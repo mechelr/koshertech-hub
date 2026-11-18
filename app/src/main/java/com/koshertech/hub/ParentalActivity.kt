@@ -118,18 +118,61 @@ class ParentalActivity : AppCompatActivity() {
 
         val sh = prefs.getInt(r.name + "_sh", r.defSH); val sm = prefs.getInt(r.name + "_sm", r.defSM)
         val eh = prefs.getInt(r.name + "_eh", r.defEH); val em = prefs.getInt(r.name + "_em", r.defEM)
-        val timeTv = TextView(this)
-        if (enabled) {
-            timeTv.text = "🕐 Available  " + fmt(sh, sm) + " – " + fmt(eh, em) + "    ✎ tap to set"
-            timeTv.setTextColor(0xFF22D3EE.toInt())
-            timeTv.setOnClickListener { pickTimes(r) }
-        } else {
-            timeTv.text = "Turned off — this app is blocked all the time"
-            timeTv.setTextColor(0xFF5b6c92.toInt())
+
+        if (!enabled) {
+            val off = TextView(this)
+            off.text = "Turned off — this app is blocked all the time"
+            off.setTextColor(0xFF5b6c92.toInt())
+            off.textSize = 12f; off.setTypeface(off.typeface, Typeface.BOLD)
+            val olp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); olp.topMargin = dp(11); off.layoutParams = olp
+            card.addView(off)
+            return card
         }
-        timeTv.textSize = 12f; timeTv.setTypeface(timeTv.typeface, Typeface.BOLD)
-        val tlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); tlp.topMargin = dp(11); timeTv.layoutParams = tlp
-        card.addView(timeTv)
+
+        // App is allowed. Second, separate choice: no time limit vs. a set window.
+        val limited = prefs.getBoolean("limited_" + r.name, false)
+
+        val pills = LinearLayout(this); pills.orientation = LinearLayout.HORIZONTAL
+        val plp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); plp.topMargin = dp(12); pills.layoutParams = plp
+        val anyPill = pill("Anytime", !limited) {
+            prefs.edit().putBoolean("limited_" + r.name, false).apply(); buildCards()
+        }
+        val anyLp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); anyLp.rightMargin = dp(8); anyPill.layoutParams = anyLp
+        val setPill = pill("Set hours", limited) {
+            prefs.edit().putBoolean("limited_" + r.name, true).apply()
+            if (!prefs.contains(r.name + "_sh")) pickTimes(r) else buildCards()
+        }
+        pills.addView(anyPill); pills.addView(setPill)
+        card.addView(pills)
+
+        val status = TextView(this)
+        if (limited) {
+            status.text = "🕐 Available  " + fmt(sh, sm) + " – " + fmt(eh, em) + "     ✎ Edit"
+            status.setTextColor(0xFF22D3EE.toInt())
+            status.setOnClickListener { pickTimes(r) }
+        } else {
+            status.text = "✓ Available anytime — no time limit"
+            status.setTextColor(0xFF4FD08A.toInt())
+        }
+        status.textSize = 12f; status.setTypeface(status.typeface, Typeface.BOLD)
+        val slp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); slp.topMargin = dp(10); status.layoutParams = slp
+        card.addView(status)
         return card
+    }
+
+    private fun pill(text: String, selected: Boolean, onClick: () -> Unit): TextView {
+        val tv = TextView(this)
+        tv.text = text; tv.textSize = 12f; tv.gravity = Gravity.CENTER
+        tv.setTypeface(tv.typeface, Typeface.BOLD)
+        tv.setPadding(dp(16), dp(7), dp(16), dp(7))
+        val bg = GradientDrawable(); bg.cornerRadius = dp(20).toFloat()
+        if (selected) {
+            bg.setColor(0x3322D3EE); bg.setStroke(dp(1), 0xFF22D3EE.toInt()); tv.setTextColor(0xFF22D3EE.toInt())
+        } else {
+            bg.setColor(0x00000000); bg.setStroke(dp(1), 0xFF2A3A63.toInt()); tv.setTextColor(0xFF6E80A8.toInt())
+        }
+        tv.background = bg
+        tv.setOnClickListener { onClick() }
+        return tv
     }
 }
