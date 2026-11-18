@@ -76,7 +76,7 @@ function registerDevice_(d) {
   var sh = tab_("Devices", H_DEV); var list = rows_("Devices", H_DEV);
   for (var i = 0; i < list.length; i++) if (list[i].deviceId === d.deviceId) {
     sh.getRange(list[i]._row, 1, 1, H_DEV.length)
-      .setValues([[d.deviceId, d.name || list[i].name, d.model || list[i].model, list[i].plan, new Date()]]);
+      .setValues([[d.deviceId, list[i].name || d.name, d.model || list[i].model, list[i].plan, new Date()]]);
     return { ok: true };
   }
   sh.appendRow([d.deviceId, d.name || "", d.model || "", "", new Date()]);
@@ -159,6 +159,18 @@ function uiReply(key, deviceId, text) { if (!checkKey_(key)) return { ok: false 
   tab_("Chats", H_CHAT).appendRow([new Date(), deviceId || "", "admin", text || ""]); return { ok: true }; }
 function uiAnnounce(key, deviceId, message) { if (!checkKey_(key)) return { ok: false };
   tab_("Announcements", H_ANN).appendRow([deviceId || "*", message || "", true, new Date()]); return { ok: true }; }
+function uiDeleteRequest(key, id) { if (!checkKey_(key)) return { ok: false };
+  var sh = tab_("Requests", H_REQ), list = rows_("Requests", H_REQ);
+  for (var i = list.length - 1; i >= 0; i--) if (list[i].id === id) sh.deleteRow(list[i]._row);
+  return { ok: true }; }
+function uiDeleteChat(key, deviceId) { if (!checkKey_(key)) return { ok: false };
+  var sh = tab_("Chats", H_CHAT), list = rows_("Chats", H_CHAT);
+  for (var i = list.length - 1; i >= 0; i--) if (list[i].deviceId === deviceId) sh.deleteRow(list[i]._row);
+  return { ok: true }; }
+function uiRename(key, deviceId, name) { if (!checkKey_(key)) return { ok: false };
+  var sh = tab_("Devices", H_DEV), list = rows_("Devices", H_DEV);
+  for (var i = 0; i < list.length; i++) if (list[i].deviceId === deviceId) { sh.getRange(list[i]._row, 2).setValue(name); return { ok: true }; }
+  return { ok: false }; }
 
 // ===================== admin dashboard page =====================
 function ADMIN_HTML() { return HTML_; }
@@ -189,6 +201,7 @@ var HTML_ =
 '<span class="tab" id="t_chat" onclick="tab(\'chat\')">Chats</span>' +
 '<span class="tab" id="t_ann" onclick="tab(\'ann\')">Announce</span>' +
 '<button class="ghost" onclick="load()">↻ Refresh</button></div>' +
+'<input id="q" placeholder="🔍 Search by device name (shows that device\\\'s chats & requests)" oninput="if(DATA&&DATA.ok)render(DATA)">' +
 '<div id="v_req"></div><div id="v_dev" style="display:none"></div><div id="v_push" style="display:none"></div>' +
 '<div id="v_chat" style="display:none"></div><div id="v_ann" style="display:none"></div>' +
 '</div>' +
@@ -205,16 +218,23 @@ var HTML_ =
 'function tab(n){["req","dev","push","chat","ann"].forEach(function(x){' +
 'document.getElementById("v_"+x).style.display=(x===n?"block":"none");document.getElementById("t_"+x).className="tab"+(x===n?" on":"");});}' +
 'function devName(id){var d=DATA.devices||[];for(var i=0;i<d.length;i++)if(d[i].deviceId===id)return d[i].name||id;return id;}' +
-'function drawReq(){var h="<h2>App requests</h2>";var q=(DATA.requests||[]).slice().reverse();if(!q.length)h+=\'<div class="muted">No requests yet.</div>\';' +
-'q.forEach(function(r){h+=\'<div class="card"><div class="row"><b>\'+esc(r.appName)+\'</b> <span class="pill \'+esc(r.status)+\'">\'+esc(r.status)+\'</span></div>\'+' +
+'function sq(){var e=document.getElementById("q");return e?e.value.trim().toLowerCase():"";}' +
+'function match(dev){var s=sq();if(!s)return true;return (devName(dev)+" "+dev).toLowerCase().indexOf(s)>=0;}' +
+'function drawReq(){var h="<h2>App requests</h2>";var arr=(DATA.requests||[]).slice().reverse();var n=0;' +
+'arr.forEach(function(r){if(!match(r.deviceId))return;n++;h+=\'<div class="card"><div class="row"><b>\'+esc(r.appName)+\'</b> <span class="pill \'+esc(r.status)+\'">\'+esc(r.status)+\'</span></div>\'+' +
 '\'<div class="muted">\'+esc(devName(r.deviceId))+(r.reason?" — "+esc(r.reason):"")+\'</div>\'+' +
 '\'<button class="green" onclick="setStatus(\\\'\'+r.id+\'\\\',\\\'Approved\\\')">Approve</button>\'+' +
-'\'<button class="red" onclick="setStatus(\\\'\'+r.id+\'\\\',\\\'Declined\\\')">Decline</button></div>\';});' +
-'document.getElementById("v_req").innerHTML=h;}' +
+'\'<button class="red" onclick="setStatus(\\\'\'+r.id+\'\\\',\\\'Declined\\\')">Decline</button>\'+' +
+'\'<button class="ghost" onclick="delReq(\\\'\'+r.id+\'\\\')">Delete</button></div>\';});' +
+'if(!n)h+=\'<div class="muted">No requests.</div>\';document.getElementById("v_req").innerHTML=h;}' +
 'function setStatus(id,s){google.script.run.withSuccessHandler(load).uiSetStatus(KEY,id,s);}' +
-'function drawDev(){var h="<h2>Devices</h2>";(DATA.devices||[]).forEach(function(d){' +
-'h+=\'<div class="card"><b>\'+esc(d.name||d.deviceId)+\'</b><div class="muted">\'+esc(d.model)+\' · \'+esc(d.deviceId)+\'</div></div>\';});' +
-'document.getElementById("v_dev").innerHTML=h;}' +
+'function delReq(id){google.script.run.withSuccessHandler(load).uiDeleteRequest(KEY,id);}' +
+'function drawDev(){var h="<h2>Devices</h2>";var n=0;(DATA.devices||[]).forEach(function(d){if(!match(d.deviceId))return;n++;' +
+'h+=\'<div class="card"><div class="muted">\'+esc(d.model)+\' · \'+esc(d.deviceId)+\'</div>\'+' +
+'\'<input id="n_\'+esc(d.deviceId)+\'" value="\'+esc(d.name||"")+\'">\'+' +
+'\'<button onclick="rename(\\\'\'+esc(d.deviceId)+\'\\\')">Save name</button></div>\';});' +
+'if(!n)h+=\'<div class="muted">No devices.</div>\';document.getElementById("v_dev").innerHTML=h;}' +
+'function rename(dev){var v=document.getElementById("n_"+dev).value;google.script.run.withSuccessHandler(load).uiRename(KEY,dev,v);}' +
 'function drawPush(){var opts=\'<option value="*">All devices</option>\';(DATA.devices||[]).forEach(function(d){opts+=\'<option value="\'+esc(d.deviceId)+\'">\'+esc(d.name||d.deviceId)+\'</option>\';});' +
 'var h=\'<h2>Push an app to a device</h2><div class="card">\'+' +
 '\'<select id="p_dev">\'+opts+\'</select>\'+' +
@@ -233,13 +253,15 @@ var HTML_ =
 'document.getElementById("p_pkg").value,document.getElementById("p_url").value,document.getElementById("p_color").value);}' +
 'function rmApp(dev,pkg){google.script.run.withSuccessHandler(load).uiRemoveApp(KEY,dev,pkg);}' +
 'function drawChat(){var byDev={};(DATA.chats||[]).forEach(function(c){(byDev[c.deviceId]=byDev[c.deviceId]||[]).push(c);});' +
-'var h="<h2>Live chats</h2>";var any=false;for(var dev in byDev){any=true;h+=\'<div class="card"><b>\'+esc(devName(dev))+\'</b>\';' +
+'var h="<h2>Live chats</h2>";var any=false;for(var dev in byDev){if(!match(dev))continue;any=true;h+=\'<div class="card"><b>\'+esc(devName(dev))+\'</b>\';' +
 'byDev[dev].forEach(function(c){h+=\'<div class="bubble \'+(c.sender==="admin"?"ba":"bu")+\'">\'+esc(c.text)+\'</div>\';});' +
 'h+=\'<input id="r_\'+esc(dev)+\'" placeholder="Type a reply...">\'+' +
-'\'<button onclick="reply(\\\'\'+esc(dev)+\'\\\')">Send reply</button></div>\';}' +
-'if(!any)h+=\'<div class="muted">No chats yet.</div>\';document.getElementById("v_chat").innerHTML=h;}' +
+'\'<button onclick="reply(\\\'\'+esc(dev)+\'\\\')">Send reply</button>\'+' +
+'\'<button class="red" onclick="delChat(\\\'\'+esc(dev)+\'\\\')">Delete chat</button></div>\';}' +
+'if(!any)h+=\'<div class="muted">No chats.</div>\';document.getElementById("v_chat").innerHTML=h;}' +
 'function reply(dev){var t=document.getElementById("r_"+dev).value;if(!t)return;' +
 'google.script.run.withSuccessHandler(load).uiReply(KEY,dev,t);}' +
+'function delChat(dev){google.script.run.withSuccessHandler(load).uiDeleteChat(KEY,dev);}' +
 'function drawAnn(){var opts=\'<option value="*">All devices</option>\';(DATA.devices||[]).forEach(function(d){opts+=\'<option value="\'+esc(d.deviceId)+\'">\'+esc(d.name||d.deviceId)+\'</option>\';});' +
 'var h=\'<h2>Send an announcement</h2><div class="card"><select id="a_dev">\'+opts+\'</select>\'+' +
 '\'<textarea id="a_msg" placeholder="Message to show on the home screen"></textarea>\'+' +
