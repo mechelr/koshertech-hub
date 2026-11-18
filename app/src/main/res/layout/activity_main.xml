@@ -4,6 +4,15 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_root">
 
+    <!-- Animated ambient glow (pulses softly in MainActivity), behind the content -->
+    <View
+        android:id="@+id/glowView"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_gravity="top"
+        android:background="@drawable/bg_glow_anim"
+        android:importantForAccessibility="no"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

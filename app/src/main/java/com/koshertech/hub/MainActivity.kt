@@ -1,5 +1,7 @@
 package com.koshertech.hub
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
@@ -33,10 +35,14 @@ class MainActivity : AppCompatActivity() {
     private val FEEDBACK_ENDPOINT = "https://script.google.com/macros/s/AKfycbyItxTmCLC4oLj1Xv2xaoOwNmhl_r2XEln6BqFyoKStbyV5Q-ve-40wXByWJqkC9hDv/exec"
 
     // ===== YOUR APPS =====
+    // apkUrl: a KosherTech-hosted link to the approved APK. When set, Install downloads
+    // and installs it directly (no Play Store). Add the real Zemer/24Six/Zing links here.
     private val allApps = listOf(
-        AppItem("Zemer", "Music · Jewish songs", "PACKAGE_FOR_ZEMER", 0xFFE0A52B.toInt()),
-        AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFE04F5F.toInt()),
-        AppItem("Zing", "Music · Streaming", "fm.jewishmusic.application", 0xFF9333EA.toInt())
+        AppItem("Zemer", "Music · Jewish songs", "PACKAGE_FOR_ZEMER", 0xFFE0A52B.toInt(), ""),
+        AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFE04F5F.toInt(), ""),
+        AppItem("Zing", "Music · Streaming", "fm.jewishmusic.application", 0xFF9333EA.toInt(), ""),
+        AppItem("KosherTech Settings", "Controlled settings app", "com.koshertech.settings", 0xFF22D3EE.toInt(),
+            "https://github.com/mechelr/koshertech-hub/releases/download/settings/KosherTechSettings.apk")
     )
 
     // ===== PLANS (demo pricing — edit freely) =====
@@ -91,6 +97,17 @@ class MainActivity : AppCompatActivity() {
 
         populateZmanim()
         initUpdateBar()
+        startGlow()
+    }
+
+    // Soft breathing ambient glow behind the top of the app.
+    private fun startGlow() {
+        val glow = findViewById<View>(R.id.glowView)
+        val anim = ObjectAnimator.ofFloat(glow, "alpha", 0.35f, 0.85f)
+        anim.duration = 3200
+        anim.repeatMode = ValueAnimator.REVERSE
+        anim.repeatCount = ValueAnimator.INFINITE
+        anim.start()
     }
 
     // ===== UPDATE CHECKER =====
