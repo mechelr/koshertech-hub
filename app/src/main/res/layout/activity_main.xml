@@ -49,7 +49,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Update available banner (hidden until an update is found) -->
+            <!-- Update bar (always visible; shows status, tap to check / update) -->
             <LinearLayout
                 android:id="@+id/updateBanner"
                 android:layout_width="match_parent"
@@ -60,12 +60,12 @@
                 android:padding="13dp"
                 android:layout_marginTop="16dp"
                 android:clickable="true"
-                android:focusable="true"
-                android:visibility="gone">
+                android:focusable="true">
                 <TextView
+                    android:id="@+id/updateIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="⬆️"
+                    android:text="🔄"
                     android:textSize="20sp"/>
                 <LinearLayout
                     android:layout_width="0dp"
@@ -74,9 +74,10 @@
                     android:orientation="vertical"
                     android:layout_marginStart="11dp">
                     <TextView
+                        android:id="@+id/updateTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Update available"
+                        android:text="Checking for updates…"
                         android:textColor="@color/white"
                         android:textStyle="bold"
                         android:textSize="13sp"/>
@@ -84,12 +85,13 @@
                         android:id="@+id/updateSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tap to update now"
+                        android:text="Version 1.0"
                         android:textColor="@color/muted"
                         android:textSize="11sp"
                         android:layout_marginTop="1dp"/>
                 </LinearLayout>
                 <TextView
+                    android:id="@+id/updateAction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Update"
@@ -98,7 +100,8 @@
                     android:textSize="12sp"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
-                    android:background="@drawable/bg_request"/>
+                    android:background="@drawable/bg_request"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <!-- Greeting -->
@@ -186,7 +189,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="—"
-                        android:textColor="@color/cyan"
+                        android:textColor="@color/gold"
                         android:textStyle="bold"
                         android:textSize="13sp"/>
                 </LinearLayout>

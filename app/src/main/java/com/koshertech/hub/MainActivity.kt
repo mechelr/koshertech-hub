@@ -90,19 +90,40 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.chatFab).setOnClickListener { startActivity(Intent(this, ChatActivity::class.java)) }
 
         populateZmanim()
-        checkForUpdate()
+        initUpdateBar()
     }
 
     // ===== UPDATE CHECKER =====
     // On launch, check version.json published with each release. If a newer build
     // exists, show the banner; tapping it downloads and installs the new APK.
     private val VERSION_URL = "https://github.com/mechelr/koshertech-hub/releases/download/latest/version.json"
+    private var pendingApkUrl: String? = null
 
     private fun installedVersionCode(): Int {
         return try {
             val pi = packageManager.getPackageInfo(packageName, 0)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) pi.longVersionCode.toInt() else @Suppress("DEPRECATION") pi.versionCode
         } catch (e: Exception) { 1 }
+    }
+
+    private fun installedVersionName(): String {
+        return try { packageManager.getPackageInfo(packageName, 0).versionName ?: "1.0" } catch (e: Exception) { "1.0" }
+    }
+
+    private fun initUpdateBar() {
+        findViewById<TextView>(R.id.updateSub).text = "Version " + installedVersionName()
+        findViewById<View>(R.id.updateBanner).setOnClickListener {
+            val url = pendingApkUrl
+            if (url != null) downloadAndInstall(url)
+            else { setChecking(); checkForUpdate() }
+        }
+        checkForUpdate()
+    }
+
+    private fun setChecking() {
+        findViewById<TextView>(R.id.updateIcon).text = "🔄"
+        findViewById<TextView>(R.id.updateTitle).text = "Checking for updates…"
+        findViewById<View>(R.id.updateAction).visibility = View.GONE
     }
 
     private fun checkForUpdate() {
@@ -118,19 +139,39 @@ class MainActivity : AppCompatActivity() {
                 val remoteCode = obj.optInt("versionCode", 0)
                 val remoteName = obj.optString("versionName", "")
                 val apkUrl = obj.optString("url", "")
-                if (remoteCode > installedVersionCode() && apkUrl.isNotBlank()) {
-                    runOnUiThread { showUpdateBanner(remoteName, apkUrl) }
+                runOnUiThread {
+                    if (remoteCode > installedVersionCode() && apkUrl.isNotBlank()) setUpdateAvailable(remoteName, apkUrl)
+                    else setUpToDate()
                 }
-            } catch (e: Exception) { /* offline or no internet — silently skip */ }
+            } catch (e: Exception) {
+                runOnUiThread { setCheckError() }
+            }
         }.start()
     }
 
-    private fun showUpdateBanner(versionName: String, apkUrl: String) {
-        val banner = findViewById<View>(R.id.updateBanner)
+    private fun setUpdateAvailable(versionName: String, apkUrl: String) {
+        pendingApkUrl = apkUrl
+        findViewById<TextView>(R.id.updateIcon).text = "⬆️"
+        findViewById<TextView>(R.id.updateTitle).text = "Update available"
         findViewById<TextView>(R.id.updateSub).text =
             if (versionName.isBlank()) "Tap to update now" else "Version " + versionName + " — tap to update"
-        banner.visibility = View.VISIBLE
-        banner.setOnClickListener { downloadAndInstall(apkUrl) }
+        findViewById<View>(R.id.updateAction).visibility = View.VISIBLE
+    }
+
+    private fun setUpToDate() {
+        pendingApkUrl = null
+        findViewById<TextView>(R.id.updateIcon).text = "✓"
+        findViewById<TextView>(R.id.updateTitle).text = "You're on the latest version"
+        findViewById<TextView>(R.id.updateSub).text = "Version " + installedVersionName() + " · tap to check again"
+        findViewById<View>(R.id.updateAction).visibility = View.GONE
+    }
+
+    private fun setCheckError() {
+        pendingApkUrl = null
+        findViewById<TextView>(R.id.updateIcon).text = "🔄"
+        findViewById<TextView>(R.id.updateTitle).text = "Tap to check for updates"
+        findViewById<TextView>(R.id.updateSub).text = "Version " + installedVersionName()
+        findViewById<View>(R.id.updateAction).visibility = View.GONE
     }
 
     private fun downloadAndInstall(apkUrl: String) {
