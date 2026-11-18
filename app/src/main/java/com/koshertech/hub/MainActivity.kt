@@ -186,7 +186,13 @@ class MainActivity : AppCompatActivity() {
 
     // ===== WEATHER (display only — no taps, goes nowhere) =====
     // Uses the free Open-Meteo API (no key). Same location as the zmanim card.
-    private fun fetchWeather() {
+    private fun fetchWeather() = fetchWeather(0)
+
+    private fun fetchWeather(attempt: Int) {
+        if (attempt == 0) {
+            findViewById<TextView>(R.id.weatherDesc).text = "Loading weather…"
+            findViewById<TextView>(R.id.weatherIcon).text = "⏳"
+        }
         Thread {
             try {
                 val url = "https://api.open-meteo.com/v1/forecast?latitude=" + ZmanimInfo.lat() +
@@ -218,7 +224,19 @@ class MainActivity : AppCompatActivity() {
                     i++
                 }
                 runOnUiThread { showWeather(nowTemp, nowCode, labels, emos, his, los) }
-            } catch (e: Exception) { /* no network / blocked by filter — card just stays hidden */ }
+            } catch (e: Exception) {
+                // No connection or blocked by the device filter — retry a couple of times, then say so.
+                if (attempt < 2) {
+                    findViewById<View>(R.id.weatherCard).postDelayed({ fetchWeather(attempt + 1) }, 6000)
+                } else {
+                    runOnUiThread {
+                        findViewById<TextView>(R.id.weatherNow).text = "—"
+                        findViewById<TextView>(R.id.weatherIcon).text = "🌐"
+                        findViewById<TextView>(R.id.weatherDesc).text = "Weather unavailable — no connection"
+                        findViewById<LinearLayout>(R.id.weatherDays).removeAllViews()
+                    }
+                }
+            }
         }.start()
     }
 
