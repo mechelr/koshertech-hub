@@ -8,11 +8,19 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class AppAdapter(
-    private val all: List<AppItem>,
+    initial: List<AppItem>,
     private val onOpen: (AppItem) -> Unit
 ) : RecyclerView.Adapter<AppAdapter.VH>() {
 
+    private var all = initial.toMutableList()
     private var shown = all.toMutableList()
+
+    // Replace the whole app list (used when the backend pushes apps).
+    fun setApps(newList: List<AppItem>) {
+        all = newList.toMutableList()
+        shown = all.toMutableList()
+        notifyDataSetChanged()
+    }
 
     fun filter(query: String) {
         val q = query.trim().lowercase()

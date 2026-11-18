@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.os.Build
 import androidx.core.content.FileProvider
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -113,6 +114,78 @@ class MainActivity : AppCompatActivity() {
 
         // Tap the location label (on the zmanim card) to change city for BOTH zmanim and weather.
         findViewById<TextView>(R.id.zmanimLoc).setOnClickListener { showLocationDialog() }
+
+        deviceId = ensureDeviceId()
+        syncBackend()
+    }
+
+    // ===== BACKEND SYNC (device identity, remote app push, request status, announcements) =====
+    private lateinit var deviceId: String
+
+    private fun ensureDeviceId(): String {
+        val p = getSharedPreferences("ktdevice", Context.MODE_PRIVATE)
+        var id = p.getString("deviceId", null)
+        if (id == null) { id = java.util.UUID.randomUUID().toString(); p.edit().putString("deviceId", id).apply() }
+        return id
+    }
+
+    private fun syncBackend() {
+        val ep = FEEDBACK_ENDPOINT
+        if (ep.isBlank() || ep.contains("PLACEHOLDER")) return
+        Thread {
+            try {
+                val reg = JSONObject().apply { put("action", "register"); put("deviceId", deviceId); put("name", Build.MODEL); put("model", Build.MODEL) }
+                val c = URL(ep).openConnection() as HttpURLConnection
+                c.requestMethod = "POST"; c.setRequestProperty("Content-Type", "application/json")
+                c.connectTimeout = 15000; c.readTimeout = 15000; c.instanceFollowRedirects = true; c.doOutput = true
+                c.outputStream.use { it.write(reg.toString().toByteArray(Charsets.UTF_8)) }; c.responseCode; c.disconnect()
+            } catch (e: Exception) {}
+            try {
+                val conn = URL(ep + "?action=sync&deviceId=" + deviceId).openConnection() as HttpURLConnection
+                conn.connectTimeout = 10000; conn.readTimeout = 10000; conn.instanceFollowRedirects = true
+                val text = conn.inputStream.bufferedReader().readText(); conn.disconnect()
+                val o = JSONObject(text)
+                runOnUiThread { applySync(o.optJSONArray("apps"), o.optJSONArray("requests"), o.optJSONArray("announcements")) }
+            } catch (e: Exception) { /* offline / blocked — keep the built-in apps */ }
+        }.start()
+    }
+
+    private fun applySync(apps: JSONArray?, reqs: JSONArray?, anns: JSONArray?) {
+        if (apps != null) {
+            val merged = allApps.toMutableList()
+            val have = merged.map { it.packageName }.toHashSet()
+            for (i in 0 until apps.length()) {
+                val a = apps.getJSONObject(i)
+                val pkg = a.optString("packageName", "")
+                if (pkg.isBlank() || have.contains(pkg)) continue
+                var cs = a.optString("color", "#22D3EE"); if (!cs.startsWith("#")) cs = "#$cs"
+                val color = try { android.graphics.Color.parseColor(cs) } catch (e: Exception) { 0xFF22D3EE.toInt() }
+                merged.add(AppItem(a.optString("name", "App"), a.optString("category", ""), pkg, color, a.optString("apkUrl", "")))
+                have.add(pkg)
+            }
+            adapter.setApps(merged)
+        }
+        val title = findViewById<TextView>(R.id.requestStatusTitle)
+        val list = findViewById<LinearLayout>(R.id.requestStatusList)
+        list.removeAllViews()
+        if (reqs != null && reqs.length() > 0) {
+            title.visibility = View.VISIBLE
+            for (i in 0 until reqs.length()) {
+                val r = reqs.getJSONObject(i)
+                val status = r.optString("status", "Pending")
+                val row = TextView(this)
+                row.text = "•  " + r.optString("appName", "") + "   —   " + status
+                row.setTextColor(when (status) { "Approved" -> 0xFF34D399.toInt(); "Declined" -> 0xFFE04F5F.toInt(); else -> 0xFFE0A52B.toInt() })
+                row.textSize = 13f; row.setPadding(0, dpx(4), 0, dpx(4))
+                list.addView(row)
+            }
+        } else title.visibility = View.GONE
+        val ann = findViewById<TextView>(R.id.announcementCard)
+        if (anns != null && anns.length() > 0) {
+            val sb = StringBuilder("📢  ")
+            for (i in 0 until anns.length()) { if (i > 0) sb.append("\n\n"); sb.append(anns.getString(i)) }
+            ann.text = sb.toString(); ann.visibility = View.VISIBLE
+        } else ann.visibility = View.GONE
     }
 
     // ===== LOCATION PICKER (shared by zmanim + weather) =====
@@ -630,6 +703,7 @@ class MainActivity : AppCompatActivity() {
                 payload.put("_subject", "KosherTech Hub: " + kind)
                 payload.put("type", kind)
                 payload.put("message", body)
+                payload.put("deviceId", if (::deviceId.isInitialized) deviceId else "")
                 conn.outputStream.use { it.write(payload.toString().toByteArray(Charsets.UTF_8)) }
                 val code = conn.responseCode
                 val ok = code in 200..399

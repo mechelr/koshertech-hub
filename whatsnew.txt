@@ -1,2 +1,3 @@
-💬 Live chat feels more real: when you message support, you now see a "typing…" indicator and the reply arrives after a few seconds instead of instantly.
-📍 Reminder: tap the location on the Zmanim card to set your city or ZIP — Zmanim and Weather both follow it.
+📋 App requests now show a live status — Pending, Approved, or Declined — right under the Request button.
+🛠️ KosherTech can now add approved apps to your device remotely, so new apps can appear without reinstalling.
+📢 Announcements from KosherTech can now show at the top of your home screen.

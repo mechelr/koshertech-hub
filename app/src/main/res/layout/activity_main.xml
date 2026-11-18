@@ -113,6 +113,19 @@
                     android:visibility="gone"/>
             </LinearLayout>
 
+            <!-- Announcement from KosherTech (pushed from the admin dashboard) -->
+            <TextView
+                android:id="@+id/announcementCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:background="@drawable/bg_update"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"/>
+
             <!-- Greeting -->
             <TextView
                 android:id="@+id/greetingText"
@@ -324,6 +337,24 @@
                     android:background="@drawable/bg_request"
                     android:clickable="true"
                     android:focusable="true"/>
+
+                <!-- Live status of the customer's app requests (filled from the backend) -->
+                <TextView
+                    android:id="@+id/requestStatusTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your requests"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="13sp"
+                    android:layout_marginTop="14dp"
+                    android:visibility="gone"/>
+                <LinearLayout
+                    android:id="@+id/requestStatusList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
 
             <!-- Tools -->

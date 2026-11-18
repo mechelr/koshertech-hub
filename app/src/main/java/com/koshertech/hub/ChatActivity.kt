@@ -42,7 +42,9 @@ class ChatActivity : AppCompatActivity() {
         findViewById<View>(R.id.backBtn).setOnClickListener { finish() }
 
         prefsChat = getSharedPreferences("ktchat", Context.MODE_PRIVATE)
-        chatId = prefsChat.getString("chatId", null) ?: UUID.randomUUID().toString().substring(0, 8).also {
+        // Use the device's ID as the chat ID so the admin dashboard ties chat to the device.
+        val devId = getSharedPreferences("ktdevice", Context.MODE_PRIVATE).getString("deviceId", null)
+        chatId = devId ?: prefsChat.getString("chatId", null) ?: UUID.randomUUID().toString().substring(0, 8).also {
             prefsChat.edit().putString("chatId", it).apply()
         }
         loadTicketState()
@@ -60,12 +62,11 @@ class ChatActivity : AppCompatActivity() {
     // When a human rep has already answered and the customer starts a fresh question,
     // open a brand-new ticket so the auto-responder runs again until the rep replies.
     private fun startNewTicket() {
-        chatId = UUID.randomUUID().toString().substring(0, 8)
-        prefsChat.edit().putString("chatId", chatId).apply()
-        adminShown = 0
+        // Keep the same chatId (= deviceId) so the dashboard groups all chat under this device;
+        // just reset so the auto-responder runs again until the rep replies.
         answered = false
         firstAutoSent = false
-        ticketNo = "KT-" + chatId.uppercase().take(6)
+        prefsChat.edit().putBoolean("answered_" + chatId, false).putBoolean("firstauto_" + chatId, false).apply()
     }
 
     override fun onResume() { super.onResume(); handler.post(poller) }
