@@ -18,7 +18,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.os.Build
+import androidx.core.content.FileProvider
 import org.json.JSONObject
+import java.io.File
+import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -85,6 +89,77 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileHelp).setOnClickListener { showHelp() }
 
         populateZmanim()
+        checkForUpdate()
+    }
+
+    // ===== UPDATE CHECKER =====
+    // On launch, check version.json published with each release. If a newer build
+    // exists, show the banner; tapping it downloads and installs the new APK.
+    private val VERSION_URL = "https://github.com/mechelr/koshertech-hub/releases/download/latest/version.json"
+
+    private fun installedVersionCode(): Int {
+        return try {
+            val pi = packageManager.getPackageInfo(packageName, 0)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) pi.longVersionCode.toInt() else @Suppress("DEPRECATION") pi.versionCode
+        } catch (e: Exception) { 1 }
+    }
+
+    private fun checkForUpdate() {
+        Thread {
+            try {
+                val conn = URL(VERSION_URL).openConnection() as HttpURLConnection
+                conn.connectTimeout = 10000
+                conn.readTimeout = 10000
+                conn.instanceFollowRedirects = true
+                val text = conn.inputStream.bufferedReader().readText()
+                conn.disconnect()
+                val obj = JSONObject(text)
+                val remoteCode = obj.optInt("versionCode", 0)
+                val remoteName = obj.optString("versionName", "")
+                val apkUrl = obj.optString("url", "")
+                if (remoteCode > installedVersionCode() && apkUrl.isNotBlank()) {
+                    runOnUiThread { showUpdateBanner(remoteName, apkUrl) }
+                }
+            } catch (e: Exception) { /* offline or no internet — silently skip */ }
+        }.start()
+    }
+
+    private fun showUpdateBanner(versionName: String, apkUrl: String) {
+        val banner = findViewById<View>(R.id.updateBanner)
+        findViewById<TextView>(R.id.updateSub).text =
+            if (versionName.isBlank()) "Tap to update now" else "Version " + versionName + " — tap to update"
+        banner.visibility = View.VISIBLE
+        banner.setOnClickListener { downloadAndInstall(apkUrl) }
+    }
+
+    private fun downloadAndInstall(apkUrl: String) {
+        Toast.makeText(this, "Downloading update…", Toast.LENGTH_SHORT).show()
+        Thread {
+            try {
+                val conn = URL(apkUrl).openConnection() as HttpURLConnection
+                conn.connectTimeout = 15000
+                conn.readTimeout = 30000
+                conn.instanceFollowRedirects = true
+                val apk = File(getExternalFilesDir(null), "KosherTechHub-update.apk")
+                conn.inputStream.use { input -> FileOutputStream(apk).use { out -> input.copyTo(out) } }
+                conn.disconnect()
+                runOnUiThread { launchInstall(apk) }
+            } catch (e: Exception) {
+                runOnUiThread { Toast.makeText(this, "Update failed: " + e.message, Toast.LENGTH_LONG).show() }
+            }
+        }.start()
+    }
+
+    private fun launchInstall(apk: File) {
+        try {
+            val uri = FileProvider.getUriForFile(this, packageName + ".fileprovider", apk)
+            val i = Intent(Intent.ACTION_VIEW)
+            i.setDataAndType(uri, "application/vnd.android.package-archive")
+            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(i)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Couldn't open installer: " + e.message, Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onResume() {
