@@ -1,6 +1,7 @@
 package com.koshertech.hub
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -22,7 +23,11 @@ class ChatActivity : AppCompatActivity() {
     private val ENDPOINT = "https://script.google.com/macros/s/AKfycbyItxTmCLC4oLj1Xv2xaoOwNmhl_r2XEln6BqFyoKStbyV5Q-ve-40wXByWJqkC9hDv/exec"
 
     private lateinit var chatId: String
+    private lateinit var prefsChat: SharedPreferences
     private var adminShown = 0
+    private var answered = false       // true once a real rep (admin) has replied to this ticket
+    private var firstAutoSent = false  // whether the full greeting has gone out this ticket
+    private var ticketNo = ""
     private val handler = Handler(Looper.getMainLooper())
     private val poller = object : Runnable {
         override fun run() {
@@ -36,13 +41,31 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
         findViewById<View>(R.id.backBtn).setOnClickListener { finish() }
 
-        val prefs = getSharedPreferences("ktchat", Context.MODE_PRIVATE)
-        chatId = prefs.getString("chatId", null) ?: UUID.randomUUID().toString().substring(0, 8).also {
-            prefs.edit().putString("chatId", it).apply()
+        prefsChat = getSharedPreferences("ktchat", Context.MODE_PRIVATE)
+        chatId = prefsChat.getString("chatId", null) ?: UUID.randomUUID().toString().substring(0, 8).also {
+            prefsChat.edit().putString("chatId", it).apply()
         }
+        loadTicketState()
 
         addBubble("Hi! 👋  How can KosherTech help you today?", false)
         findViewById<TextView>(R.id.chatSend).setOnClickListener { send() }
+    }
+
+    private fun loadTicketState() {
+        answered = prefsChat.getBoolean("answered_" + chatId, false)
+        firstAutoSent = prefsChat.getBoolean("firstauto_" + chatId, false)
+        ticketNo = "KT-" + chatId.uppercase().take(6)
+    }
+
+    // When a human rep has already answered and the customer starts a fresh question,
+    // open a brand-new ticket so the auto-responder runs again until the rep replies.
+    private fun startNewTicket() {
+        chatId = UUID.randomUUID().toString().substring(0, 8)
+        prefsChat.edit().putString("chatId", chatId).apply()
+        adminShown = 0
+        answered = false
+        firstAutoSent = false
+        ticketNo = "KT-" + chatId.uppercase().take(6)
     }
 
     override fun onResume() { super.onResume(); handler.post(poller) }
@@ -54,8 +77,29 @@ class ChatActivity : AppCompatActivity() {
         val input = findViewById<EditText>(R.id.chatInput)
         val msg = input.text.toString().trim()
         if (msg.isEmpty()) return
+
+        // Already answered by a rep? A new message opens a fresh ticket + restarts auto-replies.
+        if (answered) startNewTicket()
+
         addBubble(msg, true)
         input.setText("")
+
+        // Auto-responder: reply automatically until a real rep writes back.
+        if (!answered) {
+            val first = !firstAutoSent
+            firstAutoSent = true
+            prefsChat.edit().putBoolean("firstauto_" + chatId, true).apply()
+            handler.postDelayed({
+                if (!answered) {
+                    val reply = if (first)
+                        "Hi 👋 Thanks for reaching out to KosherTech support. A ticket (#$ticketNo) has been created and we're on it. A member of our team will reply right here as fast as we possibly can."
+                    else
+                        "Got it 👍 Your message was added to ticket #$ticketNo. We'll reply as soon as a rep is available — thanks for your patience."
+                    addBubble(reply, false)
+                }
+            }, 1100)
+        }
+
         Thread {
             try {
                 val conn = URL(ENDPOINT).openConnection() as HttpURLConnection
@@ -89,11 +133,17 @@ class ChatActivity : AppCompatActivity() {
                 val admin = ArrayList<String>()
                 for (i in 0 until arr.length()) {
                     val m = arr.getJSONObject(i)
-                    if (m.optString("sender") == "admin") admin.add(m.optString("text"))
+                    val who = if (m.has("from")) m.optString("from") else m.optString("sender")
+                    if (who == "admin") admin.add(m.optString("text"))
                 }
                 if (admin.size > adminShown) {
                     val newOnes = admin.subList(adminShown, admin.size).toList()
                     adminShown = admin.size
+                    // A real rep replied → stop the auto-responder for this ticket.
+                    if (!answered) {
+                        answered = true
+                        prefsChat.edit().putBoolean("answered_" + chatId, true).apply()
+                    }
                     runOnUiThread { for (t in newOnes) addBubble(t, false) }
                 }
             } catch (e: Exception) { /* backend not set up yet or offline — ignore */ }
