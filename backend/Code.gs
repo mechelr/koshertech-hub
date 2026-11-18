@@ -23,8 +23,16 @@ function tab_(name, headers) {
 }
 function rows_(name, headers) {
   var sh = tab_(name, headers); var v = sh.getDataRange().getValues(); var out = [];
+  var tz = Session.getScriptTimeZone();
   for (var i = 1; i < v.length; i++) {
-    var o = {}; for (var c = 0; c < headers.length; c++) o[headers[c]] = v[i][c];
+    var o = {};
+    for (var c = 0; c < headers.length; c++) {
+      var val = v[i][c];
+      if (val instanceof Date) val = Utilities.formatDate(val, tz, "MMM d, h:mm a");  // keep it a plain string
+      else if (val === null || val === undefined) val = "";
+      else val = String(val);
+      o[headers[c]] = val;
+    }
     o._row = i + 1; out.push(o);
   }
   return out;
@@ -130,9 +138,13 @@ function chatPoll_(p) {
 function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 
 // ===================== admin functions (called by the dashboard) =====================
-function uiData(key) { if (!checkKey_(key)) return { ok: false, error: "Wrong password" };
-  return { ok: true, devices: rows_("Devices", H_DEV), requests: rows_("Requests", H_REQ),
-           apps: rows_("Apps", H_APP), chats: rows_("Chats", H_CHAT), announcements: rows_("Announcements", H_ANN) }; }
+function uiData(key) {
+  try {
+    if (!checkKey_(key)) return { ok: false, error: "Wrong password" };
+    return { ok: true, devices: rows_("Devices", H_DEV), requests: rows_("Requests", H_REQ),
+             apps: rows_("Apps", H_APP), chats: rows_("Chats", H_CHAT), announcements: rows_("Announcements", H_ANN) };
+  } catch (err) { return { ok: false, error: String(err) }; }
+}
 function uiSetStatus(key, id, status) { if (!checkKey_(key)) return { ok: false };
   var sh = tab_("Requests", H_REQ), list = rows_("Requests", H_REQ);
   for (var i = 0; i < list.length; i++) if (list[i].id === id) { sh.getRange(list[i]._row, 5).setValue(status); return { ok: true }; }
@@ -185,8 +197,10 @@ var HTML_ =
 'function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}' +
 'function login(){KEY=document.getElementById("key").value;google.script.run.withSuccessHandler(function(r){' +
 'if(r&&r.ok){try{localStorage.setItem("ktkey",KEY)}catch(e){}document.getElementById("login").style.display="none";document.getElementById("app").style.display="block";render(r);}' +
-'else{document.getElementById("lerr").textContent=(r&&r.error)||"Error";}}).uiData(KEY);}' +
-'function load(){google.script.run.withSuccessHandler(render).uiData(KEY);}' +
+'else{document.getElementById("lerr").textContent=(r&&r.error)||"Error";}})' +
+'.withFailureHandler(function(e){document.getElementById("lerr").textContent="Server error: "+(e&&e.message?e.message:e);}).uiData(KEY);}' +
+'function load(){google.script.run.withSuccessHandler(function(r){if(r&&r.ok){render(r);}else{alert((r&&r.error)||"Could not load");}})' +
+'.withFailureHandler(function(e){alert("Server error: "+(e&&e.message?e.message:e));}).uiData(KEY);}' +
 'function render(r){if(!r||!r.ok)return;DATA=r;drawReq();drawDev();drawPush();drawChat();drawAnn();}' +
 'function tab(n){["req","dev","push","chat","ann"].forEach(function(x){' +
 'document.getElementById("v_"+x).style.display=(x===n?"block":"none");document.getElementById("t_"+x).className="tab"+(x===n?" on":"");});}' +
