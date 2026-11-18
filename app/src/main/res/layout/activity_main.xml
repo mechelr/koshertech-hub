@@ -113,16 +113,12 @@
                     android:visibility="gone"/>
             </LinearLayout>
 
-            <!-- Announcement from KosherTech (pushed from the admin dashboard) -->
-            <TextView
-                android:id="@+id/announcementCard"
+            <!-- Announcements from KosherTech (each dismissible by the customer) -->
+            <LinearLayout
+                android:id="@+id/announcementList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:background="@drawable/bg_update"
-                android:padding="14dp"
+                android:orientation="vertical"
                 android:layout_marginTop="12dp"
                 android:visibility="gone"/>
 

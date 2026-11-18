@@ -1,2 +1,1 @@
-💬 Live chat now receives replies from the support team (fixed).
-🔄 The app now refreshes every time you open it, so approved requests, pushed apps, and announcements from KosherTech show up right away.
+✕ You can now dismiss announcements and clear old app-request entries right from the home screen — tap the ✕ next to any of them. They only disappear on your device.

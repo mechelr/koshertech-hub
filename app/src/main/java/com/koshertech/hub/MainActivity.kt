@@ -165,27 +165,65 @@ class MainActivity : AppCompatActivity() {
             }
             adapter.setApps(merged)
         }
+        val dp = getSharedPreferences("ktdismiss", Context.MODE_PRIVATE)
+
+        // ----- request statuses (each row dismissible by the customer) -----
+        val dreq = HashSet(dp.getStringSet("req", emptySet()) ?: emptySet())
         val title = findViewById<TextView>(R.id.requestStatusTitle)
         val list = findViewById<LinearLayout>(R.id.requestStatusList)
         list.removeAllViews()
-        if (reqs != null && reqs.length() > 0) {
-            title.visibility = View.VISIBLE
+        var shownReq = 0
+        if (reqs != null) {
             for (i in 0 until reqs.length()) {
                 val r = reqs.getJSONObject(i)
                 val status = r.optString("status", "Pending")
-                val row = TextView(this)
-                row.text = "•  " + r.optString("appName", "") + "   —   " + status
-                row.setTextColor(when (status) { "Approved" -> 0xFF34D399.toInt(); "Declined" -> 0xFFE04F5F.toInt(); else -> 0xFFE0A52B.toInt() })
-                row.textSize = 13f; row.setPadding(0, dpx(4), 0, dpx(4))
-                list.addView(row)
+                val name = r.optString("appName", "")
+                val key = name + "||" + status
+                if (dreq.contains(key)) continue
+                val row = LinearLayout(this); row.orientation = LinearLayout.HORIZONTAL; row.gravity = Gravity.CENTER_VERTICAL
+                val tv = TextView(this)
+                tv.text = "•  " + name + "   —   " + status
+                tv.setTextColor(when (status) { "Approved" -> 0xFF34D399.toInt(); "Declined" -> 0xFFE04F5F.toInt(); else -> 0xFFE0A52B.toInt() })
+                tv.textSize = 13f
+                tv.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+                val x = TextView(this); x.text = "✕"; x.setTextColor(0xFF6E80A8.toInt()); x.textSize = 14f
+                x.setPadding(dpx(12), dpx(4), dpx(2), dpx(4))
+                x.setOnClickListener {
+                    dreq.add(key); dp.edit().putStringSet("req", dreq).apply()
+                    list.removeView(row); if (list.childCount == 0) title.visibility = View.GONE
+                }
+                row.addView(tv); row.addView(x)
+                val rlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); rlp.topMargin = dpx(2); row.layoutParams = rlp
+                list.addView(row); shownReq++
             }
-        } else title.visibility = View.GONE
-        val ann = findViewById<TextView>(R.id.announcementCard)
-        if (anns != null && anns.length() > 0) {
-            val sb = StringBuilder("📢  ")
-            for (i in 0 until anns.length()) { if (i > 0) sb.append("\n\n"); sb.append(anns.getString(i)) }
-            ann.text = sb.toString(); ann.visibility = View.VISIBLE
-        } else ann.visibility = View.GONE
+        }
+        title.visibility = if (shownReq > 0) View.VISIBLE else View.GONE
+
+        // ----- announcements (each dismissible by the customer) -----
+        val dann = HashSet(dp.getStringSet("ann", emptySet()) ?: emptySet())
+        val annBox = findViewById<LinearLayout>(R.id.announcementList)
+        annBox.removeAllViews()
+        var shownAnn = 0
+        if (anns != null) {
+            for (i in 0 until anns.length()) {
+                val msg = anns.getString(i)
+                if (dann.contains(msg)) continue
+                val card = LinearLayout(this); card.orientation = LinearLayout.HORIZONTAL; card.gravity = Gravity.CENTER_VERTICAL
+                card.setBackgroundResource(R.drawable.bg_update); card.setPadding(dpx(14), dpx(12), dpx(12), dpx(12))
+                val clp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); clp.bottomMargin = dpx(8); card.layoutParams = clp
+                val tv = TextView(this); tv.text = "📢  " + msg; tv.setTextColor(0xFFFFFFFF.toInt()); tv.textSize = 13f
+                tv.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+                val x = TextView(this); x.text = "✕"; x.setTextColor(0xFFBFC9E6.toInt()); x.textSize = 15f
+                x.setPadding(dpx(12), 0, dpx(2), 0)
+                x.setOnClickListener {
+                    dann.add(msg); dp.edit().putStringSet("ann", dann).apply()
+                    annBox.removeView(card); if (annBox.childCount == 0) annBox.visibility = View.GONE
+                }
+                card.addView(tv); card.addView(x)
+                annBox.addView(card); shownAnn++
+            }
+        }
+        annBox.visibility = if (shownAnn > 0) View.VISIBLE else View.GONE
     }
 
     // ===== LOCATION PICKER (shared by zmanim + weather) =====
