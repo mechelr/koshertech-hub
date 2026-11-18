@@ -284,7 +284,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(launch)   // already installed -> just open it
             return
         }
-        showInstallRequestDialog(app)   // not installed -> safe request, no store
+        if (app.apkUrl.isNotBlank()) {
+            // Approved APK hosted by KosherTech -> install it directly, no Play Store.
+            Toast.makeText(this, "Installing " + app.name + "…", Toast.LENGTH_SHORT).show()
+            downloadAndInstall(app.apkUrl)
+        } else {
+            showInstallRequestDialog(app)   // no hosted APK yet -> safe request, no store
+        }
     }
 
     private fun showInstallRequestDialog(app: AppItem) {
