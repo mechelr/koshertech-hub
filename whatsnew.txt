@@ -1,2 +1,1 @@
-🪞 Mirror now lets you snap a photo and compare it to your saved "best look", with a quick match read-out. Everything stays on your phone.
-🔦 Flashlight and 🔄 Auto-rotate moved into the Settings app, under Device.
+🏠 The Hub can now act as the phone's real home screen (home launcher), so the device locks to it properly.
