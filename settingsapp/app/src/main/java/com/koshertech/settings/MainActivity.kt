@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -35,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileFlash).setOnClickListener { toggleFlash() }
         findViewById<View>(R.id.tileRotate).setOnClickListener { toggleRotate() }
         findViewById<View>(R.id.tileLed).setOnClickListener { openLed() }
-        findViewById<View>(R.id.tileKeyboard).setOnClickListener { openKeyboard() }
 
         initFlash()
         paintRotate()
@@ -107,40 +107,38 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Wi-Fi settings not available on this device.", Toast.LENGTH_SHORT).show()
     }
 
-    // Try to open the Jelly Star's LED / Light settings screen. Android may block
-    // opening a maker's custom screen; if so, we say so and you set it at setup.
+    // Show every reachable light/LED settings screen and let the user pick the LED one.
     private fun openLed() {
-        // 1) Candidate public actions some builds expose.
-        val actions = listOf("android.settings.LED_SETTINGS", "com.android.settings.LED_SETTINGS",
-            "android.settings.LIGHT_SETTINGS")
-        for (a in actions) { try { startActivity(Intent(a)); return } catch (e: Exception) {} }
-        // 2) Search the Settings app's own screens for one labelled LED / Light / Breathing / Glow.
         try {
             val pm = packageManager
-            val q = Intent().setPackage("com.android.settings")
-            val list = pm.queryIntentActivities(q, 0)
-            val prefer = listOf("led", "breathing", "glow", "light")
-            for (key in prefer) {
-                for (ri in list) {
-                    val label = ri.loadLabel(pm).toString().lowercase()
-                    if (label.contains(key)) {
-                        try {
-                            val i = Intent().setClassName(ri.activityInfo.packageName, ri.activityInfo.name)
-                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(i); return
-                        } catch (e: Exception) {}
-                    }
+            val list = pm.queryIntentActivities(Intent().setPackage("com.android.settings"), 0)
+            val labels = ArrayList<String>()
+            val comps = ArrayList<Pair<String, String>>()
+            for (ri in list) {
+                val label = ri.loadLabel(pm).toString()
+                val l = label.lowercase()
+                if (l.contains("led") || l.contains("light") || l.contains("breathing") || l.contains("glow") || l.contains("led")) {
+                    if (!labels.contains(label)) { labels.add(label); comps.add(Pair(ri.activityInfo.packageName, ri.activityInfo.name)) }
                 }
             }
-        } catch (e: Exception) {}
-        Toast.makeText(this, "The LED menu can't be opened from here on this phone. Set it once in setup (it stays off).", Toast.LENGTH_LONG).show()
-    }
-
-    private fun openKeyboard() {
-        // On-screen keyboard / input settings (tap the keyboard there -> Languages -> Add).
-        val tries = listOf(Settings.ACTION_INPUT_METHOD_SETTINGS, "android.settings.LOCALE_SETTINGS")
-        for (a in tries) { try { startActivity(Intent(a)); return } catch (e: Exception) {} }
-        Toast.makeText(this, "Keyboard settings not available on this device.", Toast.LENGTH_SHORT).show()
+            if (labels.isEmpty()) {
+                Toast.makeText(this, "No LED/Light screen is reachable here. Set it once during setup (it stays off).", Toast.LENGTH_LONG).show()
+                return
+            }
+            AlertDialog.Builder(this)
+                .setTitle("Pick the LED / light screen")
+                .setItems(labels.toTypedArray()) { _, which ->
+                    try {
+                        val c = comps[which]
+                        startActivity(Intent().setClassName(c.first, c.second).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "Android blocked that screen.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .setNegativeButton("Cancel", null).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Couldn't look up the LED setting.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun openMobile() {
