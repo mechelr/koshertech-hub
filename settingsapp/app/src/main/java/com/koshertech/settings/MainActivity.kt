@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileSecurity).setOnClickListener { openScreenLock() }
         findViewById<View>(R.id.tileFlash).setOnClickListener { toggleFlash() }
         findViewById<View>(R.id.tileRotate).setOnClickListener { toggleRotate() }
+        findViewById<View>(R.id.tileLed).setOnClickListener { openLed() }
 
         initFlash()
         paintRotate()
@@ -103,6 +104,35 @@ class MainActivity : AppCompatActivity() {
         try { startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)); return } catch (e: Exception) {}
         try { startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS)); return } catch (e: Exception) {}
         Toast.makeText(this, "Wi-Fi settings not available on this device.", Toast.LENGTH_SHORT).show()
+    }
+
+    // Try to open the Jelly Star's LED / Light settings screen. Android may block
+    // opening a maker's custom screen; if so, we say so and you set it at setup.
+    private fun openLed() {
+        // 1) Candidate public actions some builds expose.
+        val actions = listOf("android.settings.LED_SETTINGS", "com.android.settings.LED_SETTINGS",
+            "android.settings.LIGHT_SETTINGS")
+        for (a in actions) { try { startActivity(Intent(a)); return } catch (e: Exception) {} }
+        // 2) Search the Settings app's own screens for one labelled LED / Light / Breathing / Glow.
+        try {
+            val pm = packageManager
+            val q = Intent().setPackage("com.android.settings")
+            val list = pm.queryIntentActivities(q, 0)
+            val prefer = listOf("led", "breathing", "glow", "light")
+            for (key in prefer) {
+                for (ri in list) {
+                    val label = ri.loadLabel(pm).toString().lowercase()
+                    if (label.contains(key)) {
+                        try {
+                            val i = Intent().setClassName(ri.activityInfo.packageName, ri.activityInfo.name)
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(i); return
+                        } catch (e: Exception) {}
+                    }
+                }
+            }
+        } catch (e: Exception) {}
+        Toast.makeText(this, "The LED menu can't be opened from here on this phone. Set it once in setup (it stays off).", Toast.LENGTH_LONG).show()
     }
 
     private fun openMobile() {
