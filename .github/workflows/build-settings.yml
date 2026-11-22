@@ -22,6 +22,8 @@ jobs:
           gradle-version: '8.7'
       - name: Build debug APK
         working-directory: settingsapp
+        env:
+          VERSION_CODE: ${{ github.run_number }}
         run: gradle assembleDebug --no-daemon --stacktrace
       - name: Rename APK
         run: cp settingsapp/app/build/outputs/apk/debug/app-debug.apk KosherTechSettings.apk
