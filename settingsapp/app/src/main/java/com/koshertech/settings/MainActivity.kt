@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.tileWifi).setOnClickListener { openWifi() }
         findViewById<View>(R.id.tileBluetooth).setOnClickListener { open(Settings.ACTION_BLUETOOTH_SETTINGS) }
+        findViewById<View>(R.id.tileMobile).setOnClickListener { openMobile() }
+        findViewById<View>(R.id.tileApn).setOnClickListener { openApn() }
         findViewById<View>(R.id.tileDisplay).setOnClickListener { showDisplayDialog() }
         findViewById<View>(R.id.tileSound).setOnClickListener { openVolume() }
         findViewById<View>(R.id.tileSecurity).setOnClickListener { openScreenLock() }
@@ -101,6 +103,23 @@ class MainActivity : AppCompatActivity() {
         try { startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)); return } catch (e: Exception) {}
         try { startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS)); return } catch (e: Exception) {}
         Toast.makeText(this, "Wi-Fi settings not available on this device.", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun openMobile() {
+        // Try the cellular/mobile-network pages in order (device makers vary).
+        val tries = listOf(
+            "android.settings.NETWORK_OPERATOR_SETTINGS",
+            Settings.ACTION_DATA_ROAMING_SETTINGS,
+            "android.settings.MOBILE_DATA_SETTINGS",
+            Settings.ACTION_WIRELESS_SETTINGS
+        )
+        for (a in tries) { try { startActivity(Intent(a)); return } catch (e: Exception) {} }
+        Toast.makeText(this, "Mobile network settings not available on this device.", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun openApn() {
+        try { startActivity(Intent(Settings.ACTION_APN_SETTINGS)); return } catch (e: Exception) {}
+        Toast.makeText(this, "APN settings not available on this device.", Toast.LENGTH_SHORT).show()
     }
 
     private fun openVolume() {
