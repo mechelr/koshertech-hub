@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         recycler.layoutManager = GridLayoutManager(this, 3)
         adapter = AppAdapter(allApps) { app -> openOrInstall(app) }
         recycler.adapter = adapter
+        ParentalRules.saveApps(this, allApps)
 
         findViewById<EditText>(R.id.searchBox).addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) { adapter.filter(s?.toString() ?: "") }
@@ -186,8 +187,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openLockChooser() {
-        val names = allApps.map { it.name }.toTypedArray()
-        val pkgs = allApps.map { it.packageName }
+        val list = adapter.allApps()
+        val names = list.map { it.name }.toTypedArray()
+        val pkgs = list.map { it.packageName }
         val lp = getSharedPreferences("ktlock", Context.MODE_PRIVATE)
         val locked = HashSet(lp.getStringSet("locked", emptySet()) ?: emptySet())
         val checked = BooleanArray(pkgs.size) { locked.contains(pkgs[it]) }
@@ -248,6 +250,7 @@ class MainActivity : AppCompatActivity() {
                 have.add(pkg)
             }
             adapter.setApps(merged)
+            ParentalRules.saveApps(this, merged)   // new pushed apps show up in Parental Controls
         }
         val dp = getSharedPreferences("ktdismiss", Context.MODE_PRIVATE)
 
@@ -607,9 +610,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Re-check parental time windows every 30s so tiles gray out / unlock on time.
+    private val parentalTick = android.os.Handler(android.os.Looper.getMainLooper())
+    private val parentalRun = object : Runnable {
+        override fun run() { adapter.notifyDataSetChanged(); parentalTick.postDelayed(this, 30_000) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        parentalTick.removeCallbacks(parentalRun)
+    }
+
     override fun onResume() {
         super.onResume()
         adapter.notifyDataSetChanged()
+        parentalTick.removeCallbacks(parentalRun)
+        parentalTick.postDelayed(parentalRun, 30_000)
         // Re-sync on every foreground so dashboard changes (approved requests,
         // pushed apps, announcements) show up without a full restart.
         if (::deviceId.isInitialized) syncBackend()
@@ -694,6 +710,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun doOpenOrInstall(app: AppItem) {
+        if (!ParentalRules.state(this, app.packageName).allowed) {
+            Toast.makeText(this, app.name + " is locked by Parental Controls", Toast.LENGTH_SHORT).show()
+            return
+        }
         val launch = packageManager.getLaunchIntentForPackage(app.packageName)
         if (launch != null) {
             startActivity(launch)   // already installed -> just open it

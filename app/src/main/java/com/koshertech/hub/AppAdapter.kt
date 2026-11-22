@@ -22,6 +22,8 @@ class AppAdapter(
         notifyDataSetChanged()
     }
 
+    fun allApps(): List<AppItem> = all
+
     fun filter(query: String) {
         val q = query.trim().lowercase()
         shown = if (q.isEmpty()) all.toMutableList()
@@ -60,6 +62,22 @@ class AppAdapter(
             holder.category.text = "Install"
             holder.category.setTextColor(0xFF22D3EE.toInt())
         }
+
+        // Parental Controls: locked apps turn gray and can't be opened.
+        val ctx = holder.itemView.context
+        val st = ParentalRules.state(ctx, app.packageName)
+        if (!st.allowed) {
+            holder.itemView.alpha = 0.35f
+            holder.category.text = "🔒 " + st.label
+            holder.category.setTextColor(0xFFE07A86.toInt())
+            holder.itemView.setOnClickListener {
+                val extra = if (st.label.startsWith("Opens")) " · " + st.label.lowercase() else ""
+                android.widget.Toast.makeText(ctx, app.name + " is locked by Parental Controls" + extra,
+                    android.widget.Toast.LENGTH_SHORT).show()
+            }
+            return
+        }
+        holder.itemView.alpha = 1f
 
         // The whole tile opens (or installs) the app.
         holder.itemView.setOnClickListener { onOpen(app) }

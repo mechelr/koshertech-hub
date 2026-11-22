@@ -22,14 +22,6 @@ class ParentalActivity : AppCompatActivity() {
 
     private lateinit var prefs: SharedPreferences
 
-    data class Rule(val name: String, val letter: String, val color: Int, val defOn: Boolean,
-                    val defSH: Int, val defSM: Int, val defEH: Int, val defEM: Int)
-    private val rules = listOf(
-        Rule("Zemer", "Z", 0xFFE0A52B.toInt(), true, 15, 0, 20, 0),
-        Rule("24Six", "2", 0xFFE04F5F.toInt(), true, 16, 0, 21, 0),
-        Rule("Zing", "Z", 0xFF9333EA.toInt(), false, 9, 0, 21, 0)
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parental)
@@ -73,51 +65,53 @@ class ParentalActivity : AppCompatActivity() {
         return et
     }
 
-    private fun fmt(h: Int, m: Int): String {
-        val ampm = if (h < 12) "AM" else "PM"; var hh = h % 12; if (hh == 0) hh = 12
-        return String.format("%d:%02d %s", hh, m, ampm)
-    }
-
-    private fun pickTimes(r: Rule) {
-        val sh = prefs.getInt(r.name + "_sh", r.defSH); val sm = prefs.getInt(r.name + "_sm", r.defSM)
+    private fun pickTimes(e: ParentalRules.Entry) {
+        val s0 = ParentalRules.startMin(this, e.pkg); val e0 = ParentalRules.endMin(this, e.pkg)
         TimePickerDialog(this, { _, startH, startM ->
-            val eh = prefs.getInt(r.name + "_eh", r.defEH); val em = prefs.getInt(r.name + "_em", r.defEM)
             TimePickerDialog(this, { _, endH, endM ->
-                prefs.edit().putInt(r.name + "_sh", startH).putInt(r.name + "_sm", startM)
-                    .putInt(r.name + "_eh", endH).putInt(r.name + "_em", endM).apply()
+                ParentalRules.setTimes(this, e.pkg, startH * 60 + startM, endH * 60 + endM)
+                ParentalRules.setLimited(this, e.pkg, true)
                 buildCards()
-            }, eh, em, false).also { it.setTitle("Available until"); it.show() }
-        }, sh, sm, false).also { it.setTitle("Available from"); it.show() }
+            }, e0 / 60, e0 % 60, false).also { it.setTitle("Available until"); it.show() }
+        }, s0 / 60, s0 % 60, false).also { it.setTitle("Available from"); it.show() }
     }
 
     private fun buildCards() {
         val container = findViewById<LinearLayout>(R.id.parentalCards)
         container.removeAllViews()
-        for (r in rules) container.addView(card(r))
+        val apps = ParentalRules.apps(this)
+        if (apps.isEmpty()) {
+            val t = TextView(this); t.text = "Open the KosherTech home screen once so your apps load here."
+            t.setTextColor(0xFF8599C0.toInt()); t.textSize = 13f; t.setPadding(0, dp(16), 0, 0)
+            container.addView(t); return
+        }
+        for (e in apps) container.addView(card(e))
     }
 
-    private fun card(r: Rule): View {
+    private fun card(e: ParentalRules.Entry): View {
         val card = LinearLayout(this); card.orientation = LinearLayout.VERTICAL
         val cbg = GradientDrawable(); cbg.cornerRadius = dp(15).toFloat(); cbg.setColor(0xFF0C1838.toInt()); cbg.setStroke(1, 0xFF1C2A52.toInt())
         card.background = cbg; card.setPadding(dp(14), dp(14), dp(14), dp(14))
         val clp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); clp.topMargin = dp(12); card.layoutParams = clp
 
         val top = LinearLayout(this); top.orientation = LinearLayout.HORIZONTAL; top.gravity = Gravity.CENTER_VERTICAL
-        val icon = TextView(this); icon.text = r.letter; icon.gravity = Gravity.CENTER; icon.setTextColor(0xFFFFFFFF.toInt()); icon.setTypeface(icon.typeface, Typeface.BOLD); icon.textSize = 16f
-        val ibg = GradientDrawable(); ibg.cornerRadius = dp(10).toFloat(); ibg.setColor(r.color); icon.background = ibg
+        val icon = TextView(this); icon.text = e.name.take(1); icon.gravity = Gravity.CENTER; icon.setTextColor(0xFFFFFFFF.toInt()); icon.setTypeface(icon.typeface, Typeface.BOLD); icon.textSize = 16f
+        val ibg = GradientDrawable(); ibg.cornerRadius = dp(10).toFloat(); ibg.setColor(e.color); icon.background = ibg
         icon.layoutParams = LinearLayout.LayoutParams(dp(38), dp(38))
         val nameCol = LinearLayout(this); nameCol.orientation = LinearLayout.VERTICAL
         val ncLp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f); ncLp.leftMargin = dp(11); nameCol.layoutParams = ncLp
-        val nm = TextView(this); nm.text = r.name; nm.setTextColor(0xFFF3F7FF.toInt()); nm.setTypeface(nm.typeface, Typeface.BOLD); nm.textSize = 15f
+        val nm = TextView(this); nm.text = e.name; nm.setTextColor(0xFFF3F7FF.toInt()); nm.setTypeface(nm.typeface, Typeface.BOLD); nm.textSize = 15f
         nameCol.addView(nm)
-        val enabled = prefs.getBoolean("enabled_" + r.name, r.defOn)
+        val st = ParentalRules.state(this, e.pkg)
+        val now = TextView(this); now.textSize = 11f
+        if (st.allowed) { now.text = "● Open right now"; now.setTextColor(0xFF4FD08A.toInt()) }
+        else { now.text = "● Locked right now"; now.setTextColor(0xFFE07A86.toInt()) }
+        nameCol.addView(now)
+        val enabled = ParentalRules.isEnabled(this, e.pkg)
         val sw = SwitchCompat(this); sw.isChecked = enabled
-        sw.setOnCheckedChangeListener { _, checked -> prefs.edit().putBoolean("enabled_" + r.name, checked).apply(); buildCards() }
+        sw.setOnCheckedChangeListener { _, checked -> ParentalRules.setEnabled(this, e.pkg, checked); buildCards() }
         top.addView(icon); top.addView(nameCol); top.addView(sw)
         card.addView(top)
-
-        val sh = prefs.getInt(r.name + "_sh", r.defSH); val sm = prefs.getInt(r.name + "_sm", r.defSM)
-        val eh = prefs.getInt(r.name + "_eh", r.defEH); val em = prefs.getInt(r.name + "_em", r.defEM)
 
         if (!enabled) {
             val off = TextView(this)
@@ -129,27 +123,24 @@ class ParentalActivity : AppCompatActivity() {
             return card
         }
 
-        // App is allowed. Second, separate choice: no time limit vs. a set window.
-        val limited = prefs.getBoolean("limited_" + r.name, false)
-
+        val limited = ParentalRules.isLimited(this, e.pkg)
         val pills = LinearLayout(this); pills.orientation = LinearLayout.HORIZONTAL
         val plp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); plp.topMargin = dp(12); pills.layoutParams = plp
-        val anyPill = pill("Anytime", !limited) {
-            prefs.edit().putBoolean("limited_" + r.name, false).apply(); buildCards()
-        }
+        val anyPill = pill("Anytime", !limited) { ParentalRules.setLimited(this, e.pkg, false); buildCards() }
         val anyLp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); anyLp.rightMargin = dp(8); anyPill.layoutParams = anyLp
         val setPill = pill("Set hours", limited) {
-            prefs.edit().putBoolean("limited_" + r.name, true).apply()
-            if (!prefs.contains(r.name + "_sh")) pickTimes(r) else buildCards()
+            if (!ParentalRules.hasTimes(this, e.pkg)) pickTimes(e)
+            else { ParentalRules.setLimited(this, e.pkg, true); buildCards() }
         }
         pills.addView(anyPill); pills.addView(setPill)
         card.addView(pills)
 
         val status = TextView(this)
         if (limited) {
-            status.text = "🕐 Available  " + fmt(sh, sm) + " – " + fmt(eh, em) + "     ✎ Edit"
+            status.text = "🕐 Available  " + ParentalRules.fmt(ParentalRules.startMin(this, e.pkg)) + " – " +
+                ParentalRules.fmt(ParentalRules.endMin(this, e.pkg)) + "     ✎ Edit"
             status.setTextColor(0xFF22D3EE.toInt())
-            status.setOnClickListener { pickTimes(r) }
+            status.setOnClickListener { pickTimes(e) }
         } else {
             status.text = "✓ Available anytime — no time limit"
             status.setTextColor(0xFF4FD08A.toInt())
@@ -164,9 +155,7 @@ class ParentalActivity : AppCompatActivity() {
             remove.setTextColor(0xFFE07A86.toInt())
             remove.textSize = 12f; remove.setTypeface(remove.typeface, Typeface.BOLD)
             val rlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); rlp.topMargin = dp(8); remove.layoutParams = rlp
-            remove.setOnClickListener {
-                prefs.edit().putBoolean("limited_" + r.name, false).apply(); buildCards()
-            }
+            remove.setOnClickListener { ParentalRules.setLimited(this, e.pkg, false); buildCards() }
             card.addView(remove)
         }
         return card

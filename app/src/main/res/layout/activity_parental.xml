@@ -15,7 +15,7 @@
         </LinearLayout>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Set which days and hours each app may be used. Changes are locked behind your PIN."
+            android:text="Choose when each app can be used. Locked apps turn gray on the home screen and can\'t be opened. New apps appear here automatically. Phone is always allowed."
             android:textColor="@color/muted" android:textSize="12sp" android:layout_marginTop="12dp" android:lineSpacingExtra="2dp"/>
 
         <LinearLayout android:id="@+id/parentalCards" android:layout_width="match_parent" android:layout_height="wrap_content"
