@@ -1,2 +1,2 @@
-🪞 New Mirror: check your look before you head out, and save a "good look" photo to compare against. Pops up once a day.
-🔐 New App Lock: require your PIN to open chosen apps (like Claude) — find it under Tools.
+🪞 Mirror now lets you snap a photo and compare it to your saved "best look", with a quick match read-out. Everything stays on your phone.
+🔦 Flashlight and 🔄 Auto-rotate moved into the Settings app, under Device.

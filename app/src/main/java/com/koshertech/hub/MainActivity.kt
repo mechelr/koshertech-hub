@@ -129,58 +129,6 @@ class MainActivity : AppCompatActivity() {
 
         deviceId = ensureDeviceId()
         syncBackend()
-        initToggles()
-    }
-
-    // ===== QUICK TOGGLES: flashlight + auto-rotate =====
-    private var torchOn = false
-    private var cameraManager: CameraManager? = null
-    private var torchCamId: String? = null
-
-    private fun initToggles() {
-        val flash = findViewById<TextView>(R.id.toggleFlash)
-        val rotate = findViewById<TextView>(R.id.toggleRotate)
-
-        cameraManager = getSystemService(Context.CAMERA_SERVICE) as? CameraManager
-        try {
-            torchCamId = cameraManager?.cameraIdList?.firstOrNull { id ->
-                cameraManager?.getCameraCharacteristics(id)?.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
-            }
-        } catch (e: Exception) {}
-
-        flash.setOnClickListener {
-            val cm = cameraManager; val id = torchCamId
-            if (cm == null || id == null) { Toast.makeText(this, "No flashlight on this device.", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
-            try {
-                torchOn = !torchOn
-                cm.setTorchMode(id, torchOn)
-                paintToggle(flash, torchOn, "🔦  Flashlight")
-            } catch (e: Exception) { Toast.makeText(this, "Couldn't toggle the flashlight.", Toast.LENGTH_SHORT).show() }
-        }
-
-        paintToggle(rotate, isAutoRotate(), "🔄  Auto-rotate")
-        rotate.setOnClickListener {
-            if (!Settings.System.canWrite(this)) {
-                Toast.makeText(this, "Turn on 'Modify system settings' for KosherTech Hub, then try again.", Toast.LENGTH_LONG).show()
-                try {
-                    val i = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS); i.data = Uri.parse("package:$packageName"); startActivity(i)
-                } catch (e: Exception) {}
-                return@setOnClickListener
-            }
-            val newState = !isAutoRotate()
-            try {
-                Settings.System.putInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION, if (newState) 1 else 0)
-                paintToggle(rotate, newState, "🔄  Auto-rotate")
-            } catch (e: Exception) { Toast.makeText(this, "Couldn't change auto-rotate.", Toast.LENGTH_SHORT).show() }
-        }
-    }
-
-    private fun isAutoRotate(): Boolean =
-        try { Settings.System.getInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION) == 1 } catch (e: Exception) { false }
-
-    private fun paintToggle(tv: TextView, on: Boolean, label: String) {
-        tv.text = if (on) "$label  ✓" else label
-        tv.setTextColor(if (on) 0xFF22D3EE.toInt() else 0xFFFFFFFF.toInt())
     }
 
     // ===== MORNING MIRROR: pop up on first launch and once a day =====

@@ -1,7 +1,10 @@
 package com.koshertech.settings
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -27,8 +30,64 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileDisplay).setOnClickListener { showDisplayDialog() }
         findViewById<View>(R.id.tileSound).setOnClickListener { openVolume() }
         findViewById<View>(R.id.tileSecurity).setOnClickListener { openScreenLock() }
+        findViewById<View>(R.id.tileFlash).setOnClickListener { toggleFlash() }
+        findViewById<View>(R.id.tileRotate).setOnClickListener { toggleRotate() }
+
+        initFlash()
+        paintRotate()
 
         findViewById<TextView>(R.id.deviceModel).text = Build.MANUFACTURER + " " + Build.MODEL
+    }
+
+    // ---- Flashlight (LED torch) ----
+    private var torchOn = false
+    private var cameraManager: CameraManager? = null
+    private var torchCamId: String? = null
+
+    private fun initFlash() {
+        cameraManager = getSystemService(Context.CAMERA_SERVICE) as? CameraManager
+        try {
+            torchCamId = cameraManager?.cameraIdList?.firstOrNull { id ->
+                cameraManager?.getCameraCharacteristics(id)?.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+            }
+        } catch (e: Exception) {}
+    }
+
+    private fun toggleFlash() {
+        val cm = cameraManager; val id = torchCamId
+        if (cm == null || id == null) { Toast.makeText(this, "No flashlight on this device.", Toast.LENGTH_SHORT).show(); return }
+        try {
+            torchOn = !torchOn
+            cm.setTorchMode(id, torchOn)
+            val tv = findViewById<TextView>(R.id.flashState)
+            tv.text = if (torchOn) "On" else "Off"
+            tv.setTextColor(if (torchOn) 0xFF22D3EE.toInt() else 0xFF8599C0.toInt())
+        } catch (e: Exception) { Toast.makeText(this, "Couldn't toggle the flashlight.", Toast.LENGTH_SHORT).show() }
+    }
+
+    // ---- Auto-rotate ----
+    private fun isAutoRotate(): Boolean =
+        try { Settings.System.getInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION) == 1 } catch (e: Exception) { false }
+
+    private fun paintRotate() {
+        val tv = findViewById<TextView>(R.id.rotateState)
+        val on = isAutoRotate()
+        tv.text = if (on) "On" else "Off"
+        tv.setTextColor(if (on) 0xFF22D3EE.toInt() else 0xFF8599C0.toInt())
+    }
+
+    private fun toggleRotate() {
+        if (!canWrite()) {
+            Toast.makeText(this, "Allow 'Modify system settings' for KosherTech Settings, then try again.", Toast.LENGTH_LONG).show()
+            try {
+                val i = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS); i.data = Uri.parse("package:" + packageName); startActivity(i)
+            } catch (e: Exception) {}
+            return
+        }
+        try {
+            Settings.System.putInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION, if (isAutoRotate()) 0 else 1)
+            paintRotate()
+        } catch (e: Exception) { Toast.makeText(this, "Couldn't change auto-rotate.", Toast.LENGTH_SHORT).show() }
     }
 
     private fun open(action: String) {

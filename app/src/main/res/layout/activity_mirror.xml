@@ -4,93 +4,184 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
-    <androidx.camera.view.PreviewView
-        android:id="@+id/preview"
+    <!-- LIVE MIRROR -->
+    <FrameLayout
+        android:id="@+id/liveLayer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-    <!-- Saved "good look" reference, top-right -->
+        <androidx.camera.view.PreviewView
+            android:id="@+id/preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_margin="14dp">
+            <ImageView
+                android:id="@+id/reference"
+                android:layout_width="84dp"
+                android:layout_height="112dp"
+                android:scaleType="centerCrop"
+                android:background="#22FFFFFF"/>
+            <TextView
+                android:id="@+id/refLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your good look"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:text="🪞  Morning check"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:padding="16dp"/>
+
+        <TextView
+            android:id="@+id/permHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:padding="24dp"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="16dp">
+            <TextView
+                android:id="@+id/checkBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📸  Check my look"
+                android:textColor="#04121C"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:background="@drawable/bg_open"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="12dp"
+                android:clickable="true"
+                android:focusable="true"/>
+            <View android:layout_width="10dp" android:layout_height="1dp"/>
+            <TextView
+                android:id="@+id/saveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⭐ Save look"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:background="@drawable/bg_card"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                android:clickable="true"
+                android:focusable="true"/>
+            <View android:layout_width="10dp" android:layout_height="1dp"/>
+            <TextView
+                android:id="@+id/doneBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Done"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:background="@drawable/bg_card"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="12dp"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- RESULT: captured vs reference -->
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
+        android:id="@+id/resultLayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:layout_margin="14dp">
-        <ImageView
-            android:id="@+id/reference"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:scaleType="centerCrop"
-            android:background="#22FFFFFF"/>
+        android:padding="18dp"
+        android:background="#0B1330"
+        android:visibility="gone">
+
         <TextView
-            android:id="@+id/refLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your good look"
+            android:text="How you look vs. your best"
             android:textColor="#FFFFFF"
-            android:textSize="10sp"
-            android:layout_marginTop="4dp"/>
-    </LinearLayout>
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_marginTop="6dp"/>
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:text="🪞  Morning check — how do you look?"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:textSize="15sp"
-        android:padding="16dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="14dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                <ImageView android:id="@+id/shotNow" android:layout_width="match_parent" android:layout_height="220dp" android:scaleType="centerCrop" android:background="#182a52"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Now" android:textColor="#BFC9E6" android:textSize="12sp" android:layout_marginTop="6dp"/>
+            </LinearLayout>
+            <View android:layout_width="12dp" android:layout_height="1dp"/>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                <ImageView android:id="@+id/shotRef" android:layout_width="match_parent" android:layout_height="220dp" android:scaleType="centerCrop" android:background="#182a52"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Your best look" android:textColor="#BFC9E6" android:textSize="12sp" android:layout_marginTop="6dp"/>
+            </LinearLayout>
+        </LinearLayout>
 
-    <!-- Hint when no reference saved -->
-    <TextView
-        android:id="@+id/permHint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text=""
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        android:padding="24dp"
-        android:visibility="gone"/>
-
-    <!-- Bottom controls -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="18dp">
         <TextView
-            android:id="@+id/saveBtn"
+            android:id="@+id/verdict"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="14dp"/>
+
+        <TextView
+            android:id="@+id/verdictSub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#8599C0"
+            android:textSize="12sp"
+            android:layout_marginTop="6dp"/>
+
+        <TextView
+            android:id="@+id/backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⭐  Save this as my look"
+            android:text="↺  Back to mirror"
             android:textColor="#04121C"
             android:textStyle="bold"
             android:textSize="13sp"
             android:background="@drawable/bg_open"
-            android:paddingHorizontal="18dp"
+            android:paddingHorizontal="20dp"
             android:paddingVertical="12dp"
-            android:clickable="true"
-            android:focusable="true"/>
-        <View android:layout_width="12dp" android:layout_height="1dp"/>
-        <TextView
-            android:id="@+id/doneBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Done"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="13sp"
-            android:background="@drawable/bg_card"
-            android:paddingHorizontal="22dp"
-            android:paddingVertical="12dp"
+            android:layout_marginTop="18dp"
             android:clickable="true"
             android:focusable="true"/>
     </LinearLayout>
