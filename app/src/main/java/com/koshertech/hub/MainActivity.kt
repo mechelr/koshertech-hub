@@ -5,6 +5,10 @@ import android.animation.ValueAnimator
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
+import android.net.Uri
+import android.provider.Settings
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -25,7 +29,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.os.Build
 import androidx.core.content.FileProvider
@@ -52,7 +56,10 @@ class MainActivity : AppCompatActivity() {
         AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFE04F5F.toInt(), ""),
         AppItem("Zing", "Music · Streaming", "fm.jewishmusic.application", 0xFF9333EA.toInt(), ""),
         AppItem("KosherTech Settings", "Controlled settings app", "com.koshertech.settings", 0xFF22D3EE.toInt(),
-            "https://github.com/mechelr/koshertech-hub/releases/download/settings/KosherTechSettings.apk")
+            "https://github.com/mechelr/koshertech-hub/releases/download/settings/KosherTechSettings.apk"),
+        AppItem("Phone", "Make a call", "com.google.android.dialer", 0xFF34D399.toInt(), ""),
+        AppItem("Contacts", "Phone book", "com.google.android.contacts", 0xFF4F9CF9.toInt(), ""),
+        AppItem("Claude", "AI assistant", "com.anthropic.claude", 0xFFD97757.toInt(), "")
     )
 
     // ===== PLANS (demo pricing — edit freely) =====
@@ -85,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         ZmanimInfo.load(this)
 
         val recycler = findViewById<RecyclerView>(R.id.appList)
-        recycler.layoutManager = LinearLayoutManager(this)
+        recycler.layoutManager = GridLayoutManager(this, 3)
         adapter = AppAdapter(allApps) { app -> openOrInstall(app) }
         recycler.adapter = adapter
 
@@ -117,6 +124,58 @@ class MainActivity : AppCompatActivity() {
 
         deviceId = ensureDeviceId()
         syncBackend()
+        initToggles()
+    }
+
+    // ===== QUICK TOGGLES: flashlight + auto-rotate =====
+    private var torchOn = false
+    private var cameraManager: CameraManager? = null
+    private var torchCamId: String? = null
+
+    private fun initToggles() {
+        val flash = findViewById<TextView>(R.id.toggleFlash)
+        val rotate = findViewById<TextView>(R.id.toggleRotate)
+
+        cameraManager = getSystemService(Context.CAMERA_SERVICE) as? CameraManager
+        try {
+            torchCamId = cameraManager?.cameraIdList?.firstOrNull { id ->
+                cameraManager?.getCameraCharacteristics(id)?.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+            }
+        } catch (e: Exception) {}
+
+        flash.setOnClickListener {
+            val cm = cameraManager; val id = torchCamId
+            if (cm == null || id == null) { Toast.makeText(this, "No flashlight on this device.", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
+            try {
+                torchOn = !torchOn
+                cm.setTorchMode(id, torchOn)
+                paintToggle(flash, torchOn, "🔦  Flashlight")
+            } catch (e: Exception) { Toast.makeText(this, "Couldn't toggle the flashlight.", Toast.LENGTH_SHORT).show() }
+        }
+
+        paintToggle(rotate, isAutoRotate(), "🔄  Auto-rotate")
+        rotate.setOnClickListener {
+            if (!Settings.System.canWrite(this)) {
+                Toast.makeText(this, "Turn on 'Modify system settings' for KosherTech Hub, then try again.", Toast.LENGTH_LONG).show()
+                try {
+                    val i = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS); i.data = Uri.parse("package:$packageName"); startActivity(i)
+                } catch (e: Exception) {}
+                return@setOnClickListener
+            }
+            val newState = !isAutoRotate()
+            try {
+                Settings.System.putInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION, if (newState) 1 else 0)
+                paintToggle(rotate, newState, "🔄  Auto-rotate")
+            } catch (e: Exception) { Toast.makeText(this, "Couldn't change auto-rotate.", Toast.LENGTH_SHORT).show() }
+        }
+    }
+
+    private fun isAutoRotate(): Boolean =
+        try { Settings.System.getInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION) == 1 } catch (e: Exception) { false }
+
+    private fun paintToggle(tv: TextView, on: Boolean, label: String) {
+        tv.text = if (on) "$label  ✓" else label
+        tv.setTextColor(if (on) 0xFF22D3EE.toInt() else 0xFFFFFFFF.toInt())
     }
 
     // ===== BACKEND SYNC (device identity, remote app push, request status, announcements) =====

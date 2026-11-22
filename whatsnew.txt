@@ -1,1 +1,3 @@
-💬 Support replies in live chat now show a KosherTech profile picture and a "KosherTech Employee" label, so it's clear who's answering.
+📱 Your apps now show in a grid instead of a list.
+📞 Added Phone, Contacts, and Claude — call and use them right from the launcher.
+🔦 New quick toggles on the home screen: Flashlight and Auto-rotate.

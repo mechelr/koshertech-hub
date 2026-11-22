@@ -37,10 +37,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openWifi() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            try { startActivity(Intent(Settings.Panel.ACTION_WIFI)); return } catch (e: Exception) {}
-        }
-        open(Settings.ACTION_WIFI_SETTINGS)
+        // Open the full Wi-Fi settings page (same approach as Bluetooth, which works in kiosk).
+        // The floating Wi-Fi "panel" silently fails to show on locked/kiosk devices, so we skip it.
+        try { startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)); return } catch (e: Exception) {}
+        try { startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS)); return } catch (e: Exception) {}
+        Toast.makeText(this, "Wi-Fi settings not available on this device.", Toast.LENGTH_SHORT).show()
     }
 
     private fun openVolume() {
