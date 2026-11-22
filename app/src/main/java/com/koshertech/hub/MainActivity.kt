@@ -60,6 +60,8 @@ class MainActivity : AppCompatActivity() {
             "https://github.com/mechelr/koshertech-hub/releases/download/settings/KosherTechSettings.apk"),
         AppItem("Phone", "Make a call", "com.google.android.dialer", 0xFF34D399.toInt(), ""),
         AppItem("Contacts", "Phone book", "com.google.android.contacts", 0xFF4F9CF9.toInt(), ""),
+        AppItem("Camera", "Take photos", "com.photo.android.camera", 0xFF64748B.toInt(), ""),
+        AppItem("Gallery", "Your photos", "org.fossify.gallery", 0xFFF59E0B.toInt(), ""),
         AppItem("Claude", "AI assistant", "com.anthropic.claude", 0xFFD97757.toInt(), "")
     )
 

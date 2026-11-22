@@ -1,1 +1,1 @@
-🔒 Parental Controls now really work: locked apps turn gray on the home screen and can't be opened. Every app (including new ones) shows up in Parental Controls automatically.
+📷 Camera and 🖼️ Gallery are now on your home screen. You can also set hours for them in Parental Controls.
