@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileFlash).setOnClickListener { toggleFlash() }
         findViewById<View>(R.id.tileRotate).setOnClickListener { toggleRotate() }
         findViewById<View>(R.id.tileLed).setOnClickListener { openLed() }
+        findViewById<View>(R.id.tileKeyboard).setOnClickListener { openKeyboard() }
 
         initFlash()
         paintRotate()
@@ -133,6 +134,13 @@ class MainActivity : AppCompatActivity() {
             }
         } catch (e: Exception) {}
         Toast.makeText(this, "The LED menu can't be opened from here on this phone. Set it once in setup (it stays off).", Toast.LENGTH_LONG).show()
+    }
+
+    private fun openKeyboard() {
+        // On-screen keyboard / input settings (tap the keyboard there -> Languages -> Add).
+        val tries = listOf(Settings.ACTION_INPUT_METHOD_SETTINGS, "android.settings.LOCALE_SETTINGS")
+        for (a in tries) { try { startActivity(Intent(a)); return } catch (e: Exception) {} }
+        Toast.makeText(this, "Keyboard settings not available on this device.", Toast.LENGTH_SHORT).show()
     }
 
     private fun openMobile() {
