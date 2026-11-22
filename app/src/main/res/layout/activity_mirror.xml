@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!-- Saved "good look" reference, top-right -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_margin="14dp">
+        <ImageView
+            android:id="@+id/reference"
+            android:layout_width="96dp"
+            android:layout_height="128dp"
+            android:scaleType="centerCrop"
+            android:background="#22FFFFFF"/>
+        <TextView
+            android:id="@+id/refLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your good look"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:text="🪞  Morning check — how do you look?"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:padding="16dp"/>
+
+    <!-- Hint when no reference saved -->
+    <TextView
+        android:id="@+id/permHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text=""
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:padding="24dp"
+        android:visibility="gone"/>
+
+    <!-- Bottom controls -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="18dp">
+        <TextView
+            android:id="@+id/saveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⭐  Save this as my look"
+            android:textColor="#04121C"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:background="@drawable/bg_open"
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="12dp"
+            android:clickable="true"
+            android:focusable="true"/>
+        <View android:layout_width="12dp" android:layout_height="1dp"/>
+        <TextView
+            android:id="@+id/doneBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Done"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:background="@drawable/bg_card"
+            android:paddingHorizontal="22dp"
+            android:paddingVertical="12dp"
+            android:clickable="true"
+            android:focusable="true"/>
+    </LinearLayout>
+</FrameLayout>

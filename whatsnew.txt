@@ -1,3 +1,2 @@
-📱 Your apps now show in a grid instead of a list.
-📞 Added Phone, Contacts, and Claude — call and use them right from the launcher.
-🔦 New quick toggles on the home screen: Flashlight and Auto-rotate.
+🪞 New Mirror: check your look before you head out, and save a "good look" photo to compare against. Pops up once a day.
+🔐 New App Lock: require your PIN to open chosen apps (like Claude) — find it under Tools.

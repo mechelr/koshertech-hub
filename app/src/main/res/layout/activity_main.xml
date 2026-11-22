@@ -445,6 +445,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="9dp">
+                <LinearLayout android:id="@+id/tileMirror" android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                    android:background="@drawable/bg_card" android:padding="16dp" android:clickable="true" android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🪞" android:textSize="24sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mirror" android:textColor="@color/white" android:textStyle="bold" android:textSize="12sp" android:layout_marginTop="6dp"/>
+                </LinearLayout>
+                <View android:layout_width="9dp" android:layout_height="1dp"/>
+                <LinearLayout android:id="@+id/tileAppLock" android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                    android:background="@drawable/bg_card" android:padding="16dp" android:clickable="true" android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔐" android:textSize="24sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="App Lock" android:textColor="@color/white" android:textStyle="bold" android:textSize="12sp" android:layout_marginTop="6dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="14dp">
                 <TextView
                     android:id="@+id/loopholeButton"

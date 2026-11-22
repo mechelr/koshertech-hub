@@ -13,6 +13,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.Gravity
+import android.text.InputType
 import androidx.appcompat.app.AlertDialog
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -112,6 +113,10 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileParental).setOnClickListener { startActivity(Intent(this, ParentalActivity::class.java)) }
         findViewById<View>(R.id.tileAutomations).setOnClickListener { startActivity(Intent(this, AutomationsActivity::class.java)) }
         findViewById<View>(R.id.tileHelp).setOnClickListener { showHelp() }
+        findViewById<View>(R.id.tileMirror).setOnClickListener { startActivity(Intent(this, MirrorActivity::class.java)) }
+        findViewById<View>(R.id.tileAppLock).setOnClickListener { showAppLock() }
+
+        maybeShowMirror()
         findViewById<View>(R.id.chatFab).setOnClickListener { startActivity(Intent(this, ChatActivity::class.java)) }
 
         populateZmanim()
@@ -176,6 +181,78 @@ class MainActivity : AppCompatActivity() {
     private fun paintToggle(tv: TextView, on: Boolean, label: String) {
         tv.text = if (on) "$label  ✓" else label
         tv.setTextColor(if (on) 0xFF22D3EE.toInt() else 0xFFFFFFFF.toInt())
+    }
+
+    // ===== MORNING MIRROR: pop up on first launch and once a day =====
+    private fun maybeShowMirror() {
+        val p = getSharedPreferences("ktmirror", Context.MODE_PRIVATE)
+        val today = LocalDate.now().toString()
+        if (p.getString("lastShown", "") != today) {
+            p.edit().putString("lastShown", today).apply()
+            findViewById<View>(android.R.id.content).post {
+                startActivity(Intent(this, MirrorActivity::class.java))
+            }
+        }
+    }
+
+    // ===== APP LOCK: require the parent PIN to open chosen apps =====
+    private fun isLocked(pkg: String): Boolean {
+        val locked = getSharedPreferences("ktlock", Context.MODE_PRIVATE).getStringSet("locked", emptySet()) ?: emptySet()
+        return locked.contains(pkg)
+    }
+
+    private fun pinField(): EditText {
+        val et = EditText(this)
+        et.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+        return et
+    }
+
+    private fun promptPin(onOk: () -> Unit) {
+        val pin = getSharedPreferences("ktparental", Context.MODE_PRIVATE).getString("pin", null)
+        if (pin == null) { onOk(); return }  // no PIN set -> nothing to enforce
+        val et = pinField()
+        AlertDialog.Builder(this).setTitle("Enter PIN to open")
+            .setView(et)
+            .setPositiveButton("Open") { _, _ ->
+                if (et.text.toString() == pin) onOk()
+                else Toast.makeText(this, "Wrong PIN", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Cancel", null).show()
+    }
+
+    private fun showAppLock() {
+        val pp = getSharedPreferences("ktparental", Context.MODE_PRIVATE)
+        if (pp.getString("pin", null) == null) {
+            val et = pinField()
+            AlertDialog.Builder(this).setTitle("Create a 4-digit PIN for App Lock")
+                .setView(et)
+                .setPositiveButton("Save") { _, _ ->
+                    val p = et.text.toString()
+                    if (p.length >= 4) { pp.edit().putString("pin", p).apply(); openLockChooser() }
+                    else Toast.makeText(this, "Use at least 4 digits", Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("Cancel", null).show()
+            return
+        }
+        promptPin { openLockChooser() }
+    }
+
+    private fun openLockChooser() {
+        val names = allApps.map { it.name }.toTypedArray()
+        val pkgs = allApps.map { it.packageName }
+        val lp = getSharedPreferences("ktlock", Context.MODE_PRIVATE)
+        val locked = HashSet(lp.getStringSet("locked", emptySet()) ?: emptySet())
+        val checked = BooleanArray(pkgs.size) { locked.contains(pkgs[it]) }
+        AlertDialog.Builder(this)
+            .setTitle("Lock apps (ask PIN to open)")
+            .setMultiChoiceItems(names, checked) { _, which, isChecked ->
+                if (isChecked) locked.add(pkgs[which]) else locked.remove(pkgs[which])
+            }
+            .setPositiveButton("Save") { _, _ ->
+                lp.edit().putStringSet("locked", locked).apply()
+                Toast.makeText(this, "App lock saved", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Cancel", null).show()
     }
 
     // ===== BACKEND SYNC (device identity, remote app push, request status, announcements) =====
@@ -660,6 +737,15 @@ class MainActivity : AppCompatActivity() {
     // IMPORTANT: this never opens the Play Store or any app store. Approved apps
     // are installed by KosherTech (via MDM), so the customer can never browse a store.
     private fun openOrInstall(app: AppItem) {
+        // Locked app? Require the parent PIN before opening.
+        if (isLocked(app.packageName)) {
+            promptPin { doOpenOrInstall(app) }
+            return
+        }
+        doOpenOrInstall(app)
+    }
+
+    private fun doOpenOrInstall(app: AppItem) {
         val launch = packageManager.getLaunchIntentForPackage(app.packageName)
         if (launch != null) {
             startActivity(launch)   // already installed -> just open it
