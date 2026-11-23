@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginStart="10dp">
-                    <TextView android:fontFamily="@font/inter_extrabold"
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/brand"
@@ -50,7 +50,7 @@
                         android:fontFamily="@font/inter_black"
                         android:letterSpacing="-0.02"
                         android:textSize="22sp"/>
-                    <TextView android:fontFamily="monospace"
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/tagline"
@@ -126,14 +126,14 @@
                 android:visibility="gone"/>
 
             <!-- Greeting -->
-            <TextView android:fontFamily="@font/inter_black"
+            <TextView
                 android:id="@+id/greetingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Good evening"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:textSize="32sp" android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"
+                android:textSize="32sp" android:fontFamily="@font/inter_black"
                 android:letterSpacing="-0.01"
                 android:layout_marginTop="18dp"/>
 
@@ -285,7 +285,7 @@
                 android:maxLines="1"
                 android:importantForAutofill="no"/>
 
-            <TextView android:fontFamily="@font/inter_extrabold"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Your Apps"
@@ -357,7 +357,7 @@
             </LinearLayout>
 
             <!-- Tools -->
-            <TextView android:fontFamily="@font/inter_extrabold"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tools"

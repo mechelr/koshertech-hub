@@ -15,7 +15,7 @@
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:background="@drawable/bg_icon">
-        <TextView android:fontFamily="@font/inter_extrabold"
+        <TextView
             android:id="@+id/iconLetter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
