@@ -28,29 +28,32 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingStart="22dp" android:paddingEnd="22dp"
-                    android:paddingTop="26dp" android:paddingBottom="190dp">
+                    android:paddingStart="16dp" android:paddingEnd="16dp"
+                    android:paddingTop="26dp" android:paddingBottom="140dp">
 
                     <!-- header -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:gravity="center_vertical">
-                        <ImageView android:layout_width="54dp" android:layout_height="54dp"
+                        <ImageView android:layout_width="42dp" android:layout_height="42dp"
                             android:src="@drawable/ic_logo" android:contentDescription="KosherTech"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp" android:text="Kosher" android:textColor="@color/ink"
-                            android:textSize="27sp" android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"/>
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
-                            android:text="Tech" android:textColor="@color/blue"
-                            android:textSize="27sp" android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"/>
+                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                            android:orientation="horizontal" android:layout_marginStart="9dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Kosher" android:textColor="@color/ink" android:maxLines="1"
+                                android:textSize="21sp" android:fontFamily="@font/inter_black" android:textStyle="bold" android:letterSpacing="-0.02"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Tech" android:textColor="@color/blue" android:maxLines="1"
+                                android:textSize="21sp" android:fontFamily="@font/inter_black" android:textStyle="bold" android:letterSpacing="-0.02"/>
+                        </LinearLayout>
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:gravity="center_vertical"
                             android:background="@drawable/bg_pill_green"
-                            android:paddingStart="12dp" android:paddingEnd="14dp" android:paddingTop="8dp" android:paddingBottom="8dp">
-                            <ImageView android:layout_width="18dp" android:layout_height="18dp"
+                            android:paddingStart="9dp" android:paddingEnd="11dp" android:paddingTop="6dp" android:paddingBottom="6dp">
+                            <ImageView android:layout_width="14dp" android:layout_height="14dp"
                                 android:src="@drawable/ic_x_shield" app:tint="#047857" android:contentDescription="@null"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:layout_marginStart="6dp" android:text="Protected" android:textColor="#047857"
-                                android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:layout_marginStart="5dp" android:text="Protected" android:textColor="#047857" android:maxLines="1"
+                                android:textSize="12sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -84,35 +87,35 @@
                     <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:baselineAligned="true" android:layout_marginTop="18dp">
                         <TextView android:id="@+id/clockTime" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="8:27" android:textColor="@color/ink" android:textSize="92sp"
+                            android:text="8:27" android:textColor="@color/ink" android:textSize="74sp"
                             android:fontFamily="@font/inter_black" android:letterSpacing="-0.03" android:includeFontPadding="false"/>
                         <TextView android:id="@+id/clockAmPm" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp" android:text="PM" android:textColor="@color/purple" android:textSize="34sp"
+                            android:layout_marginStart="10dp" android:text="PM" android:textColor="@color/purple" android:textSize="26sp"
                             android:fontFamily="@font/inter_black"/>
                     </LinearLayout>
                     <TextView android:id="@+id/englishDate" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="" android:textColor="@color/indigo" android:textSize="23sp" android:fontFamily="@font/inter_extrabold"
+                        android:text="" android:textColor="@color/indigo" android:textSize="19sp" android:fontFamily="@font/inter_extrabold"
                         android:layout_marginTop="4dp"/>
                     <TextView android:id="@+id/hebrewDate" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="" android:textColor="@color/slate" android:textSize="16sp" android:fontFamily="@font/inter_bold"
+                        android:text="" android:textColor="@color/slate" android:textSize="14sp" android:fontFamily="@font/inter_bold"
                         android:layout_marginTop="2dp"/>
 
                     <!-- weather (display only, never clickable) -->
                     <LinearLayout android:id="@+id/weatherCard" android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:background="@drawable/bg_weather"
-                        android:paddingStart="22dp" android:paddingEnd="22dp" android:paddingTop="22dp" android:paddingBottom="20dp"
+                        android:paddingStart="16dp" android:paddingEnd="16dp" android:paddingTop="18dp" android:paddingBottom="16dp"
                         android:layout_marginTop="22dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:gravity="center_vertical">
                             <TextView android:id="@+id/weatherIcon" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="⏳" android:textSize="50sp" android:layout_marginEnd="16dp"/>
+                                android:text="⏳" android:textSize="40sp" android:layout_marginEnd="12dp"/>
                             <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
                                 android:orientation="vertical">
                                 <TextView android:id="@+id/weatherNow" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="—" android:textColor="@color/pure_white" android:textSize="60sp"
+                                    android:text="—" android:textColor="@color/pure_white" android:textSize="50sp"
                                     android:fontFamily="@font/inter_black" android:includeFontPadding="false"/>
                                 <TextView android:id="@+id/weatherDesc" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Loading weather…" android:textColor="@color/pure_white" android:textSize="16sp"
+                                    android:text="Loading weather…" android:textColor="@color/pure_white" android:textSize="14sp" android:maxLines="2"
                                     android:fontFamily="@font/inter_bold" android:layout_marginTop="4dp"/>
                             </LinearLayout>
                         </LinearLayout>
@@ -124,14 +127,14 @@
 
                     <!-- zmanim -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:orientation="vertical" android:background="@drawable/bg_zmanim" android:padding="20dp"
+                        android:orientation="vertical" android:background="@drawable/bg_zmanim" android:padding="14dp"
                         android:layout_marginTop="18dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:gravity="center_vertical">
                             <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
-                                android:text="Zmanim" android:textColor="#C2410C" android:textSize="28sp" android:fontFamily="@font/inter_black"/>
+                                android:text="Zmanim" android:textColor="#C2410C" android:textSize="24sp" android:fontFamily="@font/inter_black"/>
                             <TextView android:id="@+id/zmanimDay" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="Today" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"
+                                android:text="Today" android:textColor="@color/pure_white" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"
                                 android:background="@drawable/bg_pill_orange" android:paddingStart="16dp" android:paddingEnd="16dp"
                                 android:paddingTop="7dp" android:paddingBottom="7dp" android:clickable="true" android:focusable="true"/>
                         </LinearLayout>
@@ -150,98 +153,119 @@
                             android:orientation="horizontal" android:gravity="center_vertical" android:background="@drawable/bg_p_orange"
                             android:padding="16dp">
                             <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
-                                android:text="Candle lighting (Fri)" android:textColor="#C2410C" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="Candle lighting (Fri)" android:textColor="#C2410C" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                             <TextView android:id="@+id/candleVal" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="—" android:textColor="@color/ink" android:textSize="20sp" android:fontFamily="@font/inter_black"/>
+                                android:text="—" android:textColor="@color/ink" android:textSize="18sp" android:fontFamily="@font/inter_black"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <!-- more: every other KosherTech feature -->
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="More" android:textColor="@color/ink" android:textSize="28sp" android:fontFamily="@font/inter_black"
+                        android:text="More" android:textColor="@color/ink" android:textSize="24sp" android:fontFamily="@font/inter_black"
                         android:layout_marginTop="26dp"/>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="12dp">
+                        <LinearLayout android:id="@+id/tileSettings" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
+                            android:orientation="vertical" android:background="@drawable/bg_c_slate" android:padding="16dp"
+                            android:clickable="true" android:focusable="true">
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_a_settings" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
+                                android:text="Settings" android:textColor="@color/pure_white" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                        </LinearLayout>
+                        <View android:layout_width="12dp" android:layout_height="1dp"/>
+                        <LinearLayout android:id="@+id/tileUpdates" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
+                            android:orientation="vertical" android:background="@drawable/bg_c_teal" android:padding="16dp"
+                            android:clickable="true" android:focusable="true">
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_download" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
+                                android:text="Updates" android:textColor="@color/pure_white" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginTop="12dp">
                         <LinearLayout android:id="@+id/tileMirror" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
-                            android:orientation="vertical" android:background="@drawable/bg_c_sky" android:padding="18dp"
+                            android:orientation="vertical" android:background="@drawable/bg_c_sky" android:padding="16dp"
                             android:clickable="true" android:focusable="true">
                             <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_mirror" android:contentDescription="@null"/>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Mirror" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="Mirror" android:textColor="@color/pure_white" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
                         <LinearLayout android:id="@+id/tileAutomations" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
-                            android:orientation="vertical" android:background="@drawable/bg_c_violet" android:padding="18dp"
+                            android:orientation="vertical" android:background="@drawable/bg_c_violet" android:padding="16dp"
                             android:clickable="true" android:focusable="true">
                             <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_bolt" android:contentDescription="@null"/>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Automations" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="Automations" android:textColor="@color/pure_white" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="12dp">
                         <LinearLayout android:id="@+id/tileHelp" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
-                            android:orientation="vertical" android:background="@drawable/bg_c_green" android:padding="18dp"
+                            android:orientation="vertical" android:background="@drawable/bg_c_green" android:padding="16dp"
                             android:clickable="true" android:focusable="true">
                             <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_help" android:contentDescription="@null"/>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Help &amp; Support" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="Help &amp; Support" android:textColor="@color/pure_white" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
                         <LinearLayout android:id="@+id/tileChat" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
-                            android:orientation="vertical" android:background="@drawable/bg_c_blue" android:padding="18dp"
+                            android:orientation="vertical" android:background="@drawable/bg_c_blue" android:padding="16dp"
                             android:clickable="true" android:focusable="true">
                             <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_chat" android:contentDescription="@null"/>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Live chat" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="Live chat" android:textColor="@color/pure_white" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="12dp">
                         <LinearLayout android:id="@+id/buyPlanButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
-                            android:orientation="vertical" android:background="@drawable/bg_c_orange" android:padding="18dp"
+                            android:orientation="vertical" android:background="@drawable/bg_c_orange" android:padding="16dp"
                             android:clickable="true" android:focusable="true">
                             <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_cart" android:contentDescription="@null"/>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Buy a plan" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="Buy a plan" android:textColor="@color/pure_white" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
                         <LinearLayout android:id="@+id/updatePaymentButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
-                            android:orientation="vertical" android:background="@drawable/bg_c_pink" android:padding="18dp"
+                            android:orientation="vertical" android:background="@drawable/bg_c_pink" android:padding="16dp"
                             android:clickable="true" android:focusable="true">
                             <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_card" android:contentDescription="@null"/>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Update payment" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="Update payment" android:textColor="@color/pure_white" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="12dp">
                         <LinearLayout android:id="@+id/loopholeButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
-                            android:orientation="vertical" android:background="@drawable/bg_c_red" android:padding="18dp"
+                            android:orientation="vertical" android:background="@drawable/bg_c_red" android:padding="16dp"
                             android:clickable="true" android:focusable="true">
                             <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_flag" android:contentDescription="@null"/>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Report a loophole" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="Report a loophole" android:textColor="@color/pure_white" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
                         <LinearLayout android:id="@+id/rateButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
-                            android:orientation="vertical" android:background="@drawable/bg_c_yellow" android:padding="18dp"
+                            android:orientation="vertical" android:background="@drawable/bg_c_yellow" android:padding="16dp"
                             android:clickable="true" android:focusable="true">
                             <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_star" app:tint="@color/ink" android:contentDescription="@null"/>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Rate us" android:textColor="@color/ink" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="Rate us" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -263,21 +287,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingStart="22dp" android:paddingEnd="22dp"
-                    android:paddingTop="30dp" android:paddingBottom="190dp">
+                    android:paddingStart="16dp" android:paddingEnd="16dp"
+                    android:paddingTop="30dp" android:paddingBottom="140dp">
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:gravity="center_vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="My " android:textColor="@color/ink" android:textSize="44sp"
+                            android:text="My " android:textColor="@color/ink" android:textSize="34sp"
                             android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"/>
                         <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
-                            android:text="Apps" android:textColor="@color/pink" android:textSize="44sp"
+                            android:text="Apps" android:textColor="@color/pink" android:textSize="34sp"
                             android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"/>
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="Approved only" android:textColor="#047857" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"
-                            android:background="@drawable/bg_pill_green" android:paddingStart="14dp" android:paddingEnd="14dp"
-                            android:paddingTop="8dp" android:paddingBottom="8dp"/>
+                            android:text="Approved only" android:textColor="#047857" android:textSize="12sp" android:fontFamily="@font/inter_extrabold" android:maxLines="1"
+                            android:background="@drawable/bg_pill_green" android:paddingStart="11dp" android:paddingEnd="11dp"
+                            android:paddingTop="6dp" android:paddingBottom="6dp"/>
                     </LinearLayout>
 
                     <EditText android:id="@+id/searchBox" android:layout_width="match_parent" android:layout_height="48dp"
@@ -291,13 +315,13 @@
                         android:layout_height="wrap_content" android:layout_marginTop="14dp" android:nestedScrollingEnabled="false"
                         android:overScrollMode="never"/>
 
-                    <LinearLayout android:id="@+id/requestButton" android:layout_width="match_parent" android:layout_height="64dp"
+                    <LinearLayout android:id="@+id/requestButton" android:layout_width="match_parent" android:layout_height="58dp"
                         android:orientation="horizontal" android:gravity="center" android:background="@drawable/bg_yellow_btn"
                         android:layout_marginTop="16dp" android:clickable="true" android:focusable="true">
                         <ImageView android:layout_width="26dp" android:layout_height="26dp" android:src="@drawable/ic_x_plus"
                             app:tint="@color/ink" android:contentDescription="@null"/>
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp"
-                            android:text="Request an App" android:textColor="@color/ink" android:textSize="21sp" android:fontFamily="@font/inter_black"/>
+                            android:text="Request an App" android:textColor="@color/ink" android:textSize="18sp" android:fontFamily="@font/inter_black"/>
                     </LinearLayout>
 
                     <TextView android:id="@+id/requestStatusTitle" android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -319,42 +343,42 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingStart="22dp" android:paddingEnd="22dp"
-                    android:paddingTop="26dp" android:paddingBottom="190dp">
+                    android:paddingStart="16dp" android:paddingEnd="16dp"
+                    android:paddingTop="26dp" android:paddingBottom="140dp">
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:gravity="center_vertical">
-                        <FrameLayout android:layout_width="60dp" android:layout_height="60dp" android:background="@drawable/bg_green_sq">
-                            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:layout_gravity="center"
+                        <FrameLayout android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_green_sq">
+                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center"
                                 android:src="@drawable/ic_x_lock" android:contentDescription="@null"/>
                         </FrameLayout>
                         <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
                             android:orientation="vertical" android:layout_marginStart="14dp">
                             <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Parental " android:textColor="@color/ink" android:textSize="30sp"
+                                    android:text="Parental " android:textColor="@color/ink" android:textSize="23sp" android:maxLines="1"
                                     android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Controls" android:textColor="@color/green" android:textSize="30sp"
+                                    android:text="Controls" android:textColor="@color/green" android:textSize="23sp" android:maxLines="1"
                                     android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"/>
                             </LinearLayout>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="PIN required to change" android:textColor="@color/indigo" android:textSize="15sp"
+                                android:text="PIN required to change" android:textColor="@color/indigo" android:textSize="13sp"
                                 android:fontFamily="@font/inter_bold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <!-- screen time today -->
                     <LinearLayout android:id="@+id/screenCard" android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:orientation="vertical" android:background="@drawable/bg_screen" android:padding="22dp"
+                        android:orientation="vertical" android:background="@drawable/bg_screen" android:padding="18dp"
                         android:layout_marginTop="20dp" android:clickable="true" android:focusable="true">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:gravity="center_vertical">
                             <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
-                                android:text="Screen time today" android:textColor="@color/pure_white" android:textSize="18sp"
+                                android:text="Screen time today" android:textColor="@color/pure_white" android:textSize="15sp"
                                 android:fontFamily="@font/inter_extrabold"/>
                             <TextView android:id="@+id/screenTotal" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="0m" android:textColor="@color/pure_white" android:textSize="38sp"
+                                android:text="0m" android:textColor="@color/pure_white" android:textSize="30sp"
                                 android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"/>
                         </LinearLayout>
                         <LinearLayout android:id="@+id/screenBar" android:layout_width="match_parent" android:layout_height="16dp"
@@ -363,15 +387,15 @@
                             android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="14dp">
                             <View android:layout_width="12dp" android:layout_height="12dp" android:background="@drawable/bg_dot" android:backgroundTint="#F97316"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp"
-                                android:text="Claude" android:textColor="@color/pure_white" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
-                            <View android:layout_width="12dp" android:layout_height="12dp" android:layout_marginStart="14dp" android:background="@drawable/bg_dot" android:backgroundTint="#FACC15"/>
+                                android:text="Claude" android:textColor="@color/pure_white" android:textSize="12sp" android:fontFamily="@font/inter_extrabold"/>
+                            <View android:layout_width="12dp" android:layout_height="12dp" android:layout_marginStart="10dp" android:background="@drawable/bg_dot" android:backgroundTint="#FACC15"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp"
-                                android:text="Music" android:textColor="@color/pure_white" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
-                            <View android:layout_width="12dp" android:layout_height="12dp" android:layout_marginStart="14dp" android:background="@drawable/bg_dot" android:backgroundTint="#34D399"/>
+                                android:text="Music" android:textColor="@color/pure_white" android:textSize="12sp" android:fontFamily="@font/inter_extrabold"/>
+                            <View android:layout_width="12dp" android:layout_height="12dp" android:layout_marginStart="10dp" android:background="@drawable/bg_dot" android:backgroundTint="#34D399"/>
                             <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="6dp"
-                                android:text="Other" android:textColor="@color/pure_white" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="Other" android:textColor="@color/pure_white" android:textSize="12sp" android:fontFamily="@font/inter_extrabold"/>
                             <TextView android:id="@+id/screenLimit" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="No limit" android:textColor="@color/pure_white" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
+                                android:text="No limit" android:textColor="@color/pure_white" android:textSize="12sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <TextView android:id="@+id/screenHint" android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="Tap to turn on screen-time tracking" android:textColor="#E9D5FF" android:textSize="13sp"
@@ -381,58 +405,58 @@
                     <!-- settings rows -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:background="@drawable/bg_white32"
-                        android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="6dp" android:paddingBottom="6dp"
+                        android:paddingStart="14dp" android:paddingEnd="14dp" android:paddingTop="4dp" android:paddingBottom="4dp"
                         android:layout_marginTop="16dp">
 
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="14dp" android:paddingBottom="14dp">
-                            <FrameLayout android:layout_width="50dp" android:layout_height="50dp" android:background="@drawable/bg_p_purple">
-                                <ImageView android:layout_width="26dp" android:layout_height="26dp" android:layout_gravity="center"
+                            <FrameLayout android:layout_width="42dp" android:layout_height="42dp" android:background="@drawable/bg_p_purple">
+                                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center"
                                     android:src="@drawable/ic_x_moon" app:tint="@color/purple" android:contentDescription="@null"/>
                             </FrameLayout>
                             <LinearLayout android:id="@+id/bedtimeText" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
                                 android:orientation="vertical" android:layout_marginStart="14dp" android:clickable="true" android:focusable="true">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Bedtime lock" android:textColor="@color/ink" android:textSize="19sp" android:fontFamily="@font/inter_black"/>
+                                    android:text="Bedtime lock" android:textColor="@color/ink" android:textSize="16sp" android:fontFamily="@font/inter_black" android:maxLines="1"/>
                                 <TextView android:id="@+id/bedtimeSub" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="9:00 PM – 7:00 AM" android:textColor="@color/slate" android:textSize="15sp" android:fontFamily="@font/inter_bold"/>
+                                    android:text="9:00 PM – 7:00 AM" android:textColor="@color/slate" android:textSize="13sp" android:fontFamily="@font/inter_bold"/>
                             </LinearLayout>
                             <androidx.appcompat.widget.SwitchCompat android:id="@+id/swBedtime" android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:scaleX="1.25" android:scaleY="1.25"/>
+                                android:layout_height="wrap_content" android:scaleX="1.1" android:scaleY="1.1"/>
                         </LinearLayout>
                         <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E8ECF6"/>
 
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="14dp" android:paddingBottom="14dp">
-                            <FrameLayout android:layout_width="50dp" android:layout_height="50dp" android:background="@drawable/bg_p_orange">
-                                <ImageView android:layout_width="26dp" android:layout_height="26dp" android:layout_gravity="center"
+                            <FrameLayout android:layout_width="42dp" android:layout_height="42dp" android:background="@drawable/bg_p_orange">
+                                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center"
                                     android:src="@drawable/ic_x_download" app:tint="#C2410C" android:contentDescription="@null"/>
                             </FrameLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
                                 android:orientation="vertical" android:layout_marginStart="14dp">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Block new installs" android:textColor="@color/ink" android:textSize="19sp" android:fontFamily="@font/inter_black"/>
+                                    android:text="Block new installs" android:textColor="@color/ink" android:textSize="16sp" android:fontFamily="@font/inter_black" android:maxLines="1"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Kids must request apps" android:textColor="@color/slate" android:textSize="15sp" android:fontFamily="@font/inter_bold"/>
+                                    android:text="Kids must request apps" android:textColor="@color/slate" android:textSize="13sp" android:fontFamily="@font/inter_bold"/>
                             </LinearLayout>
                             <androidx.appcompat.widget.SwitchCompat android:id="@+id/swInstalls" android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:scaleX="1.25" android:scaleY="1.25"/>
+                                android:layout_height="wrap_content" android:scaleX="1.1" android:scaleY="1.1"/>
                         </LinearLayout>
                         <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E8ECF6"/>
 
                         <LinearLayout android:id="@+id/tileAppHours" android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="14dp" android:paddingBottom="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="50dp" android:layout_height="50dp" android:background="@drawable/bg_p_blue">
-                                <ImageView android:layout_width="26dp" android:layout_height="26dp" android:layout_gravity="center"
+                            <FrameLayout android:layout_width="42dp" android:layout_height="42dp" android:background="@drawable/bg_p_blue">
+                                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center"
                                     android:src="@drawable/ic_a_clock" app:tint="@color/blue" android:contentDescription="@null"/>
                             </FrameLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
                                 android:orientation="vertical" android:layout_marginStart="14dp">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="App hours" android:textColor="@color/ink" android:textSize="19sp" android:fontFamily="@font/inter_black"/>
+                                    android:text="App hours" android:textColor="@color/ink" android:textSize="16sp" android:fontFamily="@font/inter_black" android:maxLines="1"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="When each app can be used" android:textColor="@color/slate" android:textSize="15sp" android:fontFamily="@font/inter_bold"/>
+                                    android:text="When each app can be used" android:textColor="@color/slate" android:textSize="13sp" android:fontFamily="@font/inter_bold"/>
                             </LinearLayout>
                             <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_x_chevron"
                                 app:tint="@color/slate" android:contentDescription="@null"/>
@@ -442,16 +466,16 @@
                         <LinearLayout android:id="@+id/tileAppLock" android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="14dp" android:paddingBottom="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="50dp" android:layout_height="50dp" android:background="@drawable/bg_p_pink">
-                                <ImageView android:layout_width="26dp" android:layout_height="26dp" android:layout_gravity="center"
+                            <FrameLayout android:layout_width="42dp" android:layout_height="42dp" android:background="@drawable/bg_p_pink">
+                                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center"
                                     android:src="@drawable/ic_x_lock" app:tint="@color/pink" android:contentDescription="@null"/>
                             </FrameLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
                                 android:orientation="vertical" android:layout_marginStart="14dp">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="App Lock" android:textColor="@color/ink" android:textSize="19sp" android:fontFamily="@font/inter_black"/>
+                                    android:text="App Lock" android:textColor="@color/ink" android:textSize="16sp" android:fontFamily="@font/inter_black" android:maxLines="1"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="Ask for the PIN to open apps" android:textColor="@color/slate" android:textSize="15sp" android:fontFamily="@font/inter_bold"/>
+                                    android:text="Ask for the PIN to open apps" android:textColor="@color/slate" android:textSize="13sp" android:fontFamily="@font/inter_bold"/>
                             </LinearLayout>
                             <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_x_chevron"
                                 app:tint="@color/slate" android:contentDescription="@null"/>
@@ -461,22 +485,24 @@
                     <!-- requests + PIN -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="16dp">
-                        <LinearLayout android:id="@+id/tileRequests" android:layout_width="0dp" android:layout_weight="1" android:layout_height="140dp"
-                            android:orientation="vertical" android:gravity="bottom" android:background="@drawable/bg_yellow_tile" android:padding="20dp"
+                        <LinearLayout android:id="@+id/tileRequests" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
+                            android:orientation="vertical" android:background="@drawable/bg_yellow_tile" android:padding="16dp"
                             android:clickable="true" android:focusable="true">
                             <TextView android:id="@+id/reqCount" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="0" android:textColor="@color/ink" android:textSize="44sp" android:fontFamily="@font/inter_black"
+                                android:text="0" android:textColor="@color/ink" android:textSize="30sp" android:fontFamily="@font/inter_black"
                                 android:includeFontPadding="false"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp"
-                                android:text="App requests waiting" android:textColor="@color/ink" android:textSize="17sp" android:fontFamily="@font/inter_black"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2"
+                                android:text="Requests waiting" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_black"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/tileChangePin" android:layout_width="0dp" android:layout_weight="1" android:layout_height="140dp"
-                            android:orientation="vertical" android:gravity="bottom" android:background="@drawable/bg_pink_tile" android:padding="20dp"
+                        <LinearLayout android:id="@+id/tileChangePin" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
+                            android:orientation="vertical" android:background="@drawable/bg_pink_tile" android:padding="16dp"
                             android:clickable="true" android:focusable="true">
-                            <ImageView android:layout_width="36dp" android:layout_height="36dp" android:src="@drawable/ic_x_key" android:contentDescription="@null"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp"
-                                android:text="Change PIN" android:textColor="@color/pure_white" android:textSize="19sp" android:fontFamily="@font/inter_black"/>
+                            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_x_key" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2"
+                                android:text="Change PIN" android:textColor="@color/pure_white" android:textSize="15sp" android:fontFamily="@font/inter_black"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -492,10 +518,10 @@
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:background="@drawable/bg_bottom_fade"
-        android:paddingTop="34dp"
-        android:paddingBottom="22dp">
+        android:paddingTop="18dp"
+        android:paddingBottom="14dp">
         <TextView android:id="@+id/pagerHint" android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="Swipe for your apps →" android:textColor="@color/purple" android:textSize="18sp"
+            android:text="Swipe for your apps →" android:textColor="@color/purple" android:textSize="15sp"
             android:fontFamily="@font/inter_extrabold" android:padding="6dp" android:clickable="true" android:focusable="true"/>
         <LinearLayout android:id="@+id/dots" android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="10dp"/>
@@ -504,11 +530,11 @@
     <!-- live chat -->
     <ImageView
         android:id="@+id/chatFab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="18dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginBottom="80dp"
         android:src="@drawable/ic_x_chat"
         android:padding="15dp"
         android:background="@drawable/bg_chatfab"

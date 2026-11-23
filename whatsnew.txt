@@ -1,1 +1,1 @@
-▦ All the boxes on the Home page are now the same size and lined up, and the bold lettering now shows properly.
+✨ Everything fits the screen now: all boxes are the same size, nothing is cut off, bold lettering shows properly, and Settings has its own big tile on the Home page.

@@ -119,6 +119,15 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.updatePaymentButton).setOnClickListener { showPaymentDialog(null) }
         findViewById<View>(R.id.tileChat).setOnClickListener { startActivity(Intent(this, ChatActivity::class.java)) }
         findViewById<View>(R.id.versionLine).setOnClickListener { setChecking(); checkForUpdate() }
+        findViewById<View>(R.id.tileUpdates).setOnClickListener {
+            val url = pendingApkUrl
+            if (url != null) downloadAndInstall(url) else { setChecking(); checkForUpdate() }
+            Toast.makeText(this, if (url != null) "Downloading update…" else "Checking for updates…", Toast.LENGTH_SHORT).show()
+        }
+        findViewById<View>(R.id.tileSettings).setOnClickListener {
+            val settings = allApps.firstOrNull { it.packageName == "com.koshertech.settings" }
+            if (settings != null) openOrInstall(settings)
+        }
 
         setupPager()
         setupParentalPage()
@@ -289,7 +298,7 @@ class MainActivity : AppCompatActivity() {
                 val tv = TextView(this)
                 tv.text = name + "   ·   " + statusLabel(status)
                 tv.setTextColor(0xFF1E1B4B.toInt()); tv.setTypeface(tv.typeface, Typeface.BOLD)
-                tv.textSize = 15f
+                tv.textSize = 14f
                 row.setBackgroundResource(R.drawable.bg_card); row.setPadding(dpx(16), dpx(12), dpx(10), dpx(12))
                 tv.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
                 val x = TextView(this); x.text = "✕"; x.setTextColor(0xFF64748B.toInt()); x.textSize = 15f
@@ -474,16 +483,16 @@ class MainActivity : AppCompatActivity() {
         val hrow = findViewById<LinearLayout>(R.id.weatherHours); hrow.removeAllViews()
         for ((k, h) in hours.withIndex()) {
             val cell = LinearLayout(this); cell.orientation = LinearLayout.VERTICAL; cell.gravity = Gravity.CENTER
-            cell.setBackgroundResource(R.drawable.bg_hour); cell.setPadding(0, dpx(12), 0, dpx(12))
-            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f); if (k > 0) lp.marginStart = dpx(8); cell.layoutParams = lp
-            val t1 = TextView(this); t1.text = h.first; t1.setTextColor(0xFFFFFFFF.toInt()); t1.textSize = 15f; t1.setTypeface(t1.typeface, Typeface.BOLD); t1.gravity = Gravity.CENTER
-            val t2 = TextView(this); t2.text = h.second; t2.setTextColor(0xFFFFFFFF.toInt()); t2.textSize = 17f; t2.setTypeface(t2.typeface, Typeface.BOLD); t2.gravity = Gravity.CENTER
+            cell.setBackgroundResource(R.drawable.bg_hour); cell.setPadding(0, dpx(9), 0, dpx(9))
+            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f); if (k > 0) lp.marginStart = dpx(6); cell.layoutParams = lp
+            val t1 = TextView(this); t1.text = h.first; t1.setTextColor(0xFFFFFFFF.toInt()); t1.textSize = 13f; t1.setTypeface(t1.typeface, Typeface.BOLD); t1.gravity = Gravity.CENTER
+            val t2 = TextView(this); t2.text = h.second; t2.setTextColor(0xFFFFFFFF.toInt()); t2.textSize = 15f; t2.setTypeface(t2.typeface, Typeface.BOLD); t2.gravity = Gravity.CENTER
             cell.addView(t1); cell.addView(t2); hrow.addView(cell)
         }
         val drow = findViewById<LinearLayout>(R.id.weatherDays); drow.removeAllViews()
         for (d in days) {
-            val tv = TextView(this); tv.text = d.first + " " + d.second + " " + d.third
-            tv.setTextColor(0xFFDBEAFE.toInt()); tv.textSize = 13f; tv.setTypeface(tv.typeface, Typeface.BOLD); tv.gravity = Gravity.CENTER
+            val tv = TextView(this); tv.text = d.first + " " + d.second + "\n" + d.third
+            tv.setTextColor(0xFFDBEAFE.toInt()); tv.textSize = 12f; tv.setTypeface(tv.typeface, Typeface.BOLD); tv.gravity = Gravity.CENTER
             tv.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
             drow.addView(tv)
         }
@@ -683,10 +692,10 @@ class MainActivity : AppCompatActivity() {
             val row = LinearLayout(this)
             row.orientation = LinearLayout.HORIZONTAL
             val lp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            lp.bottomMargin = dp(12)
+            lp.bottomMargin = dp(10)
             row.layoutParams = lp
             row.addView(zmanCell(list[i], styles[i % 6]))
-            val sp = View(this); sp.layoutParams = LinearLayout.LayoutParams(dp(12), 1); row.addView(sp)
+            val sp = View(this); sp.layoutParams = LinearLayout.LayoutParams(dp(10), 1); row.addView(sp)
             if (i + 1 < list.size) row.addView(zmanCell(list[i + 1], styles[(i + 1) % 6]))
             else { val f = View(this); f.layoutParams = LinearLayout.LayoutParams(0, 1, 1f); row.addView(f) }
             grid.addView(row)
@@ -699,11 +708,11 @@ class MainActivity : AppCompatActivity() {
         cell.orientation = LinearLayout.VERTICAL
         cell.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
         val bg = GradientDrawable(); bg.cornerRadius = dp(22).toFloat(); bg.setColor(style.first.toInt()); cell.background = bg
-        cell.setPadding(dp(16), dp(12), dp(10), dp(12))
-        val label = TextView(this); label.text = z.label; label.textSize = 15f
+        cell.setPadding(dp(12), dp(10), dp(8), dp(10))
+        val label = TextView(this); label.text = z.label; label.textSize = 13f
         label.setTextColor(style.second.toInt()); label.setTypeface(label.typeface, Typeface.BOLD)
-        label.maxLines = 1; label.ellipsize = android.text.TextUtils.TruncateAt.END
-        val value = TextView(this); value.text = z.time; value.textSize = 23f
+        label.maxLines = 2
+        val value = TextView(this); value.text = z.time; value.textSize = 18f
         value.setTextColor(0xFF1E1B4B.toInt())
         try { value.typeface = androidx.core.content.res.ResourcesCompat.getFont(this, R.font.inter_black) } catch (e: Exception) {}
         cell.addView(label); cell.addView(value)
@@ -741,7 +750,7 @@ class MainActivity : AppCompatActivity() {
         val row = findViewById<LinearLayout>(R.id.dots); row.removeAllViews()
         for (i in 0 until 3) {
             val v = View(this)
-            val lp = LinearLayout.LayoutParams(dp(if (i == page) 34 else 10), dp(10)); if (i > 0) lp.marginStart = dp(10)
+            val lp = LinearLayout.LayoutParams(dp(if (i == page) 28 else 8), dp(8)); if (i > 0) lp.marginStart = dp(8)
             v.layoutParams = lp
             val g = GradientDrawable(); g.cornerRadius = dp(5).toFloat(); g.setColor(if (i == page) dotColors[page] else dotSoft[page])
             v.background = g; row.addView(v)

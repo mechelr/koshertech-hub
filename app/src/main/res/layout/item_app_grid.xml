@@ -11,13 +11,13 @@
 
     <FrameLayout
         android:id="@+id/icon"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
         android:background="@drawable/bg_icon">
         <ImageView
             android:id="@+id/appIcon"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_gravity="center"
             android:contentDescription="@null"/>
         <TextView
@@ -27,7 +27,7 @@
             android:gravity="center"
             android:textColor="#FFFFFF"
             android:fontFamily="@font/inter_black"
-            android:textSize="28sp"/>
+            android:textSize="24sp"/>
     </FrameLayout>
 
     <TextView
@@ -39,8 +39,8 @@
         android:ellipsize="end"
         android:textColor="#1E1B4B"
         android:fontFamily="@font/inter_extrabold"
-        android:textSize="14sp"
-        android:layout_marginTop="8dp"/>
+        android:textSize="12sp"
+        android:layout_marginTop="6dp"/>
 
     <TextView
         android:id="@+id/category"
