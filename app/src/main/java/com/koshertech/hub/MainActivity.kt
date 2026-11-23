@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         AppItem("Zemer", "Music · Jewish songs", "com.jtech.zemer", 0xFFF59E0B.toInt(),
             "https://github.com/mechelr/koshertech-hub/releases/download/latest/zemer.apk"),
         AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFE11D48.toInt(), ""),
+        AppItem("Shulert", "Shuls · Siddur · Zmanim", "com.shulert", 0xFF0D9488.toInt(), ""),
         AppItem("Phone", "Make a call", "com.google.android.dialer", 0xFF10B981.toInt(), ""),
         AppItem("Camera", "Take photos", "org.fossify.camera", 0xFF14B8A6.toInt(), ""),
         AppItem("Clock", "Alarms & timers", firstInstalled("com.google.android.deskclock", "com.android.deskclock"), 0xFF0EA5E9.toInt(), ""),
@@ -138,7 +139,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileAppLock).setOnClickListener { showAppLock() }
 
         maybeShowMirror()
-        findViewById<View>(R.id.chatFab).setOnClickListener { startActivity(Intent(this, ChatActivity::class.java)) }
 
         populateZmanim()
         fetchWeather()

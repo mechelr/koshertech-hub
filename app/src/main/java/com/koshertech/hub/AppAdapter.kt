@@ -98,6 +98,7 @@ object AppStyle {
         "fm.jewishmusic.application" to R.drawable.ic_a_music,
         "com.jtech.zemer" to R.drawable.ic_a_pulse,
         "app.tfs.prod" to R.drawable.ic_a_play,
+        "com.shulert" to R.drawable.ic_a_shul,
         "com.google.android.dialer" to R.drawable.ic_a_phone,
         "org.fossify.camera" to R.drawable.ic_a_camera,
         "org.fossify.gallery" to R.drawable.ic_a_gallery,
