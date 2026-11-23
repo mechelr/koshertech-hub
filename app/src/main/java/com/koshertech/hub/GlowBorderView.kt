@@ -34,7 +34,6 @@ class GlowBorderView @JvmOverloads constructor(
         0xFFD9D9D9.toInt(),
         0xFFFFFFFF.toInt()  // back to white (seamless)
     )
-    )
     private val sweepStops = floatArrayOf(0f, 0.22f, 0.44f, 0.64f, 0.84f, 1f)
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE }
