@@ -82,7 +82,7 @@ class ParentalActivity : AppCompatActivity() {
         val apps = ParentalRules.apps(this)
         if (apps.isEmpty()) {
             val t = TextView(this); t.text = "Open the KosherTech home screen once so your apps load here."
-            t.setTextColor(0xFF8599C0.toInt()); t.textSize = 13f; t.setPadding(0, dp(16), 0, 0)
+            t.setTextColor(0xFF8C8C8C.toInt()); t.textSize = 13f; t.setPadding(0, dp(16), 0, 0)
             container.addView(t); return
         }
         for (e in apps) container.addView(card(e))
@@ -90,22 +90,22 @@ class ParentalActivity : AppCompatActivity() {
 
     private fun card(e: ParentalRules.Entry): View {
         val card = LinearLayout(this); card.orientation = LinearLayout.VERTICAL
-        val cbg = GradientDrawable(); cbg.cornerRadius = dp(15).toFloat(); cbg.setColor(0xFF0C1838.toInt()); cbg.setStroke(1, 0xFF1C2A52.toInt())
+        val cbg = GradientDrawable(); cbg.cornerRadius = dp(15).toFloat(); cbg.setColor(0xFF161616.toInt()); cbg.setStroke(1, 0xFF2A2A2A.toInt())
         card.background = cbg; card.setPadding(dp(14), dp(14), dp(14), dp(14))
         val clp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); clp.topMargin = dp(12); card.layoutParams = clp
 
         val top = LinearLayout(this); top.orientation = LinearLayout.HORIZONTAL; top.gravity = Gravity.CENTER_VERTICAL
-        val icon = TextView(this); icon.text = e.name.take(1); icon.gravity = Gravity.CENTER; icon.setTextColor(0xFFFFFFFF.toInt()); icon.setTypeface(icon.typeface, Typeface.BOLD); icon.textSize = 16f
-        val ibg = GradientDrawable(); ibg.cornerRadius = dp(10).toFloat(); ibg.setColor(e.color); icon.background = ibg
+        val icon = TextView(this); icon.text = e.name.take(1); icon.gravity = Gravity.CENTER; icon.setTextColor(0xFF0C0C0C.toInt()); icon.setTypeface(icon.typeface, Typeface.BOLD); icon.textSize = 16f
+        val ibg = GradientDrawable(); ibg.cornerRadius = dp(10).toFloat(); ibg.setColor(0xFFF5F5F5.toInt()); icon.background = ibg
         icon.layoutParams = LinearLayout.LayoutParams(dp(38), dp(38))
         val nameCol = LinearLayout(this); nameCol.orientation = LinearLayout.VERTICAL
         val ncLp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f); ncLp.leftMargin = dp(11); nameCol.layoutParams = ncLp
-        val nm = TextView(this); nm.text = e.name; nm.setTextColor(0xFFF3F7FF.toInt()); nm.setTypeface(nm.typeface, Typeface.BOLD); nm.textSize = 15f
+        val nm = TextView(this); nm.text = e.name; nm.setTextColor(0xFFF5F5F5.toInt()); nm.setTypeface(nm.typeface, Typeface.BOLD); nm.textSize = 15f
         nameCol.addView(nm)
         val st = ParentalRules.state(this, e.pkg)
         val now = TextView(this); now.textSize = 11f
-        if (st.allowed) { now.text = "● Open right now"; now.setTextColor(0xFF4FD08A.toInt()) }
-        else { now.text = "● Locked right now"; now.setTextColor(0xFFE07A86.toInt()) }
+        if (st.allowed) { now.text = "● Open right now"; now.setTextColor(0xFFFFFFFF.toInt()) }
+        else { now.text = "● Locked right now"; now.setTextColor(0xFF9A9A9A.toInt()) }
         nameCol.addView(now)
         val enabled = ParentalRules.isEnabled(this, e.pkg)
         val sw = SwitchCompat(this); sw.isChecked = enabled
@@ -116,7 +116,7 @@ class ParentalActivity : AppCompatActivity() {
         if (!enabled) {
             val off = TextView(this)
             off.text = "Turned off — this app is blocked all the time"
-            off.setTextColor(0xFF5b6c92.toInt())
+            off.setTextColor(0xFF6A6A6A.toInt())
             off.textSize = 12f; off.setTypeface(off.typeface, Typeface.BOLD)
             val olp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); olp.topMargin = dp(11); off.layoutParams = olp
             card.addView(off)
@@ -139,11 +139,11 @@ class ParentalActivity : AppCompatActivity() {
         if (limited) {
             status.text = "🕐 Available  " + ParentalRules.fmt(ParentalRules.startMin(this, e.pkg)) + " – " +
                 ParentalRules.fmt(ParentalRules.endMin(this, e.pkg)) + "     ✎ Edit"
-            status.setTextColor(0xFF22D3EE.toInt())
+            status.setTextColor(0xFFFFFFFF.toInt())
             status.setOnClickListener { pickTimes(e) }
         } else {
             status.text = "✓ Available anytime — no time limit"
-            status.setTextColor(0xFF4FD08A.toInt())
+            status.setTextColor(0xFFFFFFFF.toInt())
         }
         status.textSize = 12f; status.setTypeface(status.typeface, Typeface.BOLD)
         val slp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); slp.topMargin = dp(10); status.layoutParams = slp
@@ -152,7 +152,7 @@ class ParentalActivity : AppCompatActivity() {
         if (limited) {
             val remove = TextView(this)
             remove.text = "✕  Remove time limit  (make available anytime)"
-            remove.setTextColor(0xFFE07A86.toInt())
+            remove.setTextColor(0xFF9A9A9A.toInt())
             remove.textSize = 12f; remove.setTypeface(remove.typeface, Typeface.BOLD)
             val rlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); rlp.topMargin = dp(8); remove.layoutParams = rlp
             remove.setOnClickListener { ParentalRules.setLimited(this, e.pkg, false); buildCards() }
@@ -168,9 +168,9 @@ class ParentalActivity : AppCompatActivity() {
         tv.setPadding(dp(16), dp(7), dp(16), dp(7))
         val bg = GradientDrawable(); bg.cornerRadius = dp(20).toFloat()
         if (selected) {
-            bg.setColor(0x3322D3EE); bg.setStroke(dp(1), 0xFF22D3EE.toInt()); tv.setTextColor(0xFF22D3EE.toInt())
+            bg.setColor(0x33FFFFFF); bg.setStroke(dp(1), 0xFFFFFFFF.toInt()); tv.setTextColor(0xFFFFFFFF.toInt())
         } else {
-            bg.setColor(0x00000000); bg.setStroke(dp(1), 0xFF2A3A63.toInt()); tv.setTextColor(0xFF6E80A8.toInt())
+            bg.setColor(0x00000000); bg.setStroke(dp(1), 0xFF333333.toInt()); tv.setTextColor(0xFF7A7A7A.toInt())
         }
         tv.background = bg
         tv.setOnClickListener { onClick() }

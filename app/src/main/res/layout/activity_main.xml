@@ -41,19 +41,22 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginStart="10dp">
-                    <TextView
+                    <TextView android:fontFamily="@font/inter_extrabold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/brand"
                         android:textColor="@color/white"
                         android:textStyle="bold"
-                        android:textSize="18sp"/>
-                    <TextView
+                        android:fontFamily="@font/inter_black"
+                        android:letterSpacing="-0.02"
+                        android:textSize="22sp"/>
+                    <TextView android:fontFamily="monospace"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/tagline"
                         android:textColor="@color/muted"
                         android:textSize="9sp"
+                        android:fontFamily="monospace"
                         android:letterSpacing="0.14"/>
                 </LinearLayout>
             </LinearLayout>
@@ -74,7 +77,7 @@
                     android:id="@+id/updateIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🔄"
+                    android:text="↻"
                     android:textSize="20sp"/>
                 <LinearLayout
                     android:layout_width="0dp"
@@ -104,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Update"
-                    android:textColor="#04121C"
+                    android:textColor="#0C0C0C"
                     android:textStyle="bold"
                     android:textSize="12sp"
                     android:paddingHorizontal="16dp"
@@ -123,14 +126,14 @@
                 android:visibility="gone"/>
 
             <!-- Greeting -->
-            <TextView
+            <TextView android:fontFamily="@font/inter_black"
                 android:id="@+id/greetingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Good evening"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:textSize="26sp"
+                android:textSize="32sp" android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"
                 android:letterSpacing="-0.01"
                 android:layout_marginTop="18dp"/>
 
@@ -152,7 +155,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
-                        <TextView
+                        <TextView android:fontFamily="@font/inter_extrabold"
                             android:id="@+id/hebrewDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -173,7 +176,7 @@
                         android:id="@+id/zmanimLoc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🕯️ Zmanim"
+                        android:text="ZMANIM"
                         android:textColor="@color/cyan"
                         android:textSize="10sp"
                         android:gravity="end"/>
@@ -198,7 +201,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="🕯️  Candle Lighting (Fri)"
+                        android:text="Candle lighting (Fri)"
                         android:textColor="@color/white"
                         android:textSize="12sp"
                         android:textStyle="bold"/>
@@ -235,7 +238,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
-                        <TextView
+                        <TextView android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"
                             android:id="@+id/weatherNow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -251,11 +254,11 @@
                             android:textColor="@color/muted"
                             android:textSize="12sp"/>
                     </LinearLayout>
-                    <TextView
+                    <TextView android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"
                         android:id="@+id/weatherIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🌤️"
+                        android:text="☁︎"
                         android:textSize="40sp"/>
                 </LinearLayout>
 
@@ -282,13 +285,13 @@
                 android:maxLines="1"
                 android:importantForAutofill="no"/>
 
-            <TextView
+            <TextView android:fontFamily="@font/inter_extrabold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Your Apps"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:textSize="15sp"
+                android:textSize="26sp" android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="10dp"/>
 
@@ -326,7 +329,7 @@
                     android:layout_height="wrap_content"
                     android:text="+  Request an App"
                     android:gravity="center"
-                    android:textColor="#04121C"
+                    android:textColor="#0C0C0C"
                     android:textStyle="bold"
                     android:textSize="14sp"
                     android:paddingVertical="12dp"
@@ -354,13 +357,13 @@
             </LinearLayout>
 
             <!-- Tools -->
-            <TextView
+            <TextView android:fontFamily="@font/inter_extrabold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tools"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:textSize="15sp"
+                android:textSize="26sp" android:fontFamily="@font/inter_black" android:letterSpacing="-0.02"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="10dp"/>
 
@@ -371,14 +374,14 @@
                 <LinearLayout android:id="@+id/tileCalendar" android:layout_width="0dp" android:layout_height="wrap_content"
                     android:layout_weight="1" android:orientation="vertical" android:gravity="center"
                     android:background="@drawable/bg_card" android:padding="16dp" android:clickable="true" android:focusable="true">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📅" android:textSize="24sp"/>
+                    <ImageView android:layout_width="26dp" android:layout_height="26dp" android:src="@drawable/ic_t_calendar" android:contentDescription="@null"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hebrew Calendar" android:textColor="@color/white" android:textStyle="bold" android:textSize="12sp" android:layout_marginTop="6dp"/>
                 </LinearLayout>
                 <View android:layout_width="9dp" android:layout_height="1dp"/>
                 <LinearLayout android:id="@+id/tileParental" android:layout_width="0dp" android:layout_height="wrap_content"
                     android:layout_weight="1" android:orientation="vertical" android:gravity="center"
                     android:background="@drawable/bg_card" android:padding="16dp" android:clickable="true" android:focusable="true">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔒" android:textSize="24sp"/>
+                    <ImageView android:layout_width="26dp" android:layout_height="26dp" android:src="@drawable/ic_t_parental" android:contentDescription="@null"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Parental Controls" android:textColor="@color/white" android:textStyle="bold" android:textSize="12sp" android:layout_marginTop="6dp"/>
                 </LinearLayout>
             </LinearLayout>
@@ -391,14 +394,14 @@
                 <LinearLayout android:id="@+id/tileAutomations" android:layout_width="0dp" android:layout_height="wrap_content"
                     android:layout_weight="1" android:orientation="vertical" android:gravity="center"
                     android:background="@drawable/bg_card" android:padding="16dp" android:clickable="true" android:focusable="true">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⚡" android:textSize="24sp"/>
+                    <ImageView android:layout_width="26dp" android:layout_height="26dp" android:src="@drawable/ic_t_bolt" android:contentDescription="@null"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Automations" android:textColor="@color/white" android:textStyle="bold" android:textSize="12sp" android:layout_marginTop="6dp"/>
                 </LinearLayout>
                 <View android:layout_width="9dp" android:layout_height="1dp"/>
                 <LinearLayout android:id="@+id/tileHelp" android:layout_width="0dp" android:layout_height="wrap_content"
                     android:layout_weight="1" android:orientation="vertical" android:gravity="center"
                     android:background="@drawable/bg_card" android:padding="16dp" android:clickable="true" android:focusable="true">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="❓" android:textSize="24sp"/>
+                    <ImageView android:layout_width="26dp" android:layout_height="26dp" android:src="@drawable/ic_t_help" android:contentDescription="@null"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Help &amp; Support" android:textColor="@color/white" android:textStyle="bold" android:textSize="12sp" android:layout_marginTop="6dp"/>
                 </LinearLayout>
             </LinearLayout>
@@ -411,14 +414,14 @@
                 <LinearLayout android:id="@+id/tileMirror" android:layout_width="0dp" android:layout_height="wrap_content"
                     android:layout_weight="1" android:orientation="vertical" android:gravity="center"
                     android:background="@drawable/bg_card" android:padding="16dp" android:clickable="true" android:focusable="true">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🪞" android:textSize="24sp"/>
+                    <ImageView android:layout_width="26dp" android:layout_height="26dp" android:src="@drawable/ic_t_mirror" android:contentDescription="@null"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mirror" android:textColor="@color/white" android:textStyle="bold" android:textSize="12sp" android:layout_marginTop="6dp"/>
                 </LinearLayout>
                 <View android:layout_width="9dp" android:layout_height="1dp"/>
                 <LinearLayout android:id="@+id/tileAppLock" android:layout_width="0dp" android:layout_height="wrap_content"
                     android:layout_weight="1" android:orientation="vertical" android:gravity="center"
                     android:background="@drawable/bg_card" android:padding="16dp" android:clickable="true" android:focusable="true">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔐" android:textSize="24sp"/>
+                    <ImageView android:layout_width="26dp" android:layout_height="26dp" android:src="@drawable/ic_t_lock" android:contentDescription="@null"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="App Lock" android:textColor="@color/white" android:textStyle="bold" android:textSize="12sp" android:layout_marginTop="6dp"/>
                 </LinearLayout>
             </LinearLayout>
@@ -433,7 +436,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="🛡  Report a Loophole"
+                    android:text="Report a loophole"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -450,7 +453,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="⭐  Rate Us"
+                    android:text="Rate us"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -471,7 +474,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="🛒  Buy Plan"
+                    android:text="Buy a plan"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -488,7 +491,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="💳  Update Payment"
+                    android:text="Update payment"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -512,15 +515,15 @@
     </ScrollView>
 
     <!-- Floating live-chat button -->
-    <TextView
+    <ImageView
         android:id="@+id/chatFab"
         android:layout_width="58dp"
         android:layout_height="58dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="18dp"
-        android:text="💬"
-        android:textSize="24sp"
-        android:gravity="center"
+        android:src="@drawable/ic_t_chat"
+        android:padding="16dp"
+        android:contentDescription="Live chat"
         android:background="@drawable/bg_chatfab"
         android:elevation="6dp"
         android:clickable="true"

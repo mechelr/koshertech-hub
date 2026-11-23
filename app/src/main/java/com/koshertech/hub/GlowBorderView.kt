@@ -27,12 +27,13 @@ class GlowBorderView @JvmOverloads constructor(
 
     // The color sweep that runs around the frame.
     private val sweepColors = intArrayOf(
-        0xFF22D3EE.toInt(), // cyan
-        0xFF4F9CF9.toInt(), // blue
-        0xFF8B5CF6.toInt(), // violet
-        0xFFEC4899.toInt(), // pink
-        0xFF34D399.toInt(), // emerald
-        0xFF22D3EE.toInt()  // back to cyan (seamless)
+        0xFFFFFFFF.toInt(), // white
+        0xFF8A8A8A.toInt(), // silver
+        0xFFFFFFFF.toInt(),
+        0xFF5E5E5E.toInt(), // graphite
+        0xFFD9D9D9.toInt(),
+        0xFFFFFFFF.toInt()  // back to white (seamless)
+    )
     )
     private val sweepStops = floatArrayOf(0f, 0.22f, 0.44f, 0.64f, 0.84f, 1f)
 
@@ -58,7 +59,7 @@ class GlowBorderView @JvmOverloads constructor(
 
         bloomPaint.shader = shader
         bloomPaint.strokeWidth = strokeW * 2.6f
-        bloomPaint.alpha = 95
+        bloomPaint.alpha = 70
         bloomPaint.maskFilter = BlurMaskFilter(11f * d, BlurMaskFilter.Blur.NORMAL)
     }
 

@@ -15,14 +15,15 @@
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:background="@drawable/bg_icon">
-        <TextView
+        <TextView android:fontFamily="@font/inter_extrabold"
             android:id="@+id/iconLetter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="#FFFFFF"
+            android:textColor="#0C0C0C"
             android:textStyle="bold"
-            android:textSize="20sp"/>
+            android:fontFamily="@font/inter_black"
+            android:textSize="24sp"/>
     </FrameLayout>
 
     <TextView

@@ -9,7 +9,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
+        <TextView android:fontFamily="@font/inter_extrabold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="💳  Payment"
@@ -103,13 +103,13 @@
             android:importantForAutofill="no"/>
     </LinearLayout>
 
-    <TextView
+    <TextView android:fontFamily="@font/inter_extrabold"
         android:id="@+id/primaryBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit payment"
         android:gravity="center"
-        android:textColor="#04121C"
+        android:textColor="#0C0C0C"
         android:textStyle="bold"
         android:textSize="15sp"
         android:paddingVertical="14dp"

@@ -12,30 +12,30 @@
                 android:startX="54" android:startY="10"
                 android:endX="54" android:endY="98"
                 android:type="linear">
-                <item android:offset="0.0" android:color="#FF1E3A8A"/>
-                <item android:offset="0.55" android:color="#FF2563EB"/>
-                <item android:offset="1.0" android:color="#FF0EA5E9"/>
+                <item android:offset="0.0" android:color="#FFFFFFFF"/>
+                <item android:offset="0.55" android:color="#FFEDEDED"/>
+                <item android:offset="1.0" android:color="#FFD6D6D6"/>
             </gradient>
         </aapt:attr>
     </path>
 
     <!-- Glowing cyan outer border -->
     <path
-        android:strokeColor="#FF22D3EE"
+        android:strokeColor="#FFFFFFFF"
         android:strokeWidth="4"
         android:fillColor="#00000000"
         android:pathData="M54,10 L92,32 L92,76 L54,98 L16,76 L16,32 Z"/>
 
     <!-- Inner accent ring -->
     <path
-        android:strokeColor="#9967E8F5"
+        android:strokeColor="#220C0C0C"
         android:strokeWidth="2"
         android:fillColor="#00000000"
         android:pathData="M54,20 L84,37 L84,71 L54,88 L24,71 L24,37 Z"/>
 
     <!-- Bright white checkmark -->
     <path
-        android:strokeColor="#FFFFFFFF"
+        android:strokeColor="#FF0C0C0C"
         android:strokeWidth="9"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"

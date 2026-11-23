@@ -50,26 +50,28 @@ class AppAdapter(
         holder.name.text = app.name
         holder.iconLetter.text = app.name.take(1)
         val d = holder.icon.background.mutate() as GradientDrawable
-        d.setColor(app.color)
+        d.setColor(0xFFF5F5F5.toInt())              // monochrome: white tile, black letter
+        holder.iconLetter.setTextColor(0xFF0C0C0C.toInt())
 
         // Show "Install" under apps not yet on the phone; otherwise the category.
         val pm = holder.itemView.context.packageManager
         val installed = pm.getLaunchIntentForPackage(app.packageName) != null
         if (installed) {
             holder.category.text = app.category
-            holder.category.setTextColor(0xFF6E80A8.toInt())
+            holder.category.setTextColor(0xFF7A7A7A.toInt())
         } else {
             holder.category.text = "Install"
-            holder.category.setTextColor(0xFF22D3EE.toInt())
+            holder.category.setTextColor(0xFFFFFFFF.toInt())
         }
 
         // Parental Controls: locked apps turn gray and can't be opened.
         val ctx = holder.itemView.context
         val st = ParentalRules.state(ctx, app.packageName)
         if (!st.allowed) {
-            holder.itemView.alpha = 0.35f
-            holder.category.text = "🔒 " + st.label
-            holder.category.setTextColor(0xFFE07A86.toInt())
+            holder.itemView.alpha = 0.45f
+            d.setColor(0xFF2E2E2E.toInt()); holder.iconLetter.setTextColor(0xFF7A7A7A.toInt())
+            holder.category.text = if (st.label == "Blocked") "LOCKED" else st.label.uppercase()
+            holder.category.setTextColor(0xFF9A9A9A.toInt())
             holder.itemView.setOnClickListener {
                 val extra = if (st.label.startsWith("Opens")) " · " + st.label.lowercase() else ""
                 android.widget.Toast.makeText(ctx, app.name + " is locked by Parental Controls" + extra,

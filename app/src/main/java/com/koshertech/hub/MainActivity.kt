@@ -52,17 +52,17 @@ class MainActivity : AppCompatActivity() {
     // apkUrl: a KosherTech-hosted link to the approved APK. When set, Install downloads
     // and installs it directly (no Play Store). Add the real Zemer/24Six/Zing links here.
     private val allApps = listOf(
-        AppItem("Zemer", "Music · Jewish songs", "com.jtech.zemer", 0xFFE0A52B.toInt(),
+        AppItem("Zemer", "Music · Jewish songs", "com.jtech.zemer", 0xFFFFFFFF.toInt(),
             "https://github.com/mechelr/koshertech-hub/releases/download/latest/zemer.apk"),
-        AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFE04F5F.toInt(), ""),
-        AppItem("Zing", "Music · Streaming", "fm.jewishmusic.application", 0xFF9333EA.toInt(), ""),
-        AppItem("KosherTech Settings", "Controlled settings app", "com.koshertech.settings", 0xFF22D3EE.toInt(),
+        AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFFFFFFF.toInt(), ""),
+        AppItem("Zing", "Music · Streaming", "fm.jewishmusic.application", 0xFFFFFFFF.toInt(), ""),
+        AppItem("KosherTech Settings", "Controlled settings app", "com.koshertech.settings", 0xFFFFFFFF.toInt(),
             "https://github.com/mechelr/koshertech-hub/releases/download/settings/KosherTechSettings.apk"),
-        AppItem("Phone", "Make a call", "com.google.android.dialer", 0xFF34D399.toInt(), ""),
-        AppItem("Contacts", "Phone book", "com.google.android.contacts", 0xFF4F9CF9.toInt(), ""),
-        AppItem("Camera", "Take photos", "org.fossify.camera", 0xFF64748B.toInt(), ""),
-        AppItem("Gallery", "Your photos", "org.fossify.gallery", 0xFFF59E0B.toInt(), ""),
-        AppItem("Claude", "AI assistant", "com.anthropic.claude", 0xFFD97757.toInt(), "")
+        AppItem("Phone", "Make a call", "com.google.android.dialer", 0xFFFFFFFF.toInt(), ""),
+        AppItem("Contacts", "Phone book", "com.google.android.contacts", 0xFFFFFFFF.toInt(), ""),
+        AppItem("Camera", "Take photos", "org.fossify.camera", 0xFF9A9A9A.toInt(), ""),
+        AppItem("Gallery", "Your photos", "org.fossify.gallery", 0xFFFFFFFF.toInt(), ""),
+        AppItem("Claude", "AI assistant", "com.anthropic.claude", 0xFFFFFFFF.toInt(), "")
     )
 
     // ===== PLANS (demo pricing — edit freely) =====
@@ -77,13 +77,13 @@ class MainActivity : AppCompatActivity() {
 
     private val plans = listOf(
         Plan("Basic", "$14.99", "/mo",
-            "1 device  ·  approved apps  ·  email support", false, 0xFF22D3EE.toInt()),
+            "1 device  ·  approved apps  ·  email support", false, 0xFFFFFFFF.toInt()),
         Plan("Family", "$24.99", "/mo",
-            "Up to 4 devices  ·  remote management  ·  priority support", true, 0xFF9333EA.toInt()),
+            "Up to 4 devices  ·  remote management  ·  priority support", true, 0xFFFFFFFF.toInt()),
         Plan("Premium", "$34.99", "/mo",
-            "Unlimited devices  ·  custom app approvals  ·  24/7 support", false, 0xFFE0A52B.toInt()),
+            "Unlimited devices  ·  custom app approvals  ·  24/7 support", false, 0xFFFFFFFF.toInt()),
         Plan("Yearly", "$299", "/yr",
-            "All Premium features  ·  2 months free", false, 0xFF34D399.toInt())
+            "All Premium features  ·  2 months free", false, 0xFFFFFFFF.toInt())
     )
 
     private lateinit var adapter: AppAdapter
@@ -246,8 +246,8 @@ class MainActivity : AppCompatActivity() {
                 val a = apps.getJSONObject(i)
                 val pkg = a.optString("packageName", "")
                 if (pkg.isBlank() || have.contains(pkg)) continue
-                var cs = a.optString("color", "#22D3EE"); if (!cs.startsWith("#")) cs = "#$cs"
-                val color = try { android.graphics.Color.parseColor(cs) } catch (e: Exception) { 0xFF22D3EE.toInt() }
+                var cs = a.optString("color", "#FFFFFF"); if (!cs.startsWith("#")) cs = "#$cs"
+                val color = try { android.graphics.Color.parseColor(cs) } catch (e: Exception) { 0xFFFFFFFF.toInt() }
                 merged.add(AppItem(a.optString("name", "App"), a.optString("category", ""), pkg, color, a.optString("apkUrl", "")))
                 have.add(pkg)
             }
@@ -272,10 +272,10 @@ class MainActivity : AppCompatActivity() {
                 val row = LinearLayout(this); row.orientation = LinearLayout.HORIZONTAL; row.gravity = Gravity.CENTER_VERTICAL
                 val tv = TextView(this)
                 tv.text = "•  " + name + "   —   " + status
-                tv.setTextColor(when (status) { "Approved" -> 0xFF34D399.toInt(); "Declined" -> 0xFFE04F5F.toInt(); else -> 0xFFE0A52B.toInt() })
+                tv.setTextColor(when (status) { "Approved" -> 0xFFFFFFFF.toInt(); "Declined" -> 0xFFFFFFFF.toInt(); else -> 0xFFFFFFFF.toInt() })
                 tv.textSize = 13f
                 tv.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-                val x = TextView(this); x.text = "✕"; x.setTextColor(0xFF6E80A8.toInt()); x.textSize = 14f
+                val x = TextView(this); x.text = "✕"; x.setTextColor(0xFF7A7A7A.toInt()); x.textSize = 14f
                 x.setPadding(dpx(12), dpx(4), dpx(2), dpx(4))
                 x.setOnClickListener {
                     dreq.add(key); dp.edit().putStringSet("req", dreq).apply()
@@ -300,9 +300,9 @@ class MainActivity : AppCompatActivity() {
                 val card = LinearLayout(this); card.orientation = LinearLayout.HORIZONTAL; card.gravity = Gravity.CENTER_VERTICAL
                 card.setBackgroundResource(R.drawable.bg_update); card.setPadding(dpx(14), dpx(12), dpx(12), dpx(12))
                 val clp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); clp.bottomMargin = dpx(8); card.layoutParams = clp
-                val tv = TextView(this); tv.text = "📢  " + msg; tv.setTextColor(0xFFFFFFFF.toInt()); tv.textSize = 13f
+                val tv = TextView(this); tv.text = "■  " + msg; tv.setTextColor(0xFFFFFFFF.toInt()); tv.textSize = 13f
                 tv.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-                val x = TextView(this); x.text = "✕"; x.setTextColor(0xFFBFC9E6.toInt()); x.textSize = 15f
+                val x = TextView(this); x.text = "✕"; x.setTextColor(0xFFB8B8B8.toInt()); x.textSize = 15f
                 x.setPadding(dpx(12), 0, dpx(2), 0)
                 x.setOnClickListener {
                     dann.add(msg); dp.edit().putStringSet("ann", dann).apply()
@@ -431,7 +431,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     runOnUiThread {
                         findViewById<TextView>(R.id.weatherNow).text = "—"
-                        findViewById<TextView>(R.id.weatherIcon).text = "🌐"
+                        findViewById<TextView>(R.id.weatherIcon).text = "°"
                         findViewById<TextView>(R.id.weatherDesc).text = "Weather unavailable — no connection"
                         findViewById<LinearLayout>(R.id.weatherDays).removeAllViews()
                     }
@@ -449,9 +449,9 @@ class MainActivity : AppCompatActivity() {
         for (k in labels.indices) {
             val cell = LinearLayout(this); cell.orientation = LinearLayout.VERTICAL; cell.gravity = Gravity.CENTER
             val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f); cell.layoutParams = lp
-            val lbl = TextView(this); lbl.text = labels[k]; lbl.setTextColor(0xFFBFC9E6.toInt()); lbl.textSize = 12f; lbl.gravity = Gravity.CENTER
+            val lbl = TextView(this); lbl.text = labels[k]; lbl.setTextColor(0xFFB8B8B8.toInt()); lbl.textSize = 12f; lbl.gravity = Gravity.CENTER
             val em = TextView(this); em.text = emos[k]; em.textSize = 20f; em.gravity = Gravity.CENTER
-            val tmp = TextView(this); tmp.text = "${his[k]}° / ${los[k]}°"; tmp.setTextColor(0xFFF3F7FF.toInt()); tmp.textSize = 12f; tmp.gravity = Gravity.CENTER; tmp.setTypeface(tmp.typeface, Typeface.BOLD)
+            val tmp = TextView(this); tmp.text = "${his[k]}° / ${los[k]}°"; tmp.setTextColor(0xFFF5F5F5.toInt()); tmp.textSize = 12f; tmp.gravity = Gravity.CENTER; tmp.setTypeface(tmp.typeface, Typeface.BOLD)
             val emlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); emlp.topMargin = dpx(3); emlp.bottomMargin = dpx(3); em.layoutParams = emlp
             cell.addView(lbl); cell.addView(em); cell.addView(tmp)
             row.addView(cell)
@@ -462,9 +462,9 @@ class MainActivity : AppCompatActivity() {
     private fun dpx(v: Int): Int = (v * resources.displayMetrics.density).toInt()
 
     private fun emojiFor(code: Int): String = when (code) {
-        0 -> "☀️"; 1, 2 -> "🌤️"; 3 -> "☁️"; 45, 48 -> "🌫️"
-        in 51..57 -> "🌦️"; in 61..67 -> "🌧️"; in 71..77 -> "🌨️"
-        in 80..82 -> "🌧️"; in 85..86 -> "🌨️"; in 95..99 -> "⛈️"; else -> "🌡️"
+        0 -> "☀\uFE0E"; 1, 2, 3 -> "☁\uFE0E"; 45, 48 -> "≋"
+        in 51..67 -> "☂\uFE0E"; in 71..77 -> "❄\uFE0E"
+        in 80..82 -> "☂\uFE0E"; in 85..86 -> "❄\uFE0E"; in 95..99 -> "ϟ"; else -> "°"
     }
 
     private fun descFor(code: Int): String = when (code) {
@@ -511,7 +511,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setChecking() {
-        findViewById<TextView>(R.id.updateIcon).text = "🔄"
+        findViewById<TextView>(R.id.updateIcon).text = "↻"
         findViewById<TextView>(R.id.updateTitle).text = "Checking for updates…"
         findViewById<View>(R.id.updateAction).visibility = View.GONE
     }
@@ -542,7 +542,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpdateAvailable(versionName: String, apkUrl: String, notes: String) {
         pendingApkUrl = apkUrl
-        findViewById<TextView>(R.id.updateIcon).text = "⬆️"
+        findViewById<TextView>(R.id.updateIcon).text = "↑"
         findViewById<TextView>(R.id.updateTitle).text = "Update available — tap to install"
         findViewById<TextView>(R.id.updateSub).text = when {
             notes.isNotBlank() -> notes
@@ -576,7 +576,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setCheckError() {
         pendingApkUrl = null
-        findViewById<TextView>(R.id.updateIcon).text = "🔄"
+        findViewById<TextView>(R.id.updateIcon).text = "↻"
         findViewById<TextView>(R.id.updateTitle).text = "Tap to check for updates"
         findViewById<TextView>(R.id.updateSub).text = "Version " + installedVersionName()
         findViewById<View>(R.id.updateAction).visibility = View.GONE
@@ -637,7 +637,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.greetingText).text = ZmanimInfo.greeting()
         findViewById<TextView>(R.id.hebrewDate).text = ZmanimInfo.hebrewDate()
         findViewById<TextView>(R.id.englishDate).text = ZmanimInfo.englishDate()
-        findViewById<TextView>(R.id.zmanimLoc).text = "📍 " + ZmanimInfo.locationName() + "  ✎"
+        findViewById<TextView>(R.id.zmanimLoc).text = ZmanimInfo.locationName().uppercase() + "  ✎"
         findViewById<TextView>(R.id.candleVal).text = ZmanimInfo.candleLighting()
 
         val grid = findViewById<LinearLayout>(R.id.zmanimGrid)
@@ -673,13 +673,13 @@ class MainActivity : AppCompatActivity() {
         val label = TextView(this)
         label.text = z.label
         label.textSize = 11f
-        label.setTextColor(0xFF8599C0.toInt())
+        label.setTextColor(0xFF8C8C8C.toInt())
         label.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
         val value = TextView(this)
         value.text = z.time
         value.textSize = 12f
         value.setTypeface(value.typeface, android.graphics.Typeface.BOLD)
-        value.setTextColor(0xFFF3F7FF.toInt())
+        value.setTextColor(0xFFF5F5F5.toInt())
         cell.addView(label)
         cell.addView(value)
         return cell

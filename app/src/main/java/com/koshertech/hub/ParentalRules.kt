@@ -40,7 +40,7 @@ object ParentalRules {
             val arr = JSONArray(prefs(ctx).getString("apps", "[]"))
             for (i in 0 until arr.length()) {
                 val o = arr.getJSONObject(i)
-                out.add(Entry(o.optString("n"), o.optString("p"), o.optInt("c", 0xFF22D3EE.toInt())))
+                out.add(Entry(o.optString("n"), o.optString("p"), o.optInt("c", 0xFFFFFFFF.toInt())))
             }
         } catch (e: Exception) {}
         return out

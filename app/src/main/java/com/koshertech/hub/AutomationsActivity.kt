@@ -124,7 +124,7 @@ class AutomationsActivity : AppCompatActivity() {
         val card = LinearLayout(this)
         card.orientation = LinearLayout.HORIZONTAL
         card.gravity = Gravity.TOP
-        val cbg = GradientDrawable(); cbg.cornerRadius = dp(15).toFloat(); cbg.setColor(0xFF0C1838.toInt()); cbg.setStroke(1, 0xFF1C2A52.toInt())
+        val cbg = GradientDrawable(); cbg.cornerRadius = dp(15).toFloat(); cbg.setColor(0xFF161616.toInt()); cbg.setStroke(1, 0xFF2A2A2A.toInt())
         card.background = cbg
         card.setPadding(dp(15), dp(15), dp(15), dp(15))
         val clp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); clp.topMargin = dp(12)
@@ -135,12 +135,12 @@ class AutomationsActivity : AppCompatActivity() {
 
         val col = LinearLayout(this); col.orientation = LinearLayout.VERTICAL
         col.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-        val t = TextView(this); t.text = a.title; t.setTextColor(0xFFF3F7FF.toInt()); t.setTypeface(t.typeface, Typeface.BOLD); t.textSize = 14f
-        val d = TextView(this); d.text = a.desc; d.setTextColor(0xFF8599C0.toInt()); d.textSize = 11f
+        val t = TextView(this); t.text = a.title; t.setTextColor(0xFFF5F5F5.toInt()); t.setTypeface(t.typeface, Typeface.BOLD); t.textSize = 14f
+        val d = TextView(this); d.text = a.desc; d.setTextColor(0xFF8C8C8C.toInt()); d.textSize = 11f
         val dlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); dlp.topMargin = dp(3); d.layoutParams = dlp
         col.addView(t); col.addView(d)
         if (a.prefix.isNotBlank()) {
-            val w = TextView(this); w.text = whenText(a); w.setTextColor(0xFF22D3EE.toInt()); w.setTypeface(w.typeface, Typeface.BOLD); w.textSize = 11f
+            val w = TextView(this); w.text = whenText(a); w.setTextColor(0xFFFFFFFF.toInt()); w.setTypeface(w.typeface, Typeface.BOLD); w.textSize = 11f
             val wlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); wlp.topMargin = dp(5); w.layoutParams = wlp
             if (a.editTime) w.setOnClickListener { pickTimes(a) }
             col.addView(w)
@@ -150,7 +150,7 @@ class AutomationsActivity : AppCompatActivity() {
             val email = prefs.getString("reportEmail", "") ?: ""
             val emTv = TextView(this)
             emTv.text = if (email.isBlank()) "📧 Send to: tap to set an email" else "📧 Send to: " + email + "   ✎"
-            emTv.setTextColor(0xFF34D399.toInt()); emTv.textSize = 11f; emTv.setTypeface(emTv.typeface, Typeface.BOLD)
+            emTv.setTextColor(0xFFFFFFFF.toInt()); emTv.textSize = 11f; emTv.setTypeface(emTv.typeface, Typeface.BOLD)
             val elp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); elp.topMargin = dp(6); emTv.layoutParams = elp
             emTv.setOnClickListener { editEmail() }
             col.addView(emTv)
@@ -164,7 +164,7 @@ class AutomationsActivity : AppCompatActivity() {
             sw.setOnCheckedChangeListener { _, c -> prefs.edit().putBoolean(a.key, c).apply() }
             card.addView(sw)
         } else {
-            val always = TextView(this); always.text = "ALWAYS ON"; always.setTextColor(0xFF34D399.toInt()); always.setTypeface(always.typeface, Typeface.BOLD); always.textSize = 10f
+            val always = TextView(this); always.text = "ALWAYS ON"; always.setTextColor(0xFFFFFFFF.toInt()); always.setTypeface(always.typeface, Typeface.BOLD); always.textSize = 10f
             card.addView(always)
         }
         return card

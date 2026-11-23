@@ -9,7 +9,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
+        <TextView android:fontFamily="@font/inter_extrabold"
             android:id="@+id/installTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,13 +43,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
 
-    <TextView
+    <TextView android:fontFamily="@font/inter_extrabold"
         android:id="@+id/primaryBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Request install"
         android:gravity="center"
-        android:textColor="#04121C"
+        android:textColor="#0C0C0C"
         android:textStyle="bold"
         android:textSize="15sp"
         android:paddingVertical="14dp"

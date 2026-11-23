@@ -38,7 +38,7 @@
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-        <TextView
+        <TextView android:fontFamily="@font/inter_extrabold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📸  Check my look"
-                android:textColor="#04121C"
+                android:textColor="#0C0C0C"
                 android:textStyle="bold"
                 android:textSize="13sp"
                 android:background="@drawable/bg_open"
@@ -119,10 +119,10 @@
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:padding="18dp"
-        android:background="#0B1330"
+        android:background="#0C0C0C"
         android:visibility="gone">
 
-        <TextView
+        <TextView android:fontFamily="@font/inter_extrabold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="How you look vs. your best"
@@ -139,17 +139,17 @@
             android:gravity="center"
             android:layout_marginTop="14dp">
             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-                <ImageView android:id="@+id/shotNow" android:layout_width="match_parent" android:layout_height="220dp" android:scaleType="centerCrop" android:background="#182a52"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Now" android:textColor="#BFC9E6" android:textSize="12sp" android:layout_marginTop="6dp"/>
+                <ImageView android:id="@+id/shotNow" android:layout_width="match_parent" android:layout_height="220dp" android:scaleType="centerCrop" android:background="#2A2A2A"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Now" android:textColor="#B8B8B8" android:textSize="12sp" android:layout_marginTop="6dp"/>
             </LinearLayout>
             <View android:layout_width="12dp" android:layout_height="1dp"/>
             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-                <ImageView android:id="@+id/shotRef" android:layout_width="match_parent" android:layout_height="220dp" android:scaleType="centerCrop" android:background="#182a52"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Your best look" android:textColor="#BFC9E6" android:textSize="12sp" android:layout_marginTop="6dp"/>
+                <ImageView android:id="@+id/shotRef" android:layout_width="match_parent" android:layout_height="220dp" android:scaleType="centerCrop" android:background="#2A2A2A"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Your best look" android:textColor="#B8B8B8" android:textSize="12sp" android:layout_marginTop="6dp"/>
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
+        <TextView android:fontFamily="@font/inter_extrabold"
             android:id="@+id/verdict"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -166,7 +166,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text=""
-            android:textColor="#8599C0"
+            android:textColor="#8C8C8C"
             android:textSize="12sp"
             android:layout_marginTop="6dp"/>
 
@@ -175,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="↺  Back to mirror"
-            android:textColor="#04121C"
+            android:textColor="#0C0C0C"
             android:textStyle="bold"
             android:textSize="13sp"
             android:background="@drawable/bg_open"

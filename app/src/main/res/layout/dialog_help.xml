@@ -7,7 +7,7 @@
     android:background="@drawable/bg_dialog">
 
     <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        <TextView android:fontFamily="@font/inter_extrabold" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="❓  Help &amp; Support" android:textColor="@color/white" android:textStyle="bold"
             android:textSize="18sp" android:gravity="center" android:paddingHorizontal="24dp"/>
         <TextView android:id="@+id/closeX" android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -41,8 +41,8 @@
             android:textColor="@color/cyan" android:textSize="13sp" android:layout_marginTop="2dp"/>
     </LinearLayout>
 
-    <TextView android:id="@+id/helpChat" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="💬  Start a live chat" android:gravity="center" android:textColor="#04121C" android:textStyle="bold"
+    <TextView android:fontFamily="@font/inter_extrabold" android:id="@+id/helpChat" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="💬  Start a live chat" android:gravity="center" android:textColor="#0C0C0C" android:textStyle="bold"
         android:textSize="15sp" android:paddingVertical="14dp" android:background="@drawable/bg_request"
         android:layout_marginTop="16dp" android:clickable="true" android:focusable="true"/>
 

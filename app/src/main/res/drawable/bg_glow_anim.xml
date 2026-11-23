@@ -4,5 +4,5 @@
         android:type="radial"
         android:gradientRadius="640dp"
         android:centerX="0.5" android:centerY="0.10"
-        android:startColor="#5522D3EE" android:endColor="#0022D3EE"/>
+        android:startColor="#55FFFFFF" android:endColor="#00FFFFFF"/>
 </shape>
