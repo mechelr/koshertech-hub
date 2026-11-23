@@ -51,18 +51,34 @@ class AppAdapter(
         val ctx = holder.itemView.context
         holder.name.text = app.name
         val d = holder.icon.background.mutate() as GradientDrawable
-        d.setColor(AppStyle.color(app))
-        val ic = AppStyle.icon(app)
-        if (ic != 0) {
-            holder.appIcon.setImageResource(ic); holder.appIcon.visibility = View.VISIBLE
+        val installed = app.internal.isNotEmpty() || ctx.packageManager.getLaunchIntentForPackage(app.packageName) != null
+        // The app's REAL icon, read from the phone (same icon the normal launcher shows).
+        val real = if (app.internal.isEmpty() && installed)
+            try { ctx.packageManager.getApplicationIcon(app.packageName) } catch (e: Exception) { null } else null
+        val lp = holder.appIcon.layoutParams
+        holder.appIcon.clearColorFilter()
+        if (real != null) {
+            d.setColor(0x00000000)
+            lp.width = ViewGroup.LayoutParams.MATCH_PARENT; lp.height = ViewGroup.LayoutParams.MATCH_PARENT
+            holder.appIcon.layoutParams = lp
+            holder.appIcon.setImageDrawable(real); holder.appIcon.visibility = View.VISIBLE
             holder.iconLetter.visibility = View.GONE
         } else {
-            holder.appIcon.visibility = View.GONE
-            holder.iconLetter.visibility = View.VISIBLE; holder.iconLetter.text = app.name.take(1)
+            // Not installed yet (or built into the Hub): colored placeholder.
+            d.setColor(AppStyle.color(app))
+            val px = (28 * ctx.resources.displayMetrics.density).toInt()
+            lp.width = px; lp.height = px; holder.appIcon.layoutParams = lp
+            val ic = AppStyle.icon(app)
+            if (ic != 0) {
+                holder.appIcon.setImageResource(ic); holder.appIcon.visibility = View.VISIBLE
+                holder.iconLetter.visibility = View.GONE
+            } else {
+                holder.appIcon.visibility = View.GONE
+                holder.iconLetter.visibility = View.VISIBLE; holder.iconLetter.text = app.name.take(1)
+            }
         }
 
         // Small line under the name only when it matters: not installed yet, or locked.
-        val installed = app.internal.isNotEmpty() || ctx.packageManager.getLaunchIntentForPackage(app.packageName) != null
         holder.category.visibility = if (installed) View.GONE else View.VISIBLE
         holder.category.text = "INSTALL"
         holder.category.setTextColor(0xFF7C3AED.toInt())
@@ -71,7 +87,10 @@ class AppAdapter(
         val st = ParentalRules.state(ctx, app.packageName)
         if (!st.allowed) {
             holder.itemView.alpha = 0.6f
-            d.setColor(0xFFCBD5E1.toInt())
+            if (real != null) {
+                val cm = android.graphics.ColorMatrix(); cm.setSaturation(0f)
+                holder.appIcon.colorFilter = android.graphics.ColorMatrixColorFilter(cm)   // gray out the real icon
+            } else d.setColor(0xFFCBD5E1.toInt())
             holder.category.visibility = View.VISIBLE
             holder.category.text = "\uD83D\uDD12 " + (if (st.label == "Blocked") "LOCKED" else st.label.uppercase())
             holder.category.setTextColor(0xFF64748B.toInt())

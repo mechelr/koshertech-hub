@@ -98,6 +98,11 @@ class ParentalActivity : AppCompatActivity() {
         val icon = TextView(this); icon.text = e.name.take(1); icon.gravity = Gravity.CENTER; icon.setTextColor(0xFFFFFFFF.toInt()); icon.setTypeface(icon.typeface, Typeface.BOLD); icon.textSize = 16f
         val ibg = GradientDrawable(); ibg.cornerRadius = dp(10).toFloat(); ibg.setColor(e.color.takeIf { it != 0xFFFFFFFF.toInt() && it != 0 } ?: 0xFF64748B.toInt()); icon.background = ibg
         icon.layoutParams = LinearLayout.LayoutParams(dp(38), dp(38))
+        try {   // use the app's real icon when it's installed
+            if (packageManager.getLaunchIntentForPackage(e.pkg) != null) {
+                icon.background = packageManager.getApplicationIcon(e.pkg); icon.text = ""
+            }
+        } catch (ex: Exception) {}
         val nameCol = LinearLayout(this); nameCol.orientation = LinearLayout.VERTICAL
         val ncLp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f); ncLp.leftMargin = dp(11); nameCol.layoutParams = ncLp
         val nm = TextView(this); nm.text = e.name; nm.setTextColor(0xFF1E1B4B.toInt()); nm.setTypeface(nm.typeface, Typeface.BOLD); nm.textSize = 15f
