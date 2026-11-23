@@ -1,1 +1,1 @@
-🎨 Brand-new look! Swipe between three pages: Home (clock, weather, zmanim), My Apps, and Parental Controls. New: hourly weather, bedtime lock, daily screen-time limit, and block new installs.
+▦ All the boxes on the Home page are now the same size and lined up, and the bold lettering now shows properly.

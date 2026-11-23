@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingStart="22dp" android:paddingEnd="22dp"
-                    android:paddingTop="26dp" android:paddingBottom="150dp">
+                    android:paddingTop="26dp" android:paddingBottom="190dp">
 
                     <!-- header -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -163,77 +163,85 @@
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="12dp">
-                        <LinearLayout android:id="@+id/tileMirror" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        <LinearLayout android:id="@+id/tileMirror" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
                             android:orientation="vertical" android:background="@drawable/bg_c_sky" android:padding="18dp"
                             android:clickable="true" android:focusable="true">
-                            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_x_mirror" android:contentDescription="@null"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp"
-                                android:text="Mirror" android:textColor="@color/pure_white" android:textSize="17sp" android:fontFamily="@font/inter_extrabold"/>
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_mirror" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
+                                android:text="Mirror" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/tileAutomations" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        <LinearLayout android:id="@+id/tileAutomations" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
                             android:orientation="vertical" android:background="@drawable/bg_c_violet" android:padding="18dp"
                             android:clickable="true" android:focusable="true">
-                            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_x_bolt" android:contentDescription="@null"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp"
-                                android:text="Automations" android:textColor="@color/pure_white" android:textSize="17sp" android:fontFamily="@font/inter_extrabold"/>
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_bolt" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
+                                android:text="Automations" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="12dp">
-                        <LinearLayout android:id="@+id/tileHelp" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        <LinearLayout android:id="@+id/tileHelp" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
                             android:orientation="vertical" android:background="@drawable/bg_c_green" android:padding="18dp"
                             android:clickable="true" android:focusable="true">
-                            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_x_help" android:contentDescription="@null"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp"
-                                android:text="Help &amp; Support" android:textColor="@color/pure_white" android:textSize="17sp" android:fontFamily="@font/inter_extrabold"/>
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_help" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
+                                android:text="Help &amp; Support" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/tileChat" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        <LinearLayout android:id="@+id/tileChat" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
                             android:orientation="vertical" android:background="@drawable/bg_c_blue" android:padding="18dp"
                             android:clickable="true" android:focusable="true">
-                            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_x_chat" android:contentDescription="@null"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp"
-                                android:text="Live chat" android:textColor="@color/pure_white" android:textSize="17sp" android:fontFamily="@font/inter_extrabold"/>
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_chat" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
+                                android:text="Live chat" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="12dp">
-                        <LinearLayout android:id="@+id/buyPlanButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        <LinearLayout android:id="@+id/buyPlanButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
                             android:orientation="vertical" android:background="@drawable/bg_c_orange" android:padding="18dp"
                             android:clickable="true" android:focusable="true">
-                            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_x_cart" android:contentDescription="@null"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp"
-                                android:text="Buy a plan" android:textColor="@color/pure_white" android:textSize="17sp" android:fontFamily="@font/inter_extrabold"/>
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_cart" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
+                                android:text="Buy a plan" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/updatePaymentButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        <LinearLayout android:id="@+id/updatePaymentButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
                             android:orientation="vertical" android:background="@drawable/bg_c_pink" android:padding="18dp"
                             android:clickable="true" android:focusable="true">
-                            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_x_card" android:contentDescription="@null"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp"
-                                android:text="Update payment" android:textColor="@color/pure_white" android:textSize="17sp" android:fontFamily="@font/inter_extrabold"/>
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_card" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
+                                android:text="Update payment" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="12dp">
-                        <LinearLayout android:id="@+id/loopholeButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        <LinearLayout android:id="@+id/loopholeButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
                             android:orientation="vertical" android:background="@drawable/bg_c_red" android:padding="18dp"
                             android:clickable="true" android:focusable="true">
-                            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_x_flag" android:contentDescription="@null"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp"
-                                android:text="Report a loophole" android:textColor="@color/pure_white" android:textSize="17sp" android:fontFamily="@font/inter_extrabold"/>
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_flag" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
+                                android:text="Report a loophole" android:textColor="@color/pure_white" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/rateButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        <LinearLayout android:id="@+id/rateButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="128dp"
                             android:orientation="vertical" android:background="@drawable/bg_c_yellow" android:padding="18dp"
                             android:clickable="true" android:focusable="true">
-                            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_x_star" app:tint="@color/ink" android:contentDescription="@null"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp"
-                                android:text="Rate us" android:textColor="@color/ink" android:textSize="17sp" android:fontFamily="@font/inter_extrabold"/>
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_x_star" app:tint="@color/ink" android:contentDescription="@null"/>
+                            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
+                                android:text="Rate us" android:textColor="@color/ink" android:textSize="16sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -256,7 +264,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingStart="22dp" android:paddingEnd="22dp"
-                    android:paddingTop="30dp" android:paddingBottom="150dp">
+                    android:paddingTop="30dp" android:paddingBottom="190dp">
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:gravity="center_vertical">
@@ -312,7 +320,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingStart="22dp" android:paddingEnd="22dp"
-                    android:paddingTop="26dp" android:paddingBottom="150dp">
+                    android:paddingTop="26dp" android:paddingBottom="190dp">
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:gravity="center_vertical">
