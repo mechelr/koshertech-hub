@@ -167,126 +167,126 @@
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="10dp">
-                        <LinearLayout android:id="@+id/tileSettings" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/tileSettings" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_slate">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_slate">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_a_settings" app:tint="#475569" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Settings" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold" android:includeFontPadding="false" android:lineSpacingMultiplier="0.92"
+                                android:text="Settings" android:textColor="@color/ink" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/tileUpdates" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/tileUpdates" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_teal">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_teal">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_x_download" app:tint="#0F766E" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Updates" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold" android:includeFontPadding="false" android:lineSpacingMultiplier="0.92"
+                                android:text="Updates" android:textColor="@color/ink" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="10dp">
-                        <LinearLayout android:id="@+id/tileMirror" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/tileMirror" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_sky">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_sky">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_x_mirror" app:tint="#0284C7" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Mirror" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold" android:includeFontPadding="false" android:lineSpacingMultiplier="0.92"
+                                android:text="Mirror" android:textColor="@color/ink" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/tileAutomations" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/tileAutomations" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_violet">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_violet">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_x_bolt" app:tint="#7C3AED" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Automations" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold" android:includeFontPadding="false" android:lineSpacingMultiplier="0.92"
+                                android:text="Automations" android:textColor="@color/ink" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="10dp">
-                        <LinearLayout android:id="@+id/tileHelp" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/tileHelp" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_green">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_green">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_x_help" app:tint="#047857" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Help &amp; Support" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold" android:includeFontPadding="false" android:lineSpacingMultiplier="0.92"
+                                android:text="Help &amp; Support" android:textColor="@color/ink" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/tileChat" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/tileChat" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_blue">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_blue">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_x_chat" app:tint="#2563EB" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Live chat" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold" android:includeFontPadding="false" android:lineSpacingMultiplier="0.92"
+                                android:text="Live chat" android:textColor="@color/ink" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="12dp">
-                        <LinearLayout android:id="@+id/buyPlanButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/buyPlanButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_orange">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_orange">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_x_cart" app:tint="#C2410C" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Buy a plan" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold" android:includeFontPadding="false" android:lineSpacingMultiplier="0.92"
+                                android:text="Buy a plan" android:textColor="@color/ink" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/updatePaymentButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/updatePaymentButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_pink">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_pink">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_x_card" app:tint="#DB2777" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Update payment" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold" android:includeFontPadding="false" android:lineSpacingMultiplier="0.92"
+                                android:text="Update payment" android:textColor="@color/ink" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="12dp">
-                        <LinearLayout android:id="@+id/loopholeButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/loopholeButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_red">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_red">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_x_flag" app:tint="#E11D48" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Report a loophole" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold" android:includeFontPadding="false" android:lineSpacingMultiplier="0.92"
+                                android:text="Report a loophole" android:textColor="@color/ink" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/rateButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/rateButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_yellow">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_yellow">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_x_star" app:tint="#CA8A04" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold"
-                                android:text="Rate us" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_extrabold"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" android:ellipsize="end" android:breakStrategy="simple" android:hyphenationFrequency="none" android:textStyle="bold" android:includeFontPadding="false" android:lineSpacingMultiplier="0.92"
+                                android:text="Rate us" android:textColor="@color/ink" android:textSize="14sp" android:fontFamily="@font/inter_extrabold"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -506,7 +506,7 @@
                     <!-- requests + PIN -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="16dp">
-                        <LinearLayout android:id="@+id/tileRequests" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/tileRequests" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
                             <TextView android:id="@+id/reqCount" android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -514,18 +514,18 @@
                                 android:includeFontPadding="false"/>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2"
-                                android:text="Requests waiting" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_black"/>
+                                android:text="Requests waiting" android:textColor="@color/ink" android:textSize="14sp" android:includeFontPadding="false" android:fontFamily="@font/inter_black"/>
                         </LinearLayout>
                         <View android:layout_width="12dp" android:layout_height="1dp"/>
-                        <LinearLayout android:id="@+id/tileChangePin" android:layout_width="0dp" android:layout_weight="1" android:layout_height="108dp"
+                        <LinearLayout android:id="@+id/tileChangePin" android:layout_width="0dp" android:layout_weight="1" android:layout_height="118dp"
                             android:orientation="vertical" android:background="@drawable/bg_tile" android:padding="14dp"
                             android:clickable="true" android:focusable="true">
-                            <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_p_pink">
+                            <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/bg_p_pink">
                                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/ic_x_key" app:tint="#DB2777" android:contentDescription="@null"/>
                             </FrameLayout>
                             <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2"
-                                android:text="Change PIN" android:textColor="@color/ink" android:textSize="15sp" android:fontFamily="@font/inter_black"/>
+                                android:text="Change PIN" android:textColor="@color/ink" android:textSize="14sp" android:includeFontPadding="false" android:fontFamily="@font/inter_black"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

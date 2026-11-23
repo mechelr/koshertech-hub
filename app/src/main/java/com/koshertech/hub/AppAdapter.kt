@@ -124,8 +124,8 @@ object AppStyle {
         "com.google.android.contacts" to R.drawable.ic_a_contacts,
         "com.koshertech.settings" to R.drawable.ic_a_settings,
         "com.koshertech.hub.calendar" to R.drawable.ic_a_calendar,
-        "com.google.android.deskclock" to R.drawable.ic_a_clock, "com.android.deskclock" to R.drawable.ic_a_clock,
-        "com.google.android.calculator" to R.drawable.ic_a_calc, "com.android.calculator2" to R.drawable.ic_a_calc
+        "org.fossify.clock" to R.drawable.ic_a_clock, "com.google.android.deskclock" to R.drawable.ic_a_clock, "com.android.deskclock" to R.drawable.ic_a_clock,
+        "org.fossify.math" to R.drawable.ic_a_calc, "com.google.android.calculator" to R.drawable.ic_a_calc, "com.android.calculator2" to R.drawable.ic_a_calc
     )
     fun icon(app: AppItem): Int = icons[app.packageName] ?: 0
     fun icon(pkg: String): Int = icons[pkg] ?: 0

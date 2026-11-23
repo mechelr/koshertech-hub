@@ -1,1 +1,1 @@
-🖼️ Your apps now show their real icons.
+🧮 Clock and Calculator now open the offline Fossify apps, labels fit, and the Hub tells you if an app is blocked by kiosk settings.

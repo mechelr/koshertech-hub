@@ -63,8 +63,8 @@ class MainActivity : AppCompatActivity() {
         AppItem("Shulert", "Shuls · Siddur · Zmanim", "com.shulert", 0xFF0D9488.toInt(), ""),
         AppItem("Phone", "Make a call", "com.google.android.dialer", 0xFF10B981.toInt(), ""),
         AppItem("Camera", "Take photos", "org.fossify.camera", 0xFF14B8A6.toInt(), ""),
-        AppItem("Clock", "Alarms & timers", firstInstalled("com.google.android.deskclock", "com.android.deskclock"), 0xFF0EA5E9.toInt(), ""),
-        AppItem("Calculator", "Math", firstInstalled("com.google.android.calculator", "com.android.calculator2"), 0xFF84CC16.toInt(), ""),
+        AppItem("Clock", "Alarms & timers", firstInstalled("org.fossify.clock", "com.google.android.deskclock", "com.android.deskclock"), 0xFF0EA5E9.toInt(), ""),
+        AppItem("Calculator", "Math", firstInstalled("org.fossify.math", "com.google.android.calculator", "com.android.calculator2"), 0xFF84CC16.toInt(), ""),
         AppItem("Calendar", "Hebrew calendar", "com.koshertech.hub.calendar", 0xFFEC4899.toInt(), "", "calendar"),
         AppItem("Settings", "Controlled settings app", "com.koshertech.settings", 0xFF64748B.toInt(),
             "https://github.com/mechelr/koshertech-hub/releases/download/settings/KosherTechSettings.apk"),
@@ -499,6 +499,13 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.weatherCard).visibility = View.VISIBLE
     }
 
+    // In kiosk (lock task) mode, Android only opens apps on the kiosk allow-list.
+    private fun kioskAllows(pkg: String): Boolean = try {
+        val am = getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
+        if (am.lockTaskModeState == android.app.ActivityManager.LOCK_TASK_MODE_NONE) true
+        else (getSystemService(Context.DEVICE_POLICY_SERVICE) as android.app.admin.DevicePolicyManager).isLockTaskPermitted(pkg)
+    } catch (e: Exception) { true }
+
     private fun dpx(v: Int): Int = (v * resources.displayMetrics.density).toInt()
 
     private fun emojiFor(code: Int): String = when (code) {
@@ -927,6 +934,12 @@ class MainActivity : AppCompatActivity() {
             return
         }
         if (app.internal == "calendar") { startActivity(Intent(this, CalendarActivity::class.java)); return }
+        if (!kioskAllows(app.packageName) && packageManager.getLaunchIntentForPackage(app.packageName) != null) {
+            AlertDialog.Builder(this).setTitle(app.name + " is installed but blocked")
+                .setMessage("The kiosk settings don't allow this app yet.\n\nIn Miradore, add this package to the kiosk's allowed apps:\n\n" + app.packageName)
+                .setPositiveButton("OK", null).show()
+            return
+        }
         val launch = packageManager.getLaunchIntentForPackage(app.packageName)
         if (launch != null) {
             startActivity(launch)   // already installed -> just open it
