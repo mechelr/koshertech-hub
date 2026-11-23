@@ -89,9 +89,9 @@ class CalendarActivity : AppCompatActivity() {
 
         val bg = android.graphics.drawable.GradientDrawable()
         bg.cornerRadius = dp(9).toFloat()
-        bg.setColor(if (isSaturday) 0xFF1A1A1A.toInt() else 0xFF161616.toInt())
-        if (isToday) bg.setStroke(dp(2), 0xFFFFFFFF.toInt())
-        else bg.setStroke(1, 0xFF1A1A1A.toInt())
+        bg.setColor(if (isSaturday) 0xFFF1F5F9.toInt() else 0xFFFFFFFF.toInt())
+        if (isToday) bg.setStroke(dp(2), 0xFF7C3AED.toInt())
+        else bg.setStroke(1, 0xFFF1F5F9.toInt())
         cell.background = bg
 
         var heb = ""
@@ -104,12 +104,12 @@ class CalendarActivity : AppCompatActivity() {
 
         val h = TextView(this)
         h.text = heb
-        h.setTextColor(0xFFF5F5F5.toInt())
+        h.setTextColor(0xFF1E1B4B.toInt())
         h.setTypeface(h.typeface, Typeface.BOLD)
         h.textSize = 13f
         val en = TextView(this)
         en.text = day.toString()
-        en.setTextColor(0xFF8C8C8C.toInt())
+        en.setTextColor(0xFF64748B.toInt())
         en.textSize = 8f
         cell.addView(h)
         cell.addView(en)

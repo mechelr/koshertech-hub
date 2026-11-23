@@ -112,9 +112,9 @@ class MirrorActivity : AppCompatActivity() {
         val verdict = findViewById<TextView>(R.id.verdict)
         val sub = findViewById<TextView>(R.id.verdictSub)
         when {
-            match >= 68 -> { verdict.text = "👍 You're good to go — looking like your best."; verdict.setTextColor(0xFFFFFFFF.toInt()) }
-            match >= 45 -> { verdict.text = "🙂 Close. Maybe a quick check of your hair & collar."; verdict.setTextColor(0xFFFFFFFF.toInt()) }
-            else        -> { verdict.text = "🪞 Looks different today — give yourself a once-over."; verdict.setTextColor(0xFFFFFFFF.toInt()) }
+            match >= 68 -> { verdict.text = "👍 You're good to go — looking like your best."; verdict.setTextColor(0xFF10B981.toInt()) }
+            match >= 45 -> { verdict.text = "🙂 Close. Maybe a quick check of your hair & collar."; verdict.setTextColor(0xFFF97316.toInt()) }
+            else        -> { verdict.text = "🪞 Looks different today — give yourself a once-over."; verdict.setTextColor(0xFF7C3AED.toInt()) }
         }
         sub.text = "About $match% match to your saved look. Lighting and angle affect this — your own eyes are the final say."
         findViewById<View>(R.id.resultLayer).visibility = View.VISIBLE

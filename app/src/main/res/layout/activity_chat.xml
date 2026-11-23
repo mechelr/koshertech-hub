@@ -30,7 +30,7 @@
             android:background="@drawable/bg_search" android:padding="12dp" android:maxLines="4" android:inputType="textMultiLine|textCapSentences"
             android:importantForAutofill="no"/>
         <TextView android:id="@+id/chatSend" android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="Send" android:textColor="#0C0C0C" android:textStyle="bold" android:textSize="14sp"
+            android:text="Send" android:textColor="#1E1B4B" android:textStyle="bold" android:textSize="14sp"
             android:paddingHorizontal="18dp" android:paddingVertical="12dp" android:background="@drawable/bg_request"
             android:layout_marginStart="9dp" android:clickable="true" android:focusable="true"/>
     </LinearLayout>

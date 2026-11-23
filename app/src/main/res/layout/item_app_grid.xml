@@ -4,26 +4,30 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="@drawable/bg_card"
-    android:padding="12dp"
-    android:layout_margin="5dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="10dp"
     android:clickable="true"
     android:focusable="true">
 
     <FrameLayout
         android:id="@+id/icon"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:background="@drawable/bg_icon">
+        <ImageView
+            android:id="@+id/appIcon"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_gravity="center"
+            android:contentDescription="@null"/>
         <TextView
             android:id="@+id/iconLetter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="#0C0C0C"
-            android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:fontFamily="@font/inter_black"
-            android:textSize="24sp"/>
+            android:textSize="28sp"/>
     </FrameLayout>
 
     <TextView
@@ -33,10 +37,10 @@
         android:gravity="center"
         android:maxLines="1"
         android:ellipsize="end"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="13sp"
-        android:layout_marginTop="9dp"/>
+        android:textColor="#1E1B4B"
+        android:fontFamily="@font/inter_extrabold"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
 
     <TextView
         android:id="@+id/category"
@@ -45,7 +49,8 @@
         android:gravity="center"
         android:maxLines="1"
         android:ellipsize="end"
-        android:textColor="@color/muted"
+        android:textColor="#7C3AED"
+        android:fontFamily="@font/inter_extrabold"
         android:textSize="10sp"
-        android:layout_marginTop="2dp"/>
+        android:visibility="gone"/>
 </LinearLayout>

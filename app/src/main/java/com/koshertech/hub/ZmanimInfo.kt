@@ -61,7 +61,7 @@ object ZmanimInfo {
     }
 
     fun englishDate(): String {
-        val sdf = SimpleDateFormat("EEEE · MMMM d", Locale.US)
+        val sdf = SimpleDateFormat("EEEE, MMMM d", Locale.US)
         return sdf.format(Date())
     }
 
@@ -94,6 +94,36 @@ object ZmanimInfo {
                 Zman("Tzeis", fmt(z.tzais))
             )
         } catch (e: Exception) { emptyList() }
+    }
+
+    // The six zmanim shown on the Home page, for today (0) or tomorrow (1).
+    fun zmanimFor(dayOffset: Int): List<Zman> {
+        return try {
+            val tz = TimeZone.getTimeZone(TZID)
+            val geo = GeoLocation(CITY, LAT, LNG, ELEV, tz)
+            val z = ComplexZmanimCalendar(geo)
+            val cal = Calendar.getInstance(tz); cal.add(Calendar.DATE, dayOffset)
+            z.calendar = cal
+            listOf(
+                Zman("Alos", fmt(z.alosHashachar)),
+                Zman("Netz", fmt(z.sunrise)),
+                Zman("Sof Zman Shema", fmt(z.sofZmanShmaGRA)),
+                Zman("Chatzos", fmt(z.chatzos)),
+                Zman("Shkiah", fmt(z.sunset)),
+                Zman("Tzeis", fmt(z.tzais))
+            )
+        } catch (e: Exception) { emptyList() }
+    }
+
+    // True once tonight's tzeis has passed (then the Home page shows tomorrow's zmanim).
+    fun afterTzeis(): Boolean {
+        return try {
+            val tz = TimeZone.getTimeZone(TZID)
+            val z = ComplexZmanimCalendar(GeoLocation(CITY, LAT, LNG, ELEV, tz))
+            z.calendar = Calendar.getInstance(tz)
+            val t = z.tzais ?: return false
+            Date().after(t)
+        } catch (e: Exception) { false }
     }
 
     // Candle lighting for the coming Friday (18 min before shkiah).

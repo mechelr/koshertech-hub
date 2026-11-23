@@ -51,19 +51,25 @@ class MainActivity : AppCompatActivity() {
     // ===== YOUR APPS =====
     // apkUrl: a KosherTech-hosted link to the approved APK. When set, Install downloads
     // and installs it directly (no Play Store). Add the real Zemer/24Six/Zing links here.
-    private val allApps = listOf(
-        AppItem("Zemer", "Music · Jewish songs", "com.jtech.zemer", 0xFFFFFFFF.toInt(),
+    private fun firstInstalled(vararg pkgs: String): String =
+        pkgs.firstOrNull { packageManager.getLaunchIntentForPackage(it) != null } ?: pkgs[0]
+
+    private val allApps: List<AppItem> by lazy { listOf(
+        AppItem("Claude", "AI assistant", "com.anthropic.claude", 0xFFF97316.toInt(), ""),
+        AppItem("Zing", "Music · Streaming", "fm.jewishmusic.application", 0xFF8B5CF6.toInt(), ""),
+        AppItem("Zemer", "Music · Jewish songs", "com.jtech.zemer", 0xFFF59E0B.toInt(),
             "https://github.com/mechelr/koshertech-hub/releases/download/latest/zemer.apk"),
-        AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFFFFFFF.toInt(), ""),
-        AppItem("Zing", "Music · Streaming", "fm.jewishmusic.application", 0xFFFFFFFF.toInt(), ""),
-        AppItem("KosherTech Settings", "Controlled settings app", "com.koshertech.settings", 0xFFFFFFFF.toInt(),
+        AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFE11D48.toInt(), ""),
+        AppItem("Phone", "Make a call", "com.google.android.dialer", 0xFF10B981.toInt(), ""),
+        AppItem("Camera", "Take photos", "org.fossify.camera", 0xFF14B8A6.toInt(), ""),
+        AppItem("Clock", "Alarms & timers", firstInstalled("com.google.android.deskclock", "com.android.deskclock"), 0xFF0EA5E9.toInt(), ""),
+        AppItem("Calculator", "Math", firstInstalled("com.google.android.calculator", "com.android.calculator2"), 0xFF84CC16.toInt(), ""),
+        AppItem("Calendar", "Hebrew calendar", "com.koshertech.hub.calendar", 0xFFEC4899.toInt(), "", "calendar"),
+        AppItem("Settings", "Controlled settings app", "com.koshertech.settings", 0xFF64748B.toInt(),
             "https://github.com/mechelr/koshertech-hub/releases/download/settings/KosherTechSettings.apk"),
-        AppItem("Phone", "Make a call", "com.google.android.dialer", 0xFFFFFFFF.toInt(), ""),
-        AppItem("Contacts", "Phone book", "com.google.android.contacts", 0xFFFFFFFF.toInt(), ""),
-        AppItem("Camera", "Take photos", "org.fossify.camera", 0xFF9A9A9A.toInt(), ""),
-        AppItem("Gallery", "Your photos", "org.fossify.gallery", 0xFFFFFFFF.toInt(), ""),
-        AppItem("Claude", "AI assistant", "com.anthropic.claude", 0xFFFFFFFF.toInt(), "")
-    )
+        AppItem("Contacts", "Phone book", "com.google.android.contacts", 0xFF2563EB.toInt(), ""),
+        AppItem("Gallery", "Your photos", "org.fossify.gallery", 0xFF6366F1.toInt(), "")
+    ) }
 
     // ===== PLANS (demo pricing — edit freely) =====
     data class Plan(
@@ -77,13 +83,13 @@ class MainActivity : AppCompatActivity() {
 
     private val plans = listOf(
         Plan("Basic", "$14.99", "/mo",
-            "1 device  ·  approved apps  ·  email support", false, 0xFFFFFFFF.toInt()),
+            "1 device  ·  approved apps  ·  email support", false, 0xFF2563EB.toInt()),
         Plan("Family", "$24.99", "/mo",
-            "Up to 4 devices  ·  remote management  ·  priority support", true, 0xFFFFFFFF.toInt()),
+            "Up to 4 devices  ·  remote management  ·  priority support", true, 0xFF7C3AED.toInt()),
         Plan("Premium", "$34.99", "/mo",
-            "Unlimited devices  ·  custom app approvals  ·  24/7 support", false, 0xFFFFFFFF.toInt()),
+            "Unlimited devices  ·  custom app approvals  ·  24/7 support", false, 0xFFF97316.toInt()),
         Plan("Yearly", "$299", "/yr",
-            "All Premium features  ·  2 months free", false, 0xFFFFFFFF.toInt())
+            "All Premium features  ·  2 months free", false, 0xFF10B981.toInt())
     )
 
     private lateinit var adapter: AppAdapter
@@ -95,7 +101,7 @@ class MainActivity : AppCompatActivity() {
         ZmanimInfo.load(this)
 
         val recycler = findViewById<RecyclerView>(R.id.appList)
-        recycler.layoutManager = GridLayoutManager(this, 3)
+        recycler.layoutManager = GridLayoutManager(this, 4)
         adapter = AppAdapter(allApps) { app -> openOrInstall(app) }
         recycler.adapter = adapter
         ParentalRules.saveApps(this, allApps)
@@ -106,14 +112,17 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
         })
 
-        findViewById<TextView>(R.id.requestButton).setOnClickListener { showRequestDialog() }
-        findViewById<TextView>(R.id.loopholeButton).setOnClickListener { showLoopholeDialog() }
-        findViewById<TextView>(R.id.rateButton).setOnClickListener { showRateDialog() }
-        findViewById<TextView>(R.id.buyPlanButton).setOnClickListener { showBuyPlanDialog() }
-        findViewById<TextView>(R.id.updatePaymentButton).setOnClickListener { showPaymentDialog(null) }
+        findViewById<View>(R.id.requestButton).setOnClickListener { showRequestDialog() }
+        findViewById<View>(R.id.loopholeButton).setOnClickListener { showLoopholeDialog() }
+        findViewById<View>(R.id.rateButton).setOnClickListener { showRateDialog() }
+        findViewById<View>(R.id.buyPlanButton).setOnClickListener { showBuyPlanDialog() }
+        findViewById<View>(R.id.updatePaymentButton).setOnClickListener { showPaymentDialog(null) }
+        findViewById<View>(R.id.tileChat).setOnClickListener { startActivity(Intent(this, ChatActivity::class.java)) }
+        findViewById<View>(R.id.versionLine).setOnClickListener { setChecking(); checkForUpdate() }
 
-        findViewById<View>(R.id.tileCalendar).setOnClickListener { startActivity(Intent(this, CalendarActivity::class.java)) }
-        findViewById<View>(R.id.tileParental).setOnClickListener { startActivity(Intent(this, ParentalActivity::class.java)) }
+        setupPager()
+        setupParentalPage()
+
         findViewById<View>(R.id.tileAutomations).setOnClickListener { startActivity(Intent(this, AutomationsActivity::class.java)) }
         findViewById<View>(R.id.tileHelp).setOnClickListener { showHelp() }
         findViewById<View>(R.id.tileMirror).setOnClickListener { startActivity(Intent(this, MirrorActivity::class.java)) }
@@ -125,10 +134,14 @@ class MainActivity : AppCompatActivity() {
         populateZmanim()
         fetchWeather()
         initUpdateBar()
-        startGlow()
+        startClock()
 
         // Tap the location label (on the zmanim card) to change city for BOTH zmanim and weather.
+        findViewById<View>(R.id.zmanimLocRow).setOnClickListener { showLocationDialog() }
         findViewById<TextView>(R.id.zmanimLoc).setOnClickListener { showLocationDialog() }
+        findViewById<TextView>(R.id.zmanimDay).setOnClickListener {
+            zmanimOffset = if (zmanimOffset == 0) 1 else 0; zmanimManual = true; populateZmanim()
+        }
 
         deviceId = ensureDeviceId()
         syncBackend()
@@ -262,31 +275,36 @@ class MainActivity : AppCompatActivity() {
         val list = findViewById<LinearLayout>(R.id.requestStatusList)
         list.removeAllViews()
         var shownReq = 0
+        var waiting = 0
+        lastRequests = reqs
         if (reqs != null) {
             for (i in 0 until reqs.length()) {
                 val r = reqs.getJSONObject(i)
                 val status = r.optString("status", "Pending")
                 val name = r.optString("appName", "")
+                if (status.equals("Pending", true)) waiting++
                 val key = name + "||" + status
                 if (dreq.contains(key)) continue
                 val row = LinearLayout(this); row.orientation = LinearLayout.HORIZONTAL; row.gravity = Gravity.CENTER_VERTICAL
                 val tv = TextView(this)
-                tv.text = "•  " + name + "   —   " + status
-                tv.setTextColor(when (status) { "Approved" -> 0xFFFFFFFF.toInt(); "Declined" -> 0xFFFFFFFF.toInt(); else -> 0xFFFFFFFF.toInt() })
-                tv.textSize = 13f
+                tv.text = name + "   ·   " + statusLabel(status)
+                tv.setTextColor(0xFF1E1B4B.toInt()); tv.setTypeface(tv.typeface, Typeface.BOLD)
+                tv.textSize = 15f
+                row.setBackgroundResource(R.drawable.bg_card); row.setPadding(dpx(16), dpx(12), dpx(10), dpx(12))
                 tv.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-                val x = TextView(this); x.text = "✕"; x.setTextColor(0xFF7A7A7A.toInt()); x.textSize = 14f
+                val x = TextView(this); x.text = "✕"; x.setTextColor(0xFF64748B.toInt()); x.textSize = 15f
                 x.setPadding(dpx(12), dpx(4), dpx(2), dpx(4))
                 x.setOnClickListener {
                     dreq.add(key); dp.edit().putStringSet("req", dreq).apply()
                     list.removeView(row); if (list.childCount == 0) title.visibility = View.GONE
                 }
                 row.addView(tv); row.addView(x)
-                val rlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); rlp.topMargin = dpx(2); row.layoutParams = rlp
+                val rlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); rlp.topMargin = dpx(8); row.layoutParams = rlp
                 list.addView(row); shownReq++
             }
         }
         title.visibility = if (shownReq > 0) View.VISIBLE else View.GONE
+        findViewById<TextView>(R.id.reqCount).text = waiting.toString()
 
         // ----- announcements (each dismissible by the customer) -----
         val dann = HashSet(dp.getStringSet("ann", emptySet()) ?: emptySet())
@@ -300,9 +318,9 @@ class MainActivity : AppCompatActivity() {
                 val card = LinearLayout(this); card.orientation = LinearLayout.HORIZONTAL; card.gravity = Gravity.CENTER_VERTICAL
                 card.setBackgroundResource(R.drawable.bg_update); card.setPadding(dpx(14), dpx(12), dpx(12), dpx(12))
                 val clp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); clp.bottomMargin = dpx(8); card.layoutParams = clp
-                val tv = TextView(this); tv.text = "■  " + msg; tv.setTextColor(0xFFFFFFFF.toInt()); tv.textSize = 13f
+                val tv = TextView(this); tv.text = "📢  " + msg; tv.setTextColor(0xFF1E1B4B.toInt()); tv.textSize = 14f; tv.setTypeface(tv.typeface, Typeface.BOLD)
                 tv.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-                val x = TextView(this); x.text = "✕"; x.setTextColor(0xFFB8B8B8.toInt()); x.textSize = 15f
+                val x = TextView(this); x.text = "✕"; x.setTextColor(0xFF64748B.toInt()); x.textSize = 15f
                 x.setPadding(dpx(12), 0, dpx(2), 0)
                 x.setOnClickListener {
                     dann.add(msg); dp.edit().putStringSet("ann", dann).apply()
@@ -398,13 +416,10 @@ class MainActivity : AppCompatActivity() {
                 val url = "https://api.open-meteo.com/v1/forecast?latitude=" + ZmanimInfo.lat() +
                     "&longitude=" + ZmanimInfo.lng() +
                     "&current=temperature_2m,weather_code" +
+                    "&hourly=temperature_2m&forecast_hours=6" +
                     "&daily=weather_code,temperature_2m_max,temperature_2m_min" +
                     "&temperature_unit=fahrenheit&timezone=auto&forecast_days=4"
-                val conn = URL(url).openConnection() as HttpURLConnection
-                conn.connectTimeout = 10000; conn.readTimeout = 10000; conn.instanceFollowRedirects = true
-                val text = conn.inputStream.bufferedReader().readText()
-                conn.disconnect()
-                val o = JSONObject(text)
+                val o = JSONObject(httpGet(url))
                 val cur = o.getJSONObject("current")
                 val nowTemp = Math.round(cur.getDouble("temperature_2m")).toInt()
                 val nowCode = cur.optInt("weather_code", 0)
@@ -413,17 +428,27 @@ class MainActivity : AppCompatActivity() {
                 val codes = daily.getJSONArray("weather_code")
                 val maxs = daily.getJSONArray("temperature_2m_max")
                 val mins = daily.getJSONArray("temperature_2m_min")
-                val labels = ArrayList<String>(); val emos = ArrayList<String>()
-                val his = ArrayList<Int>(); val los = ArrayList<Int>()
+                val hiToday = Math.round(maxs.getDouble(0)).toInt(); val loToday = Math.round(mins.getDouble(0)).toInt()
+                val days = ArrayList<Triple<String, String, String>>()
                 var i = 1
-                while (i < times.length() && labels.size < 3) {
+                while (i < times.length() && days.size < 3) {
                     val d = LocalDate.parse(times.getString(i))
-                    labels.add(d.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
-                    emos.add(emojiFor(codes.getInt(i)))
-                    his.add(Math.round(maxs.getDouble(i)).toInt()); los.add(Math.round(mins.getDouble(i)).toInt())
+                    days.add(Triple(d.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH), emojiFor(codes.getInt(i)),
+                        Math.round(maxs.getDouble(i)).toString() + "° / " + Math.round(mins.getDouble(i)) + "°"))
                     i++
                 }
-                runOnUiThread { showWeather(nowTemp, nowCode, labels, emos, his, los) }
+                val hours = ArrayList<Pair<String, String>>()
+                val hourly = o.optJSONObject("hourly")
+                if (hourly != null) {
+                    val ht = hourly.getJSONArray("time"); val hv = hourly.getJSONArray("temperature_2m")
+                    var k = 1
+                    while (k < ht.length() && hours.size < 4) {
+                        val hr = ht.getString(k).substringAfter("T").substringBefore(":").toIntOrNull() ?: 0
+                        val label = when { hr == 0 -> "12 AM"; hr < 12 -> "$hr AM"; hr == 12 -> "12 PM"; else -> "${hr - 12} PM" }
+                        hours.add(Pair(label, Math.round(hv.getDouble(k)).toString() + "°")); k++
+                    }
+                }
+                runOnUiThread { showWeather(nowTemp, nowCode, hiToday, loToday, hours, days) }
             } catch (e: Exception) {
                 // No connection or blocked by the device filter — retry a couple of times, then say so.
                 if (attempt < 2) {
@@ -431,8 +456,9 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     runOnUiThread {
                         findViewById<TextView>(R.id.weatherNow).text = "—"
-                        findViewById<TextView>(R.id.weatherIcon).text = "°"
+                        findViewById<TextView>(R.id.weatherIcon).text = "🌡️"
                         findViewById<TextView>(R.id.weatherDesc).text = "Weather unavailable — no connection"
+                        findViewById<LinearLayout>(R.id.weatherHours).removeAllViews()
                         findViewById<LinearLayout>(R.id.weatherDays).removeAllViews()
                     }
                 }
@@ -440,21 +466,26 @@ class MainActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun showWeather(nowTemp: Int, nowCode: Int, labels: List<String>, emos: List<String>, his: List<Int>, los: List<Int>) {
+    private fun showWeather(nowTemp: Int, nowCode: Int, hi: Int, lo: Int,
+                            hours: List<Pair<String, String>>, days: List<Triple<String, String, String>>) {
         findViewById<TextView>(R.id.weatherNow).text = "$nowTemp°"
-        findViewById<TextView>(R.id.weatherDesc).text = descFor(nowCode) + "  ·  " + ZmanimInfo.locationName()
+        findViewById<TextView>(R.id.weatherDesc).text = descFor(nowCode) + " · H $hi° L $lo°"
         findViewById<TextView>(R.id.weatherIcon).text = emojiFor(nowCode)
-        val row = findViewById<LinearLayout>(R.id.weatherDays)
-        row.removeAllViews()
-        for (k in labels.indices) {
+        val hrow = findViewById<LinearLayout>(R.id.weatherHours); hrow.removeAllViews()
+        for ((k, h) in hours.withIndex()) {
             val cell = LinearLayout(this); cell.orientation = LinearLayout.VERTICAL; cell.gravity = Gravity.CENTER
-            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f); cell.layoutParams = lp
-            val lbl = TextView(this); lbl.text = labels[k]; lbl.setTextColor(0xFFB8B8B8.toInt()); lbl.textSize = 12f; lbl.gravity = Gravity.CENTER
-            val em = TextView(this); em.text = emos[k]; em.textSize = 20f; em.gravity = Gravity.CENTER
-            val tmp = TextView(this); tmp.text = "${his[k]}° / ${los[k]}°"; tmp.setTextColor(0xFFF5F5F5.toInt()); tmp.textSize = 12f; tmp.gravity = Gravity.CENTER; tmp.setTypeface(tmp.typeface, Typeface.BOLD)
-            val emlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); emlp.topMargin = dpx(3); emlp.bottomMargin = dpx(3); em.layoutParams = emlp
-            cell.addView(lbl); cell.addView(em); cell.addView(tmp)
-            row.addView(cell)
+            cell.setBackgroundResource(R.drawable.bg_hour); cell.setPadding(0, dpx(12), 0, dpx(12))
+            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f); if (k > 0) lp.marginStart = dpx(8); cell.layoutParams = lp
+            val t1 = TextView(this); t1.text = h.first; t1.setTextColor(0xFFFFFFFF.toInt()); t1.textSize = 15f; t1.setTypeface(t1.typeface, Typeface.BOLD); t1.gravity = Gravity.CENTER
+            val t2 = TextView(this); t2.text = h.second; t2.setTextColor(0xFFFFFFFF.toInt()); t2.textSize = 17f; t2.setTypeface(t2.typeface, Typeface.BOLD); t2.gravity = Gravity.CENTER
+            cell.addView(t1); cell.addView(t2); hrow.addView(cell)
+        }
+        val drow = findViewById<LinearLayout>(R.id.weatherDays); drow.removeAllViews()
+        for (d in days) {
+            val tv = TextView(this); tv.text = d.first + " " + d.second + " " + d.third
+            tv.setTextColor(0xFFDBEAFE.toInt()); tv.textSize = 13f; tv.setTypeface(tv.typeface, Typeface.BOLD); tv.gravity = Gravity.CENTER
+            tv.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            drow.addView(tv)
         }
         findViewById<View>(R.id.weatherCard).visibility = View.VISIBLE
     }
@@ -462,25 +493,15 @@ class MainActivity : AppCompatActivity() {
     private fun dpx(v: Int): Int = (v * resources.displayMetrics.density).toInt()
 
     private fun emojiFor(code: Int): String = when (code) {
-        0 -> "☀\uFE0E"; 1, 2, 3 -> "☁\uFE0E"; 45, 48 -> "≋"
-        in 51..67 -> "☂\uFE0E"; in 71..77 -> "❄\uFE0E"
-        in 80..82 -> "☂\uFE0E"; in 85..86 -> "❄\uFE0E"; in 95..99 -> "ϟ"; else -> "°"
+        0 -> "☀️"; 1, 2 -> "🌤️"; 3 -> "☁️"; 45, 48 -> "🌫️"
+        in 51..57 -> "🌦️"; in 61..67 -> "🌧️"; in 71..77 -> "🌨️"
+        in 80..82 -> "🌧️"; in 85..86 -> "🌨️"; in 95..99 -> "⛈️"; else -> "🌡️"
     }
 
     private fun descFor(code: Int): String = when (code) {
         0 -> "Clear"; 1, 2 -> "Partly cloudy"; 3 -> "Cloudy"; 45, 48 -> "Foggy"
         in 51..57 -> "Drizzle"; in 61..67 -> "Rain"; in 71..77 -> "Snow"
         in 80..82 -> "Showers"; in 85..86 -> "Snow showers"; in 95..99 -> "Thunderstorm"; else -> "—"
-    }
-
-    // Soft breathing ambient glow behind the top of the app.
-    private fun startGlow() {
-        val glow = findViewById<View>(R.id.glowView)
-        val anim = ObjectAnimator.ofFloat(glow, "alpha", 0.35f, 0.85f)
-        anim.duration = 3200
-        anim.repeatMode = ValueAnimator.REVERSE
-        anim.repeatCount = ValueAnimator.INFINITE
-        anim.start()
     }
 
     // ===== UPDATE CHECKER =====
@@ -502,6 +523,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initUpdateBar() {
         findViewById<TextView>(R.id.updateSub).text = "Version " + installedVersionName()
+        findViewById<TextView>(R.id.versionLine).text = "Version " + installedVersionName() + "  ·  Check for updates"
         findViewById<View>(R.id.updateBanner).setOnClickListener {
             val url = pendingApkUrl
             if (url != null) downloadAndInstall(url)
@@ -511,6 +533,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setChecking() {
+        findViewById<TextView>(R.id.versionLine).text = "Checking for updates…"
         findViewById<TextView>(R.id.updateIcon).text = "↻"
         findViewById<TextView>(R.id.updateTitle).text = "Checking for updates…"
         findViewById<View>(R.id.updateAction).visibility = View.GONE
@@ -550,6 +573,7 @@ class MainActivity : AppCompatActivity() {
             else -> "Version " + versionName + " — tap to update"
         }
         findViewById<View>(R.id.updateAction).visibility = View.VISIBLE
+        findViewById<View>(R.id.updateBanner).visibility = View.VISIBLE
     }
 
     // After the user updates and opens the app, show once what the new version improved.
@@ -568,6 +592,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpToDate() {
         pendingApkUrl = null
+        findViewById<View>(R.id.updateBanner).visibility = View.GONE
+        findViewById<TextView>(R.id.versionLine).text = "Version " + installedVersionName() + "  ·  You're up to date ✓"
         findViewById<TextView>(R.id.updateIcon).text = "✓"
         findViewById<TextView>(R.id.updateTitle).text = "You're on the latest version"
         findViewById<TextView>(R.id.updateSub).text = "Version " + installedVersionName() + " · tap to check again"
@@ -576,6 +602,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setCheckError() {
         pendingApkUrl = null
+        findViewById<View>(R.id.updateBanner).visibility = View.GONE
+        findViewById<TextView>(R.id.versionLine).text = "Version " + installedVersionName() + "  ·  Check for updates"
         findViewById<TextView>(R.id.updateIcon).text = "↻"
         findViewById<TextView>(R.id.updateTitle).text = "Tap to check for updates"
         findViewById<TextView>(R.id.updateSub).text = "Version " + installedVersionName()
@@ -615,7 +643,7 @@ class MainActivity : AppCompatActivity() {
     // Re-check parental time windows every 30s so tiles gray out / unlock on time.
     private val parentalTick = android.os.Handler(android.os.Looper.getMainLooper())
     private val parentalRun = object : Runnable {
-        override fun run() { adapter.notifyDataSetChanged(); parentalTick.postDelayed(this, 30_000) }
+        override fun run() { adapter.notifyDataSetChanged(); refreshScreenTime(); parentalTick.postDelayed(this, 30_000) }
     }
 
     override fun onPause() {
@@ -626,6 +654,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         adapter.notifyDataSetChanged()
+        refreshScreenTime(); refreshParentalRows(); tickClock()
         parentalTick.removeCallbacks(parentalRun)
         parentalTick.postDelayed(parentalRun, 30_000)
         // Re-sync on every foreground so dashboard changes (approved requests,
@@ -633,56 +662,228 @@ class MainActivity : AppCompatActivity() {
         if (::deviceId.isInitialized) syncBackend()
     }
 
+    private var zmanimOffset = 0
+    private var zmanimManual = false
+
     private fun populateZmanim() {
-        findViewById<TextView>(R.id.greetingText).text = ZmanimInfo.greeting()
+        if (!zmanimManual) zmanimOffset = if (ZmanimInfo.afterTzeis()) 1 else 0
         findViewById<TextView>(R.id.hebrewDate).text = ZmanimInfo.hebrewDate()
         findViewById<TextView>(R.id.englishDate).text = ZmanimInfo.englishDate()
-        findViewById<TextView>(R.id.zmanimLoc).text = ZmanimInfo.locationName().uppercase() + "  ✎"
+        findViewById<TextView>(R.id.zmanimLoc).text = ZmanimInfo.locationName() + "  ✎"
+        findViewById<TextView>(R.id.zmanimDay).text = if (zmanimOffset == 1) "Tomorrow" else "Today"
         findViewById<TextView>(R.id.candleVal).text = ZmanimInfo.candleLighting()
 
+        val styles = listOf(0xFFEDE9FE to 0xFF6D28D9, 0xFFFEF3C7 to 0xFFB45309, 0xFFDBEAFE to 0xFF1D4ED8,
+                            0xFFD1FAE5 to 0xFF047857, 0xFFFFE4E6 to 0xFFBE123C, 0xFFCCFBF1 to 0xFF0F766E)
         val grid = findViewById<LinearLayout>(R.id.zmanimGrid)
         grid.removeAllViews()
-        val list = ZmanimInfo.zmanim()
+        val list = ZmanimInfo.zmanimFor(zmanimOffset)
         var i = 0
         while (i < list.size) {
             val row = LinearLayout(this)
             row.orientation = LinearLayout.HORIZONTAL
             val lp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            lp.bottomMargin = dp(8)
+            lp.bottomMargin = dp(12)
             row.layoutParams = lp
-            row.addView(zmanCell(list[i]))
-            val sp = View(this)
-            sp.layoutParams = LinearLayout.LayoutParams(dp(14), 1)
-            row.addView(sp)
-            if (i + 1 < list.size) {
-                row.addView(zmanCell(list[i + 1]))
-            } else {
-                val filler = View(this)
-                filler.layoutParams = LinearLayout.LayoutParams(0, 1, 1f)
-                row.addView(filler)
-            }
+            row.addView(zmanCell(list[i], styles[i % 6]))
+            val sp = View(this); sp.layoutParams = LinearLayout.LayoutParams(dp(12), 1); row.addView(sp)
+            if (i + 1 < list.size) row.addView(zmanCell(list[i + 1], styles[(i + 1) % 6]))
+            else { val f = View(this); f.layoutParams = LinearLayout.LayoutParams(0, 1, 1f); row.addView(f) }
             grid.addView(row)
             i += 2
         }
     }
 
-    private fun zmanCell(z: Zman): View {
+    private fun zmanCell(z: Zman, style: Pair<Long, Long>): View {
         val cell = LinearLayout(this)
-        cell.orientation = LinearLayout.HORIZONTAL
+        cell.orientation = LinearLayout.VERTICAL
         cell.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-        val label = TextView(this)
-        label.text = z.label
-        label.textSize = 11f
-        label.setTextColor(0xFF8C8C8C.toInt())
-        label.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-        val value = TextView(this)
-        value.text = z.time
-        value.textSize = 12f
-        value.setTypeface(value.typeface, android.graphics.Typeface.BOLD)
-        value.setTextColor(0xFFF5F5F5.toInt())
-        cell.addView(label)
-        cell.addView(value)
+        val bg = GradientDrawable(); bg.cornerRadius = dp(22).toFloat(); bg.setColor(style.first.toInt()); cell.background = bg
+        cell.setPadding(dp(16), dp(12), dp(10), dp(12))
+        val label = TextView(this); label.text = z.label; label.textSize = 15f
+        label.setTextColor(style.second.toInt()); label.setTypeface(label.typeface, Typeface.BOLD)
+        label.maxLines = 1; label.ellipsize = android.text.TextUtils.TruncateAt.END
+        val value = TextView(this); value.text = z.time; value.textSize = 23f
+        value.setTextColor(0xFF1E1B4B.toInt())
+        try { value.typeface = androidx.core.content.res.ResourcesCompat.getFont(this, R.font.inter_black) } catch (e: Exception) {}
+        cell.addView(label); cell.addView(value)
         return cell
+    }
+
+    // ===== BIG CLOCK =====
+    private val clockHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private val clockRun = object : Runnable { override fun run() { tickClock(); clockHandler.postDelayed(this, 10_000) } }
+    private fun startClock() { clockHandler.removeCallbacks(clockRun); clockHandler.post(clockRun) }
+    private var lastDay = -1
+    private fun tickClock() {
+        val c = java.util.Calendar.getInstance()
+        var h = c.get(java.util.Calendar.HOUR); if (h == 0) h = 12
+        findViewById<TextView>(R.id.clockTime).text = String.format(Locale.US, "%d:%02d", h, c.get(java.util.Calendar.MINUTE))
+        findViewById<TextView>(R.id.clockAmPm).text = if (c.get(java.util.Calendar.AM_PM) == java.util.Calendar.AM) "AM" else "PM"
+        val day = c.get(java.util.Calendar.DAY_OF_YEAR)
+        if (day != lastDay || (!zmanimManual && ZmanimInfo.afterTzeis() != (zmanimOffset == 1))) { lastDay = day; populateZmanim() }
+    }
+
+    // ===== SWIPE PAGES: Home · My Apps · Parental Controls =====
+    private val hints = arrayOf("Swipe for your apps →", "← Home  ·  Parental controls →", "← Swipe back to apps")
+    private val dotColors = intArrayOf(0xFF2563EB.toInt(), 0xFFEC4899.toInt(), 0xFF10B981.toInt())
+    private val dotSoft = intArrayOf(0xFFC7D2FE.toInt(), 0xFFFBCFE8.toInt(), 0xFFA7F3D0.toInt())
+    private fun setupPager() {
+        val pager = findViewById<SwipePager>(R.id.pager)
+        pager.onPage = { paintDots(it) }
+        paintDots(0)
+        findViewById<View>(R.id.pagerHint).setOnClickListener {
+            pager.goTo(if (pager.page == 2) 1 else pager.page + 1)
+        }
+    }
+    private fun paintDots(page: Int) {
+        findViewById<TextView>(R.id.pagerHint).text = hints[page]
+        val row = findViewById<LinearLayout>(R.id.dots); row.removeAllViews()
+        for (i in 0 until 3) {
+            val v = View(this)
+            val lp = LinearLayout.LayoutParams(dp(if (i == page) 34 else 10), dp(10)); if (i > 0) lp.marginStart = dp(10)
+            v.layoutParams = lp
+            val g = GradientDrawable(); g.cornerRadius = dp(5).toFloat(); g.setColor(if (i == page) dotColors[page] else dotSoft[page])
+            v.background = g; row.addView(v)
+        }
+    }
+
+    // ===== PARENTAL CONTROLS PAGE =====
+    private var lastRequests: JSONArray? = null
+    private var paintingRows = false
+
+    private fun statusLabel(st: String): String = when {
+        st.equals("Approved", true) -> "✓ Approved"
+        st.equals("Declined", true) -> "✕ Declined"
+        else -> "⏳ Waiting"
+    }
+
+    private fun styleSwitch(sw: androidx.appcompat.widget.SwitchCompat, on: Int) {
+        val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf())
+        sw.trackTintList = android.content.res.ColorStateList(states, intArrayOf(on, 0xFFCBD5E1.toInt()))
+        sw.thumbTintList = android.content.res.ColorStateList(states, intArrayOf(0xFFFFFFFF.toInt(), 0xFFFFFFFF.toInt()))
+    }
+
+    private fun setupParentalPage() {
+        val swBed = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.swBedtime)
+        val swInst = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.swInstalls)
+        styleSwitch(swBed, 0xFF7C3AED.toInt()); styleSwitch(swInst, 0xFFF97316.toInt())
+        refreshParentalRows()
+        swBed.setOnCheckedChangeListener { _, checked ->
+            if (paintingRows) return@setOnCheckedChangeListener
+            refreshParentalRows()   // put it back until the PIN is entered
+            requirePin { ParentalRules.setBedtime(this, checked); refreshParentalRows(); adapter.notifyDataSetChanged() }
+        }
+        swInst.setOnCheckedChangeListener { _, checked ->
+            if (paintingRows) return@setOnCheckedChangeListener
+            refreshParentalRows()
+            requirePin { ParentalRules.setBlockInstalls(this, checked); refreshParentalRows() }
+        }
+        findViewById<View>(R.id.bedtimeText).setOnClickListener { requirePin { pickBedtime() } }
+        findViewById<View>(R.id.tileAppHours).setOnClickListener { startActivity(Intent(this, ParentalActivity::class.java)) }
+        findViewById<View>(R.id.tileChangePin).setOnClickListener { requirePin { createPin("Set a new PIN") {} } }
+        findViewById<View>(R.id.tileRequests).setOnClickListener { showRequestsList() }
+        findViewById<View>(R.id.screenCard).setOnClickListener {
+            if (!ParentalRules.hasUsageAccess(this)) {
+                Toast.makeText(this, "Turn on Usage access for KosherTech Hub", Toast.LENGTH_LONG).show()
+                try { startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)) } catch (e: Exception) {}
+            } else requirePin { pickLimit() }
+        }
+        refreshScreenTime()
+    }
+
+    private fun refreshParentalRows() {
+        paintingRows = true
+        findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.swBedtime).isChecked = ParentalRules.bedtimeOn(this)
+        findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.swInstalls).isChecked = ParentalRules.blockInstalls(this)
+        paintingRows = false
+        findViewById<TextView>(R.id.bedtimeSub).text =
+            ParentalRules.fmt(ParentalRules.bedStart(this)) + " – " + ParentalRules.fmt(ParentalRules.bedEnd(this))
+    }
+
+    private fun pickBedtime() {
+        val s0 = ParentalRules.bedStart(this); val e0 = ParentalRules.bedEnd(this)
+        android.app.TimePickerDialog(this, { _, sh, sm ->
+            android.app.TimePickerDialog(this, { _, eh, em ->
+                ParentalRules.setBedTimes(this, sh * 60 + sm, eh * 60 + em)
+                refreshParentalRows(); adapter.notifyDataSetChanged()
+            }, e0 / 60, e0 % 60, false).also { it.setTitle("Bedtime ends (morning)"); it.show() }
+        }, s0 / 60, s0 % 60, false).also { it.setTitle("Bedtime starts"); it.show() }
+    }
+
+    private fun pickLimit() {
+        val labels = arrayOf("No limit", "1 hour", "2 hours", "3 hours", "4 hours", "5 hours")
+        val mins = intArrayOf(0, 60, 120, 180, 240, 300)
+        AlertDialog.Builder(this).setTitle("Daily screen-time limit")
+            .setItems(labels) { _, w -> ParentalRules.setDailyLimit(this, mins[w]); refreshScreenTime(); adapter.notifyDataSetChanged() }
+            .setNegativeButton("Cancel", null).show()
+    }
+
+    private fun fmtMins(m: Int): String = if (m >= 60) "${m / 60}h ${m % 60}m" else "${m}m"
+
+    private fun refreshScreenTime() {
+        val bar = findViewById<LinearLayout>(R.id.screenBar)
+        val lim = ParentalRules.dailyLimit(this)
+        findViewById<TextView>(R.id.screenLimit).text = if (lim > 0) "Limit ${lim / 60}h" else "No limit"
+        if (!ParentalRules.hasUsageAccess(this)) {
+            findViewById<TextView>(R.id.screenTotal).text = "—"
+            findViewById<View>(R.id.screenHint).visibility = View.VISIBLE
+            bar.removeAllViews(); return
+        }
+        findViewById<View>(R.id.screenHint).visibility = View.GONE
+        val u = ParentalRules.usageToday(this)
+        val music = setOf("com.jtech.zemer", "app.tfs.prod", "fm.jewishmusic.application")
+        var claude = 0L; var mus = 0L; var other = 0L
+        for (e in ParentalRules.apps(this)) {
+            val ms = u[e.pkg] ?: 0L
+            when { e.pkg == "com.anthropic.claude" -> claude += ms; e.pkg in music -> mus += ms; else -> other += ms }
+        }
+        val total = ((claude + mus + other) / 60000L).toInt()
+        findViewById<TextView>(R.id.screenTotal).text = fmtMins(total)
+        // Bar is scaled to the limit (or 3 hours when there is no limit).
+        val scale = (if (lim > 0) lim else 180).toLong() * 60000L
+        bar.removeAllViews()
+        val parts = listOf(claude to 0xFFF97316.toInt(), mus to 0xFFFACC15.toInt(), other to 0xFF34D399.toInt())
+        var used = 0f
+        for ((ms, col) in parts) {
+            val w = (ms.toFloat() / scale).coerceAtMost(1f - used); if (w <= 0f) continue
+            used += w
+            val v = View(this); v.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, w)
+            val g = GradientDrawable(); g.setColor(col); g.cornerRadius = dp(8).toFloat(); v.background = g
+            bar.addView(v)
+        }
+        if (used < 1f) { val rest = View(this); rest.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f - used); bar.addView(rest) }
+    }
+
+    private fun showRequestsList() {
+        val reqs = lastRequests
+        val lines = ArrayList<String>()
+        if (reqs != null) for (i in 0 until reqs.length()) {
+            val r = reqs.getJSONObject(i); lines.add(r.optString("appName", "") + "  ·  " + statusLabel(r.optString("status", "Pending")))
+        }
+        AlertDialog.Builder(this).setTitle("App requests")
+            .setMessage(if (lines.isEmpty()) "No app requests yet." else lines.joinToString("\n"))
+            .setPositiveButton("OK", null).show()
+    }
+
+    // PIN gate for every parental change. No PIN yet → make one first.
+    private fun requirePin(onOk: () -> Unit) {
+        val pin = getSharedPreferences("ktparental", Context.MODE_PRIVATE).getString("pin", null)
+        if (pin == null) { createPin("Create a parent PIN (4+ digits)", onOk); return }
+        promptPin(onOk)
+    }
+
+    private fun createPin(title: String, then: () -> Unit) {
+        val et = pinField()
+        AlertDialog.Builder(this).setTitle(title).setView(et)
+            .setPositiveButton("Save") { _, _ ->
+                val p = et.text.toString()
+                if (p.length >= 4) {
+                    getSharedPreferences("ktparental", Context.MODE_PRIVATE).edit().putString("pin", p).apply()
+                    Toast.makeText(this, "PIN saved", Toast.LENGTH_SHORT).show(); then()
+                } else Toast.makeText(this, "Use at least 4 digits", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Cancel", null).show()
     }
 
     private fun dp(v: Int): Int = (v * resources.displayMetrics.density).toInt()
@@ -716,12 +917,13 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, app.name + " is locked by Parental Controls", Toast.LENGTH_SHORT).show()
             return
         }
+        if (app.internal == "calendar") { startActivity(Intent(this, CalendarActivity::class.java)); return }
         val launch = packageManager.getLaunchIntentForPackage(app.packageName)
         if (launch != null) {
             startActivity(launch)   // already installed -> just open it
             return
         }
-        if (app.apkUrl.isNotBlank()) {
+        if (app.apkUrl.isNotBlank() && !ParentalRules.blockInstalls(this)) {
             // Approved APK hosted by KosherTech -> install it directly, no Play Store.
             Toast.makeText(this, "Installing " + app.name + "…", Toast.LENGTH_SHORT).show()
             downloadAndInstall(app.apkUrl)

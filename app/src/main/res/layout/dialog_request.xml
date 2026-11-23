@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:text="Send request"
         android:gravity="center"
-        android:textColor="#0C0C0C"
+        android:textColor="#1E1B4B"
         android:textStyle="bold"
         android:textSize="15sp"
         android:paddingVertical="14dp"

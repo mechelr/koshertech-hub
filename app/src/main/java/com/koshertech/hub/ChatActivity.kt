@@ -156,7 +156,7 @@ class ChatActivity : AppCompatActivity() {
             val alp = LinearLayout.LayoutParams(dp(22), dp(22)); alp.rightMargin = dp(6); avatar.layoutParams = alp
             val nm = TextView(this)
             nm.text = "KosherTech Employee"
-            nm.setTextColor(0xFFFFFFFF.toInt()); nm.textSize = 11f; nm.setTypeface(nm.typeface, Typeface.BOLD)
+            nm.setTextColor(0xFF7C3AED.toInt()); nm.textSize = 11f; nm.setTypeface(nm.typeface, Typeface.BOLD)
             header.addView(avatar); header.addView(nm)
             val hlp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); hlp.bottomMargin = dp(3)
             header.layoutParams = hlp
@@ -169,10 +169,10 @@ class ChatActivity : AppCompatActivity() {
         bubble.setPadding(dp(13), dp(10), dp(13), dp(10))
         if (outgoing) {
             bubble.setBackgroundResource(R.drawable.bg_bubble_out)
-            bubble.setTextColor(0xFF0C0C0C.toInt())
+            bubble.setTextColor(0xFF1E1B4B.toInt())
         } else {
             bubble.setBackgroundResource(R.drawable.bg_bubble_in)
-            bubble.setTextColor(0xFFF5F5F5.toInt())
+            bubble.setTextColor(0xFF1E1B4B.toInt())
         }
         bubble.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         wrap.addView(bubble)

@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="white">#F5F5F5</color>
-    <color name="cyan">#FFFFFF</color>
-    <color name="muted">#8C8C8C</color>
-    <color name="navy">#0C0C0C</color>
-    <color name="card">#161616</color>
-    <color name="line">#2A2A2A</color>
-    <color name="black">#0C0C0C</color>
-    <color name="gold">#FFFFFF</color>
+    <!-- Light, colorful KosherTech palette. Names kept so every screen keeps working:
+         "white" = main text, "cyan" = accent, "navy" = page background. -->
+    <color name="white">#1E1B4B</color>
+    <color name="cyan">#7C3AED</color>
+    <color name="muted">#64748B</color>
+    <color name="navy">#F5F7FD</color>
+    <color name="card">#FFFFFF</color>
+    <color name="line">#E2E8F0</color>
+    <color name="black">#1E1B4B</color>
+    <color name="gold">#F97316</color>
+    <color name="ink">#1E1B4B</color>
+    <color name="indigo">#4338CA</color>
+    <color name="purple">#7C3AED</color>
+    <color name="green">#10B981</color>
+    <color name="blue">#2563EB</color>
+    <color name="pink">#EC4899</color>
+    <color name="orange">#F97316</color>
+    <color name="yellow">#FACC15</color>
+    <color name="slate">#64748B</color>
+    <color name="pagebg">#F5F7FD</color>
+    <color name="pure_white">#FFFFFF</color>
 </resources>
