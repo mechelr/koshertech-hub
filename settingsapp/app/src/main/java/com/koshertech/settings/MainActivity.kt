@@ -1,6 +1,9 @@
 package com.koshertech.settings
 
 import android.app.Dialog
+import android.app.UiModeManager
+import android.content.res.Configuration
+import android.os.BatteryManager
 import android.content.Context
 import android.content.Intent
 import android.hardware.camera2.CameraCharacteristics
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileFlash).setOnClickListener { toggleFlash() }
         findViewById<View>(R.id.tileRotate).setOnClickListener { toggleRotate() }
         findViewById<View>(R.id.tileLed).setOnClickListener { openLed() }
+        findViewById<View>(R.id.tileBattery).setOnClickListener { openBattery() }
 
         initFlash()
         paintRotate()
@@ -273,8 +277,71 @@ class MainActivity : AppCompatActivity() {
         for (i in values.indices) { if (values[i] == curTimeout) sel = i }
         paint(sel)
 
+        buildThemeRow(view)
+
         view.findViewById<View>(R.id.closeX).setOnClickListener { dialog.dismiss() }
         dialog.show()
+    }
+
+    // ===== BATTERY =====
+    override fun onResume() {
+        super.onResume()
+        try {
+            val bm = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+            val pct = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+            val charging = bm.isCharging
+            findViewById<TextView>(R.id.batteryState).text = if (pct in 0..100) (if (charging) "⚡$pct%" else "$pct%") else ""
+        } catch (e: Exception) {}
+    }
+
+    private fun openBattery() {
+        val actions = arrayOf(Settings.ACTION_BATTERY_SAVER_SETTINGS, Intent.ACTION_POWER_USAGE_SUMMARY,
+            "android.settings.BATTERY_SAVER_SETTINGS")
+        for (a in actions) {
+            try { startActivity(Intent(a)); return } catch (e: Exception) {}
+        }
+        Toast.makeText(this, "Battery settings aren't available on this phone", Toast.LENGTH_SHORT).show()
+    }
+
+    // ===== DARK / LIGHT THEME =====
+    private fun isDarkNow(): Boolean =
+        (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+
+    private fun setDark(dark: Boolean) {
+        val um = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+        val want = if (dark) UiModeManager.MODE_NIGHT_YES else UiModeManager.MODE_NIGHT_NO
+        try { um.nightMode = want } catch (e: Exception) {}
+        if (um.nightMode == want) {
+            Toast.makeText(this, if (dark) "Dark mode on" else "Light mode on", Toast.LENGTH_SHORT).show()
+            return
+        }
+        // Android didn't let us switch it directly: open the phone's own Dark theme switch.
+        Toast.makeText(this, "Turn Dark theme " + (if (dark) "ON" else "OFF") + " here", Toast.LENGTH_LONG).show()
+        try { startActivity(Intent("android.settings.DARK_THEME_SETTINGS")); return } catch (e: Exception) {}
+        try { startActivity(Intent(Settings.ACTION_DISPLAY_SETTINGS)) } catch (e: Exception) {}
+    }
+
+    private fun buildThemeRow(view: View) {
+        val row = view.findViewById<LinearLayout>(R.id.themeRow)
+        val chips = ArrayList<TextView>()
+        fun paint(darkSel: Boolean) {
+            for (i in chips.indices) {
+                val on = (i == 0) == darkSel
+                chips[i].setBackgroundResource(if (on) R.drawable.bg_request else R.drawable.bg_ghost)
+                chips[i].setTextColor(if (on) 0xFF04121C.toInt() else 0xFF8599C0.toInt())
+            }
+        }
+        for ((i, label) in arrayOf("🌙  Dark", "☀  Light").withIndex()) {
+            val chip = TextView(this)
+            chip.text = label; chip.textSize = 13f; chip.gravity = Gravity.CENTER
+            chip.setPadding(0, dp(10), 0, dp(10))
+            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            if (i > 0) lp.marginStart = dp(8)
+            chip.layoutParams = lp; chip.isClickable = true
+            chip.setOnClickListener { setDark(i == 0); paint(i == 0) }
+            chips.add(chip); row.addView(chip)
+        }
+        paint(isDarkNow())
     }
 
     private fun dp(v: Int): Int = (v * resources.displayMetrics.density).toInt()
