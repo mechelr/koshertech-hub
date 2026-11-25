@@ -271,7 +271,15 @@ class MainActivity : AppCompatActivity() {
                 if (pkg.isBlank() || have.contains(pkg)) continue
                 var cs = a.optString("color", "#FFFFFF"); if (!cs.startsWith("#")) cs = "#$cs"
                 val color = try { android.graphics.Color.parseColor(cs) } catch (e: Exception) { 0xFFFFFFFF.toInt() }
-                merged.add(AppItem(a.optString("name", "App"), a.optString("category", ""), pkg, color, a.optString("apkUrl", "")))
+                val appName = a.optString("name", "App")
+                if (pkg.startsWith("http://", true) || pkg.startsWith("https://", true)) {
+                    // A website pushed from the dashboard: shown as a locked web app.
+                    // If it has the same name as a built-in tile (e.g. "Blick Live"), it replaces that tile.
+                    merged.removeAll { it.name.equals(appName, true) }
+                    merged.add(AppItem(appName, a.optString("category", "Website"), pkg.trim(), color, "", "web"))
+                } else {
+                    merged.add(AppItem(appName, a.optString("category", ""), pkg, color, a.optString("apkUrl", "")))
+                }
                 have.add(pkg)
             }
             adapter.setApps(merged)
@@ -935,6 +943,9 @@ class MainActivity : AppCompatActivity() {
             return
         }
         if (app.internal == "calendar") { startActivity(Intent(this, CalendarActivity::class.java)); return }
+        if (app.internal == "web") {
+            startActivity(Intent(this, WebAppActivity::class.java).putExtra("url", app.packageName).putExtra("title", app.name)); return
+        }
         if (!kioskAllows(app.packageName) && packageManager.getLaunchIntentForPackage(app.packageName) != null) {
             AlertDialog.Builder(this).setTitle(app.name + " is installed but blocked")
                 .setMessage("The kiosk settings don't allow this app yet.\n\nIn Miradore, add this package to the kiosk's allowed apps:\n\n" + app.packageName)
