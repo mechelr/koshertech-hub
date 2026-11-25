@@ -61,7 +61,8 @@ class MainActivity : AppCompatActivity() {
             "https://github.com/mechelr/koshertech-hub/releases/download/latest/zemer.apk"),
         AppItem("24Six", "Music · Jewish streaming", "app.tfs.prod", 0xFFE11D48.toInt(), ""),
         AppItem("Shulert", "Shuls · Siddur · Zmanim", "com.shulert", 0xFF0D9488.toInt(), ""),
-        AppItem("Blick Live", "AH Blick Live (ABL)", "com.shapira.ahblicklive", 0xFF3F3A2E.toInt(), ""),
+        // Blick Live as a locked web app (Ah Blick Live channel only) instead of the Play Store app.
+        AppItem("Blick Live", "Ah Blick Live", "https://yideos.net/channel/ah-blick-live", 0xFF3F3A2E.toInt(), "", "web"),
         AppItem("Phone", "Make a call", "com.google.android.dialer", 0xFF10B981.toInt(), ""),
         AppItem("Camera", "Take photos", "org.fossify.camera", 0xFF14B8A6.toInt(), ""),
         AppItem("Clock", "Alarms & timers", firstInstalled("org.fossify.clock", "com.google.android.deskclock", "com.android.deskclock"), 0xFF0EA5E9.toInt(), ""),

@@ -1,1 +1,1 @@
-🌐 KosherTech can now add websites as locked apps: only that site opens, no other links, no new tabs, no Play Store.
+🎬 Blick Live now opens as a locked screen: only Ah Blick Live, nothing else.

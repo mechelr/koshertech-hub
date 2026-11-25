@@ -30,6 +30,8 @@ class WebAppActivity : AppCompatActivity() {
 
     private lateinit var web: WebView
     private var site = ""                      // e.g. "example.com"
+    private var home = ""                      // the page this app always returns to
+    private var slug: String? = null           // when the address is ".../channel/<slug>": lock to that channel only
     private var fullView: View? = null
     private var fullCb: WebChromeClient.CustomViewCallback? = null
     private lateinit var root: FrameLayout
@@ -46,7 +48,51 @@ class WebAppActivity : AppCompatActivity() {
         val scheme = (uri.scheme ?: "").lowercase()
         if (scheme != "https" && scheme != "http") return false
         val host = (uri.host ?: "").lowercase()
-        return host == site || host.endsWith(".$site")
+        if (!(host == site || host.endsWith(".$site"))) return false
+        val sl = slug ?: return true
+        val path = (uri.path ?: "/").lowercase()
+        if (path == "/" || path.isEmpty()) return false                                   // site home page
+        if (path.startsWith("/channel") && !path.startsWith("/channel/$sl")) return false // other channels
+        if (path.contains("search") || path.startsWith("/channels") || path.startsWith("/explore")
+            || path.startsWith("/trending") || path.startsWith("/categor")) return false     // browsing the whole site
+        return true
+    }
+
+    // Channel lock: hide links to anything that isn't this channel, and hide the site's search box.
+    private fun lockJs(sl: String) = """
+        (function(){
+          function clean(){
+            document.querySelectorAll('a[href]').forEach(function(a){
+              try{
+                var u=new URL(a.href, location.href), p=u.pathname.toLowerCase();
+                var ok = u.hostname.toLowerCase().endsWith('$site') && p!=='/' &&
+                         !(p.indexOf('/channel')===0 && p.indexOf('/channel/$sl')!==0) &&
+                         p.indexOf('search')<0;
+                if(!ok){ a.removeAttribute('href'); a.style.pointerEvents='none'; a.style.opacity='0.35'; }
+              }catch(e){}
+            });
+            document.querySelectorAll('input[type=search],form[role=search],form[action*=search],[class*=search i]').forEach(function(e){ e.style.display='none'; });
+          }
+          clean(); new MutationObserver(clean).observe(document.documentElement,{childList:true,subtree:true});
+        })();
+    """.trimIndent()
+
+    // A page inside the site that isn't about this channel → back to the channel.
+    private fun checkPage(view: WebView, url: String?) {
+        val sl = slug ?: return
+        val u = Uri.parse(url ?: return)
+        if (!allowed(u)) { bounce(view); return }
+        view.evaluateJavascript(lockJs(sl), null)
+        val path = (u.path ?: "").lowercase()
+        if (path.startsWith("/channel/$sl")) return
+        view.evaluateJavascript(
+            "(function(){var h=document.documentElement.innerHTML.toLowerCase();return h.indexOf('/channel/$sl')>=0 || h.indexOf('${sl.replace("-", " ")}')>=0;})()"
+        ) { ok -> if (ok != "true") bounce(view) }
+    }
+
+    private fun bounce(view: WebView) {
+        Toast.makeText(this, "Only " + (intent.getStringExtra("title") ?: "this app") + " is allowed here", Toast.LENGTH_SHORT).show()
+        view.loadUrl(home)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -55,6 +101,9 @@ class WebAppActivity : AppCompatActivity() {
         val url = intent.getStringExtra("url") ?: run { finish(); return }
         val title = intent.getStringExtra("title") ?: "App"
         site = baseDomain(Uri.parse(url).host)
+        home = url
+        val segs = Uri.parse(url).pathSegments
+        if (segs.size >= 2 && segs[0].equals("channel", true)) slug = segs[1].lowercase()
 
         root = FrameLayout(this)
         val col = LinearLayout(this); col.orientation = LinearLayout.VERTICAL
@@ -111,6 +160,9 @@ class WebAppActivity : AppCompatActivity() {
                 Toast.makeText(this@WebAppActivity, "That link is blocked", Toast.LENGTH_SHORT).show()
                 return true                                // stay on the page
             }
+            override fun onPageFinished(view: WebView, u: String?) { checkPage(view, u) }
+            // sites that change pages without reloading (single-page apps)
+            override fun doUpdateVisitedHistory(view: WebView, u: String?, isReload: Boolean) { checkPage(view, u) }
         }
         web.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, p: Int) {
