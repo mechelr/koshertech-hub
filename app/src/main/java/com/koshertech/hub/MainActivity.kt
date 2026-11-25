@@ -63,14 +63,12 @@ class MainActivity : AppCompatActivity() {
         AppItem("Shulert", "Shuls · Siddur · Zmanim", "com.shulert", 0xFF0D9488.toInt(), ""),
         // Blick Live as a locked web app: only ahblicklive.com (no Play Store app).
         AppItem("Blick Live", "Ah Blick Live", "https://ahblicklive.com/", 0xFF3F3A2E.toInt(), "", "web"),
-        AppItem("Phone", "Make a call", "com.google.android.dialer", 0xFF10B981.toInt(), ""),
         AppItem("Camera", "Take photos", "org.fossify.camera", 0xFF14B8A6.toInt(), ""),
         AppItem("Clock", "Alarms & timers", firstInstalled("org.fossify.clock", "com.google.android.deskclock", "com.android.deskclock"), 0xFF0EA5E9.toInt(), ""),
         AppItem("Calculator", "Math", firstInstalled("org.fossify.math", "com.google.android.calculator", "com.android.calculator2"), 0xFF84CC16.toInt(), ""),
         AppItem("Calendar", "Hebrew calendar", "com.koshertech.hub.calendar", 0xFFEC4899.toInt(), "", "calendar"),
         AppItem("Settings", "Controlled settings app", "com.koshertech.settings", 0xFF64748B.toInt(),
             "https://github.com/mechelr/koshertech-hub/releases/download/settings/KosherTechSettings.apk"),
-        AppItem("Contacts", "Phone book", "com.google.android.contacts", 0xFF2563EB.toInt(), ""),
         AppItem("Gallery", "Your photos", "org.fossify.gallery", 0xFF6366F1.toInt(), "")
     ) }
 
